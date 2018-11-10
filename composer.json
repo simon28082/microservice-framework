@@ -1,0 +1,56 @@
+{
+  "name": "crcms/microservice-framework",
+  "description": "The CrCms Microservice Framework.",
+  "keywords": [
+    "microservice",
+    "micro-service",
+    "swoole",
+    "rpc",
+    "crcms",
+    "php"
+  ],
+  "license": "MIT",
+  "type": "framework",
+  "require": {
+    "php": "^7.2.4",
+    "illuminate/contracts": "5.7.*",
+    "illuminate/container": "5.7.*",
+    "illuminate/support": "5.7.*",
+    "illuminate/filesystem": "5.7.*",
+    "illuminate/events": "5.7.*",
+    "illuminate/cache": "5.7.*",
+    "illuminate/config": "5.7.*",
+    "illuminate/console": "5.7.*",
+    "illuminate/database": "5.7.*",
+    "illuminate/queue": "5.7.*",
+    "illuminate/log": "5.7.*",
+    "illuminate/redis": "5.7.*",
+    "illuminate/hashing": "5.7.*",
+    "illuminate/validation": "5.7.*",
+    "illuminate/pipeline": "5.7.*",
+    "illuminate/translation": "5.7.*",
+    "vlucas/phpdotenv": "^2.2"
+  },
+  "require-dev": {
+  },
+  "autoload": {
+    "classmap": [
+    ],
+    "psr-4": {
+      "CrCms\\Microservice\\": "src/"
+    },
+    "files": [
+      "src/Helpers/helpers.php"
+    ]
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "CrCms\\Microservice\\Tests\\": "tests/"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}
