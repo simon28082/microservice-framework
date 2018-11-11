@@ -9,6 +9,7 @@
 
 namespace CrCms\Microservice\Foundation;
 
+use CrCms\Microservice\Routing\RoutingServiceProvider;
 use Illuminate\Container\Container;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 use Illuminate\Contracts\Foundation\Application as ApplicationContainerContract;
@@ -835,7 +836,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
         $this->register(new LogServiceProvider($this));
 
-        //$this->register(new RoutingServiceProvider($this));
+        $this->register(new RoutingServiceProvider($this));
     }
 
     /**
@@ -879,7 +880,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'queue.connection' => [\Illuminate\Contracts\Queue\Queue::class],
                      'queue.failer' => [\Illuminate\Queue\Failed\FailedJobProviderInterface::class],
                      'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],
-//                     'router' => [\Illuminate\Routing\Router::class, \Illuminate\Contracts\Routing\Registrar::class, \Illuminate\Contracts\Routing\BindingRegistrar::class],
+                     'router' => [\CrCms\Microservice\Routing\Router::class, ],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
                  ] as $key => $aliases) {
             foreach ($aliases as $alias) {

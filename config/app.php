@@ -28,6 +28,9 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
+
+    'mode' => 'http',
+
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -166,7 +169,7 @@ return [
 //        // App\Providers\BroadcastServiceProvider::class,
 //        App\Providers\EventServiceProvider::class,
 //        App\Providers\RouteServiceProvider::class,
-
+        \CrCms\Microservice\Routing\RouteServiceProvider::class,
     ],
 
     /*

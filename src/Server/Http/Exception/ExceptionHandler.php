@@ -7,7 +7,7 @@
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
-namespace CrCms\Foundation\MicroService\Http;
+namespace CrCms\Microservice\Server\Http\Exception;
 
 //use CrCms\Foundation\MicroService\Contracts\ExceptionHandlerContract;
 //use CrCms\Foundation\MicroService\Contracts\ServiceContract;
@@ -23,11 +23,18 @@ namespace CrCms\Foundation\MicroService\Http;
 //use CrCms\Microservice\Microservice\Contracts\ExceptionHandlerContract;
 //use CrCms\Microservice\Microservice\Contracts\ServiceContract;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Contracts\Container\Container;
 use Exception;
+use Illuminate\Contracts\Support\Responsable;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Arr;
+use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ExceptionHandler
@@ -163,7 +170,7 @@ class ExceptionHandler implements ExceptionHandlerContract
      * @param BaseException $e
      * @return bool
      */
-    protected function isHttpException(BaseException $e): bool
+    protected function isHttpException(Exception $e): bool
     {
         return $e instanceof HttpExceptionInterface;
     }
@@ -214,9 +221,9 @@ class ExceptionHandler implements ExceptionHandlerContract
         }
 
         return new Response([
-            'message' => $exception->getMessage(),
-            'errors' => $exception->errors(),
-        ], $exception->status);
+            'message' => $e->getMessage(),
+            'errors' => $e->errors(),
+        ], $e->status);
     }
 
     /**

@@ -42,6 +42,9 @@
     "illuminate/validation": "5.7.*",
     "illuminate/pipeline": "5.7.*",
     "illuminate/translation": "5.7.*",
+    "illuminate/encryption": "5.7.*",
+    "illuminate/http": "5.7.*",
+    "illuminate/pagination": "5.7.*",
     "symfony/var-dumper": "^4.1",
     "vlucas/phpdotenv": "^2.2"
   },

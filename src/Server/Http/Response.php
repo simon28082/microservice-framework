@@ -29,7 +29,7 @@ use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 class Response extends JsonResponse implements ResponseContract
 {
 
-    public static function createReponse($response): ResponseContract
+    public static function createResponse($response): ResponseContract
     {
         if ($response instanceof Model && $response->wasRecentlyCreated) {
             $response = new Response($response, 201);

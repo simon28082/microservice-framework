@@ -18,6 +18,7 @@ use CrCms\Microservice\Console\Kernel;
 use CrCms\Microservice\Console\Contracts\ExceptionHandlerContract;
 use CrCms\Microservice\Console\ExceptionHandler;
 use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
+use CrCms\Microservice\Server\Kernel as ServerKernel;
 
 /**
  * Class Start
@@ -93,6 +94,11 @@ class Start
             ExceptionHandlerContract::class,
             ExceptionHandler::class
         );
+
+        $this->app->singleton(
+            ServerKernelContract::class,
+            ServerKernel::class
+        );
     }
 
     /**
@@ -110,7 +116,8 @@ class Start
 
         $kernel->bootstrap();
 
-        $service = Factory::service($this,$this['config']->get('ms.default'));
+        $service = Factory::service($this->app,$this->app['config']->get('app.mode'));
+
         //这里还有问题，一旦被Service之前有异常或出错，则会报ExceptionHandlerContract没有绑定
 //        $this->singleton(
 //            ExceptionHandlerContract::class,

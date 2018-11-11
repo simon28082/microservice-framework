@@ -2,12 +2,13 @@
 
 namespace CrCms\Microservice\Server\Http;
 
-use CrCms\Foundation\MicroService\Http\ExceptionHandler;
+//namespace CrCms\Microservice\Server\Http\Exception\ExceptionHandler;
 use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Routing\Route;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Http\Exception\ExceptionHandler;
 use Illuminate\Contracts\Container\Container;
 //use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
 use CrCms\Microservice\Server\Http\Response as HttpResponse;
