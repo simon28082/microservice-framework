@@ -4,10 +4,22 @@
   "keywords": [
     "microservice",
     "micro-service",
+    "framework",
     "swoole",
     "rpc",
     "crcms",
     "php"
+  ],
+  "homepage": "http://blog.crcms.cn",
+  "support": {
+    "issues": "https://github.com/crcms/microservice-framework/issues",
+    "source": "https://github.com/crcms/microservice-framework"
+  },
+  "authors": [
+    {
+      "name": "simon",
+      "email": "simon@crcms.cn"
+    }
   ],
   "license": "MIT",
   "type": "framework",
@@ -17,6 +29,7 @@
     "illuminate/container": "5.7.*",
     "illuminate/support": "5.7.*",
     "illuminate/filesystem": "5.7.*",
+    "illuminate/bus": "5.7.*",
     "illuminate/events": "5.7.*",
     "illuminate/cache": "5.7.*",
     "illuminate/config": "5.7.*",
@@ -29,6 +42,7 @@
     "illuminate/validation": "5.7.*",
     "illuminate/pipeline": "5.7.*",
     "illuminate/translation": "5.7.*",
+    "symfony/var-dumper": "^4.1",
     "vlucas/phpdotenv": "^2.2"
   },
   "require-dev": {
