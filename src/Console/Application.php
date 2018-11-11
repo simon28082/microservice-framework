@@ -47,7 +47,8 @@ class Application extends BaseApplication implements ApplicationContract
  \   \  /        \   \  / '---'             `--'---'   
   `----'          `----'                               
 
-VERSION:
+Microservice Framework(Based on Laravel)
+Version:
 str;
     }
 }
