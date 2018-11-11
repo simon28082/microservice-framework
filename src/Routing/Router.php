@@ -4,7 +4,8 @@ namespace CrCms\Microservice\Routing;
 
 use Closure;
 use ArrayObject;
-use CrCms\Foundation\MicroService\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Contracts\ResponseContract;
+use CrCms\Microservice\Server\Contracts\ServiceContract;
 use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -441,6 +442,7 @@ class Router
 
     public function prepareResponse(ServiceContract $service, $response)
     {
+        $response = $this->container->make(ResponseContract::class)::createResponse($response);
         return $service::toResponse(
             $service->getRequest(),
             $service->setResponse($response)->getResponse()
