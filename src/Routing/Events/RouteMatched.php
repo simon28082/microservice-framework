@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Routing\Events;
 
-use CrCms\Foundation\MicroService\Contracts\ServiceContract;
 use CrCms\Microservice\Routing\Route;
+use CrCms\Microservice\Server\Contracts\ServiceContract;
 
 class RouteMatched
 {

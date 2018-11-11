@@ -13,7 +13,7 @@ class Request extends BaseRequest implements RequestContract
 {
     public static function createRequest(): RequestContract
     {
-        return new static();
+        return static::capture();
     }
 
 }

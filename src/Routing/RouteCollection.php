@@ -4,12 +4,12 @@ namespace CrCms\Microservice\Routing;
 
 use Countable;
 use ArrayIterator;
-use CrCms\Foundation\MicroService\Contracts\ServiceContract;
 use IteratorAggregate;
 use Illuminate\Support\Arr;
 use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use UnexpectedValueException;
+use CrCms\Microservice\Server\Contracts\ServiceContract;
 
 class RouteCollection implements Countable, IteratorAggregate
 {

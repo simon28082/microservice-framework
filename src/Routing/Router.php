@@ -122,12 +122,16 @@ class Router
 
     public function multiple($name, $action)
     {
-        $namespaceAction = $this->convertToControllerAction($action);
+        if (!$action instanceof Closure) {
+            $namespaceAction = $this->convertToControllerAction($action);
 
-        $methods = (new ReflectionAction($this))->getMethods($namespaceAction['uses']);
-        foreach ($methods as $method) {
-            $uses = isset($action['uses']) ? "{$action['uses']}@{$method}" : "{$action}@{$method}";
-            $this->single("{$name}.{$method}", array_merge($namespaceAction, ['controller' => $uses, 'uses' => $uses]));
+            $methods = (new ReflectionAction($this))->getMethods($namespaceAction['uses']);
+            foreach ($methods as $method) {
+                $uses = isset($action['uses']) ? "{$action['uses']}@{$method}" : "{$action}@{$method}";
+                $this->single("{$name}.{$method}", array_merge($namespaceAction, ['controller' => $uses, 'uses' => $uses]));
+            }
+        } else {
+            return $this->single($name, $action);
         }
     }
 
@@ -442,6 +446,8 @@ class Router
 
     public function prepareResponse(ServiceContract $service, $response)
     {
+        dd($this->container->make(ResponseContract::class));
+        //这里是null===========###################
         $response = $this->container->make(ResponseContract::class)::createResponse($response);
         return $service::toResponse(
             $service->getRequest(),

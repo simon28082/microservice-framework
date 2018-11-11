@@ -839,6 +839,19 @@ class Application extends Container implements ContainerContract, ApplicationCon
         $this->register(new RoutingServiceProvider($this));
     }
 
+
+    /**
+     * Determine if middleware has been disabled for the application.
+     *
+     * @return bool
+     */
+    public function shouldSkipMiddleware()
+    {
+        return $this->bound('middleware.disable') &&
+            $this->make('middleware.disable') === true;
+    }
+
+
     /**
      * Call the booting callbacks for the application.
      *
