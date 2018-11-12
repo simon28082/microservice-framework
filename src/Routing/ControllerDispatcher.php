@@ -38,7 +38,6 @@ class ControllerDispatcher implements ControllerDispatcherContract
     public function dispatch(Route $route, $controller, $method)
     {
         $parameters = $this->resolveClassMethodDependencies(
-//            $route->parametersWithoutNulls(), $controller, $method
             [], $controller, $method
         );
 
