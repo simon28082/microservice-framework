@@ -121,7 +121,7 @@ class Kernel implements KernelContract
             $response = $this->renderException($service, $e);
         } catch (Throwable $e) {
             $this->reportException($e = new FatalThrowableError($e));
-            $response = $this->renderException($e);
+            $response = $this->renderException($service, $e);
         }
 
         $this->app['events']->dispatch(
