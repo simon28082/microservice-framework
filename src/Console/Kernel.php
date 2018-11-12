@@ -134,14 +134,14 @@ class Kernel implements KernelContract
         } catch (Exception $e) {
             $this->reportException($e);
 
-            $this->renderException($output, $e);
+            $this->renderException($e);
 
             return 1;
         } catch (Throwable $e) {
             $e = new FatalThrowableError($e);
             $this->reportException($e);
 
-            $this->renderException($output, $e);
+            $this->renderException($e);
 
             return 1;
         }
@@ -370,8 +370,8 @@ class Kernel implements KernelContract
      * @param  \Exception  $e
      * @return void
      */
-    protected function renderException($output, Exception $e)
+    protected function renderException(Exception $e)
     {
-        $this->app[ExceptionHandlerContract::class]->render($output, $e);
+        $this->app[ExceptionHandlerContract::class]->render($e);
     }
 }

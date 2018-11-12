@@ -60,10 +60,9 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
      * @param Exception $e
      */
-    public function render($output, Exception $e)
+    public function render(Exception $e)
     {
         (new ConsoleApplication)->renderException($e, new ConsoleOutput);
     }
