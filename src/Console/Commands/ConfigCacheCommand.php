@@ -2,6 +2,7 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
+use CrCms\Microservice\Bootstrap\Start;
 use Throwable;
 use LogicException;
 use Illuminate\Console\Command;
@@ -78,10 +79,9 @@ class ConfigCacheCommand extends Command
      */
     protected function getFreshConfiguration()
     {
-        $app = require $this->laravel->bootstrapPath().'/app.php';
-
-        $app->make(ConsoleKernelContract::class)->bootstrap();
-
+        $app = tap(Start::instance()->bootstrap()->getApplication(), function ($app) {
+            $app->make(ConsoleKernelContract::class)->bootstrap();
+        });
         return $app['config']->all();
     }
 }
