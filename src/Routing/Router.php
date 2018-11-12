@@ -356,7 +356,7 @@ class Router
 
     /**
      * @param ServiceContract $service
-     * @return array
+     * @return Route
      */
     protected function findRoute(ServiceContract $service)
     {
