@@ -893,7 +893,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'queue.connection' => [\Illuminate\Contracts\Queue\Queue::class],
                      'queue.failer' => [\Illuminate\Queue\Failed\FailedJobProviderInterface::class],
                      'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],
-                     'router' => [\CrCms\Microservice\Routing\Router::class, ],
+                     'router' => [\CrCms\Microservice\Routing\Router::class,],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
                      'service' => [\CrCms\Microservice\Server\Contracts\ServiceContract::class],
                  ] as $key => $aliases) {
