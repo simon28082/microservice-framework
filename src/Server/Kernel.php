@@ -53,7 +53,7 @@ class Kernel implements KernelContract
      * @var array
      */
     protected $middleware = [
-        //\CrCms\Microservice\Server\Middleware\CheckForMaintenanceMode::class
+        \CrCms\Microservice\Server\Middleware\CheckForMaintenanceMode::class
     ];
 
     /**
@@ -76,6 +76,7 @@ class Kernel implements KernelContract
 
     /**
      * The priority-sorted list of middleware.
+     * 优先加载的中间件，必须是$middleware和$middlewareGroups中定义
      *
      * Forces the listed middleware to always be in the given order.
      *

@@ -33,10 +33,6 @@ class SortedMiddleware extends Collection
      */
     protected function sortMiddleware($priorityMap, $middlewares)
     {
-        if (empty($middlewares)) {
-            return $priorityMap;
-        }
-
         $lastIndex = 0;
         foreach ($middlewares as $index => $middleware) {
             if (!is_string($middleware)) {
