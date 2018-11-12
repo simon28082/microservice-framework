@@ -170,6 +170,7 @@ return [
 //        App\Providers\EventServiceProvider::class,
 //        App\Providers\RouteServiceProvider::class,
         \CrCms\Microservice\Routing\RouteServiceProvider::class,
+        \CrCms\Microservice\Foundation\CrCmsServiceProvider::class,
     ],
 
     /*
