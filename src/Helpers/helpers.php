@@ -36,6 +36,10 @@ function database_path(?string $path = null): string
     return app()->databasePath($path);
 }
 
+function config_path($path = '')
+{
+    return app()->configPath($path);
+}
 
 /**
  * Translate the given message.

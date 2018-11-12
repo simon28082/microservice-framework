@@ -175,7 +175,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function configPath($path = '')
     {
-
         if (is_null($this->configPath)) {
             $this->configPath = $this->basePath . DIRECTORY_SEPARATOR . 'config';
             if (!is_dir($this->configPath)) {
