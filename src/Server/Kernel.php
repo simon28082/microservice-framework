@@ -53,7 +53,7 @@ class Kernel implements KernelContract
      * @var array
      */
     protected $middleware = [
-        //\CrCms\Foundation\MicroService\Middleware\HashMiddleware::class,
+        //\CrCms\Microservice\Server\Middleware\CheckForMaintenanceMode::class
     ];
 
     /**
@@ -82,6 +82,7 @@ class Kernel implements KernelContract
      * @var array
      */
     protected $middlewarePriority = [
+        \CrCms\Microservice\Server\Middleware\CheckForMaintenanceMode::class
     ];
 
     /**
