@@ -34,8 +34,10 @@ class ReflectionAction
     {
         $class = new ReflectionClass($controller);
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
-        return array_map(function (ReflectionMethod $method) {
+        return array_filter(array_map(function (ReflectionMethod $method) {
             return $method->getName();
-        }, $methods);
+        }, $methods), function ($value) {
+            return strpos($value, '__') !== 0;
+        });
     }
 }
