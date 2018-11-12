@@ -2,6 +2,7 @@
 
 namespace CrCms\Microservice\Server\Contracts;
 
+use CrCms\Foundation\Transporters\AbstractDataProvider;
 use CrCms\Microservice\Routing\Route;
 
 /**
@@ -52,6 +53,17 @@ interface ServiceContract
      * @return ResponseContract
      */
     public function getResponse(): ResponseContract;
+
+    /**
+     * @param AbstractDataProvider $dataProvider
+     * @return ServiceContract
+     */
+    public function setDataProvider(AbstractDataProvider $dataProvider): ServiceContract;
+
+    /**
+     * @return AbstractDataProvider
+     */
+    public function getDataProvider(): AbstractDataProvider;
 
     /**
      * @param mixed $response

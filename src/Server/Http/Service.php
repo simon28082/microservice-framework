@@ -2,6 +2,8 @@
 
 namespace CrCms\Microservice\Server\Http;
 
+use CrCms\Foundation\Transporters\AbstractDataProvider;
+use CrCms\Foundation\Transporters\DataProvider;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Routing\Route;
@@ -26,6 +28,11 @@ class Service implements ServiceContract
     protected $response;
 
     /**
+     * @var AbstractDataProvider
+     */
+    protected $dataProvider;
+
+    /**
      * @var
      */
     protected $route;
@@ -36,11 +43,6 @@ class Service implements ServiceContract
     protected $app;
 
     /**
-     * @var
-     */
-    protected $indexes;
-
-    /**
      * Service constructor.
      * @param Container $app
      * @param RequestContract $request
@@ -49,8 +51,25 @@ class Service implements ServiceContract
     {
         $this->app = $app;
         $this->setRequest($request);
-        $this->baseBinding();
         $this->registerEvent();
+    }
+
+    /**
+     * @param AbstractDataProvider $dataProvider
+     * @return ServiceContract
+     */
+    public function setDataProvider(AbstractDataProvider $dataProvider): ServiceContract
+    {
+        $this->dataProvider = $dataProvider;
+        return $this;
+    }
+
+    /**
+     * @return AbstractDataProvider
+     */
+    public function getDataProvider(): AbstractDataProvider
+    {
+        return $this->dataProvider;
     }
 
     /**
@@ -73,17 +92,27 @@ class Service implements ServiceContract
     public function registerEvent(): void
     {
         $this->app['events']->listen(ServiceHandling::class, function (ServiceHandling $event) {
+            $this->baseBinding();
+            $this->setDataProvider(new DataProvider($this->request));
             if ($event->service->getRequest()->getMethod() !== 'POST') {
-                $methods = collect($this->app->make('router')->getRoutes()->get())->mapWithKeys(function (Route $route) {
-                    $uses = $route->getAction('uses');
-                    $uses = $uses instanceof \Closure ? 'Closure' : $uses;
-                    return [$route->mark() => $uses];
-                })->toArray();
-                return new Response([
-                    'methods' => $methods
-                ], 200);
+                return $this->allServices();
             }
         });
+    }
+
+    /**
+     * @return ResponseContract
+     */
+    protected function allServices(): ResponseContract
+    {
+        $methods = collect($this->app->make('router')->getRoutes()->get())->mapWithKeys(function (Route $route) {
+            $uses = $route->getAction('uses');
+            $uses = $uses instanceof \Closure ? 'Closure' : $uses;
+            return [$route->mark() => $uses];
+        })->toArray();
+        return new Response([
+            'methods' => $methods
+        ], 200);
     }
 
     /**
