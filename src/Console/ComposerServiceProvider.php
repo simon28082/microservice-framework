@@ -1,6 +1,6 @@
 <?php
 
-namespace Illuminate\Foundation\Providers;
+namespace CrCms\Microservice\Console;
 
 use Illuminate\Support\Composer;
 use Illuminate\Support\ServiceProvider;
