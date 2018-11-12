@@ -55,19 +55,43 @@ class Start
     public static function run(array $params = [], ?string $basePath = null, ?string $mode = null): void
     {
         $instance = new static;
-        $instance->mode($mode);
-        $instance->createApplication($basePath)->baseKernelBinding();
+
+        $instance->bootstrap($basePath, $mode);
 
         $instance->getApplication()->runningInConsole() ?
             $instance->runConsole($params) : $instance->runApplication($params);
     }
 
     /**
-     * @param string $basePath
      * @return Start
      */
-    public function createApplication(string $basePath): self
+    public static function instance(): Start
     {
+        return new static;
+    }
+
+    /**
+     * @param null|string $basePath
+     * @param null|string $mode
+     * @return Start
+     */
+    public function bootstrap(?string $basePath = null, ?string $mode = null): self
+    {
+        $this->mode($mode);
+        $this->createApplication($basePath);
+        $this->baseKernelBinding();
+
+        return $this;
+    }
+
+    /**
+     * @param null|string $basePath
+     * @return Start
+     */
+    public function createApplication(?string $basePath = null): self
+    {
+        $basePath ? : $basePath = realpath(__DIR__.'/../../../../');
+
         $this->app = new Application($basePath);
         return $this;
     }
