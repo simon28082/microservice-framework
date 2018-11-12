@@ -106,7 +106,14 @@ class Router
      */
     public function register($name, $action)
     {
-        return $this->multiple($name, $action);
+        if (
+            is_array($action) ||
+            (is_string($action) && strpos($action, '@') === false)
+        ) {
+            return $this->multiple($name, $action);
+        } else {
+            return $this->single($name, $action);
+        }
     }
 
     /**
@@ -127,15 +134,11 @@ class Router
      */
     public function multiple($name, $action)
     {
-        if (is_string($action) && strpos($action, '@') === false) {
-            $namespaceAction = $this->convertToControllerAction($action);
-            $methods = (new ReflectionAction($this))->getMethods($namespaceAction['uses']);
-            foreach ($methods as $method) {
-                $uses = isset($action['uses']) ? "{$action['uses']}@{$method}" : "{$action}@{$method}";
-                $this->single("{$name}.{$method}", array_merge($namespaceAction, ['controller' => $uses, 'uses' => $uses]));
-            }
-        } else {
-            return $this->single($name, $action);
+        $namespaceAction = $this->convertToControllerAction($action);
+        $methods = (new ReflectionAction($this))->getMethods($namespaceAction['uses']);
+        foreach ($methods as $method) {
+            $uses = isset($action['uses']) ? "{$action['uses']}@{$method}" : "{$action}@{$method}";
+            $this->single("{$name}.{$method}", array_merge($namespaceAction, ['controller' => $uses, 'uses' => $uses]));
         }
     }
 
