@@ -18,18 +18,16 @@ abstract class Controller
      *
      * @param  array|string|\Closure  $middleware
      * @param  array   $options
-     * @return \CrCms\Microservice\Routing\ControllerMiddlewareOptions
+     * @return void
      */
-    public function middleware($middleware, array $options = [])
+    public function middleware($middleware, array $options = []): void
     {
         foreach ((array) $middleware as $m) {
             $this->middleware[] = [
                 'middleware' => $m,
-                'options' => &$options,
+                'options' => $options,
             ];
         }
-
-        return new ControllerMiddlewareOptions($options);
     }
 
     /**
@@ -40,18 +38,6 @@ abstract class Controller
     public function getMiddleware()
     {
         return $this->middleware;
-    }
-
-    /**
-     * Execute an action on the controller.
-     *
-     * @param  string  $method
-     * @param  array   $parameters
-     * @return \Symfony\Component\HttpFoundation\Response
-     */
-    public function callAction($method, $parameters)
-    {
-        return call_user_func_array([$this, $method], $parameters);
     }
 
     /**
