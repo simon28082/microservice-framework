@@ -78,7 +78,7 @@ class ArtisanServiceProvider extends ServiceProvider
         'MigrateStatus' => 'command.migrate.status',
 //        'Optimize' => 'command.optimize',
 //        'OptimizeClear' => 'command.optimize.clear',
-//        'PackageDiscover' => 'command.package.discover',
+        'PackageDiscover' => 'command.package.discover',
 //        'QueueFailed' => 'command.queue.failed',
 //        'QueueFlush' => 'command.queue.flush',
 //        'QueueForget' => 'command.queue.forget',
