@@ -2,7 +2,6 @@
 
 namespace CrCms\Microservice\Server\Http;
 
-//namespace CrCms\Microservice\Server\Http\Exception\ExceptionHandler;
 use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
@@ -10,8 +9,6 @@ use CrCms\Microservice\Routing\Route;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
 use CrCms\Microservice\Server\Http\Exception\ExceptionHandler;
 use Illuminate\Contracts\Container\Container;
-//use Symfony\Component\HttpKernel\Exception\AccessDeniedHttpException;
-use CrCms\Microservice\Server\Http\Response as HttpResponse;
 
 /**
  * Class Service
@@ -19,37 +16,46 @@ use CrCms\Microservice\Server\Http\Response as HttpResponse;
  */
 class Service implements ServiceContract
 {
+    /**
+     * @var
+     */
     protected $request;
 
+    /**
+     * @var
+     */
     protected $response;
 
+    /**
+     * @var
+     */
     protected $route;
 
+    /**
+     * @var Container
+     */
     protected $app;
 
+    /**
+     * @var
+     */
     protected $indexes;
 
+    /**
+     * Service constructor.
+     * @param Container $app
+     * @param RequestContract $request
+     */
     public function __construct(Container $app, RequestContract $request)
     {
         $this->app = $app;
-        $this->baseBinding();
         $this->setRequest($request);
-        $this->app->bind(RequestContract::class, function ($app) {
-            return $this->request;
-        });
-        $this->app->bind(ResponseContract::class, function ($app) {
-            return $this->response;
-        });
-        //$this->setResponse(new Response());
-        //$this->app->bind(ResponseContract::class, Response::class);
+        $this->baseBinding();
     }
 
-    public function createResponse($response): ServiceContract
-    {
-        $this->response = Response::createResponse($response);
-        return $this;
-    }
-
+    /**
+     * @return void
+     */
     public function baseBinding(): void
     {
         $this->app->singleton(
@@ -57,28 +63,37 @@ class Service implements ServiceContract
             ExceptionHandler::class
         );
 
+        $this->app->bind(RequestContract::class, function ($app) {
+            return $this->request;
+        });
 
-//        $this->app->bind(ResponseContract::class, function () {
-//            return $this->response;
-//        });
+        $this->app->bind(ResponseContract::class, function () {
+            return $this->response;
+        });
     }
 
-//    public static function createResponse($response)
-//    {
-//
-//    }
-
+    /**
+     * @param Route $route
+     * @return ServiceContract
+     */
     public function setRoute(Route $route): ServiceContract
     {
         $this->route = $route;
         return $this;
     }
 
+    /**
+     * @return Route
+     */
     public function getRoute(): Route
     {
         return $this->route;
     }
 
+    /**
+     * @return bool
+     * @throws \Exception
+     */
     public function certification(): bool
     {
         $token = $this->request->headers->get('X-CRCMS-Microservice-Hash');
@@ -92,29 +107,45 @@ class Service implements ServiceContract
         return true;
     }
 
+    /**
+     * @param RequestContract $request
+     * @return ServiceContract
+     */
     public function setRequest(RequestContract $request): ServiceContract
     {
         $this->request = $request;
         return $this;
     }
 
+    /**
+     * @param ResponseContract $response
+     * @return ServiceContract
+     */
     public function setResponse(ResponseContract $response): ServiceContract
     {
         $this->response = $response;
         return $this;
     }
 
-
+    /**
+     * @return RequestContract
+     */
     public function getRequest(): RequestContract
     {
         return $this->request;
     }
 
+    /**
+     * @return ResponseContract
+     */
     public function getResponse(): ResponseContract
     {
         return $this->response;
     }
 
+    /**
+     * @return string
+     */
     public function name(): string
     {
         return $this->request->get('method');
@@ -130,6 +161,21 @@ class Service implements ServiceContract
 //        return $this->indexes[$key];
 //    }
 
+    /**
+     * @param mixed $response
+     * @return ServiceContract
+     */
+    public function createResponse($response): ServiceContract
+    {
+        $this->response = Response::createResponse($response);
+        return $this;
+    }
+
+    /**
+     * @param RequestContract $request
+     * @param ResponseContract $response
+     * @return ResponseContract
+     */
     public static function toResponse(RequestContract $request, ResponseContract $response): ResponseContract
     {
         return $response->prepare($request);

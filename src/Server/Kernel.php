@@ -33,8 +33,7 @@ class Kernel implements KernelContract
     protected $bootstrappers = [
         \CrCms\Microservice\Bootstrap\LoadEnvironmentVariables::class,
         \CrCms\Microservice\Bootstrap\LoadConfiguration::class,
-        //\Illuminate\Foundation\Bootstrap\HandleExceptions::class,
-        //\CrCms\Foundation\MicroService\Bootstrap\HandleExceptions::class,
+        \CrCms\Microservice\Bootstrap\HandleExceptions::class,
         \CrCms\Microservice\Bootstrap\RegisterFacades::class,
         \CrCms\Microservice\Bootstrap\RegisterProviders::class,
         \CrCms\Microservice\Bootstrap\BootProviders::class,
@@ -108,12 +107,10 @@ class Kernel implements KernelContract
             $response = $this->sendRequestThroughRouter($service);
         } catch (Exception $e) {
             $this->reportException($e);
-
             $response = $this->renderException($service, $e);
         } catch (Throwable $e) {
             $this->reportException($e = new FatalThrowableError($e));
-
-            $response = $this->renderException($service, $e);
+            $response = $this->renderException($e);
         }
 
 //        $this->app['events']->dispatch(
@@ -269,7 +266,7 @@ class Kernel implements KernelContract
 
     protected function renderException(ServiceContract $service, Exception $e)
     {
-        return $this->app[ExceptionHandlerContract::class]->render($service, $e);
+        return $this->app[ExceptionHandlerContract::class]->render($e);
     }
 
     public function getApplication(): ApplicationContract

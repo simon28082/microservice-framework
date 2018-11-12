@@ -21,5 +21,5 @@ interface ExceptionHandlerContract
      * @param Exception $e
      * @return mixed
      */
-    public function render(ServiceContract $service, Exception $e);
+    public function render(Exception $e);
 }

@@ -355,19 +355,6 @@ class Router
         $route->setAction($this->mergeWithLastGroup($route->getAction()));
     }
 
-    /**
-     * Return the response returned by the given route.
-     *
-     * @param  string $name
-     * @return mixed
-     */
-    public function respondWithRoute($name)
-    {
-        $route = tap($this->routes->getByName($name))->bind($this->currentRequest);
-
-        return $this->runRoute($this->currentRequest, $route);
-    }
-
 
     public function dispatch(ServiceContract $service)
     {
@@ -419,12 +406,6 @@ class Router
             });
     }
 
-    /**
-     * Gather the middleware for the given route with resolved class names.
-     *
-     * @param  \CrCms\Microservice\Routing\Route $route
-     * @return array
-     */
     public function gatherRouteMiddleware(Route $route)
     {
         $middleware = collect($route->gatherMiddleware())->map(function ($name) {
@@ -434,12 +415,6 @@ class Router
         return $this->sortMiddleware($middleware);
     }
 
-    /**
-     * Sort the given middleware by priority.
-     *
-     * @param  \Illuminate\Support\Collection $middlewares
-     * @return array
-     */
     protected function sortMiddleware(Collection $middlewares)
     {
         return (new SortedMiddleware($this->middlewarePriority, $middlewares))->all();
@@ -447,7 +422,10 @@ class Router
 
     public function prepareResponse(ServiceContract $service, $response)
     {
-        return $service->createResponse($response)->getResponse();
+        return $service::toResponse(
+            $service->getRequest(),
+            $service->createResponse($response)->getResponse()
+        );
     }
 
     /**
@@ -591,12 +569,6 @@ class Router
 //    {
 //        return $this->current()->parameter($key, $default);
 //    }
-
-    /**
-     * Get the request currently being dispatched.
-     *
-     * @return \Illuminate\Http\Request
-     */
     public function getCurrentService()
     {
         return $this->currentService;

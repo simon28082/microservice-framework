@@ -14,6 +14,7 @@ use Exception;
 use Illuminate\Contracts\Container\Container;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Class ExceptionHandler
@@ -64,6 +65,6 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function render($output, Exception $e)
     {
-        (new ConsoleApplication)->renderException($e, $output);
+        (new ConsoleApplication)->renderException($e, new ConsoleOutput);
     }
 }

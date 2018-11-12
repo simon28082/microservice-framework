@@ -28,9 +28,8 @@ interface ExceptionHandlerContract
     /**
      * Render an exception to the console.
      *
-     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
      * @param  \Exception  $e
      * @return void
      */
-    public function render($output, Exception $e);
+    public function render(Exception $e);
 }

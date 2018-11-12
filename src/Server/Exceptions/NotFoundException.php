@@ -5,10 +5,17 @@ namespace CrCms\Microservice\Server\Exceptions;
 use Throwable;
 
 /**
- * @author Fabien Potencier <fabien@symfony.com>
+ * Class NotFoundException
+ * @package CrCms\Microservice\Server\Exceptions
  */
 class NotFoundException extends ServiceException
 {
+    /**
+     * NotFoundException constructor.
+     * @param string $message
+     * @param int $code
+     * @param Throwable|null $previous
+     */
     public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
     {
         parent::__construct($message, 404, $previous);

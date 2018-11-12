@@ -13,6 +13,11 @@ use Illuminate\Contracts\Container\Container;
  */
 class Factory
 {
+    /**
+     * @param Container $app
+     * @param string $driver
+     * @return ServiceContract
+     */
     public static function service(Container $app, string $driver): ServiceContract
     {
         switch ($driver) {

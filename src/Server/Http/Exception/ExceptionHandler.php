@@ -10,18 +10,15 @@
 namespace CrCms\Microservice\Server\Http\Exception;
 
 use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Exceptions\ServiceException;
 use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Contracts\Container\Container;
 use Exception;
-use Illuminate\Contracts\Support\Responsable;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
-use Illuminate\Http\Exceptions\HttpResponseException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
 use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
-use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class ExceptionHandler
@@ -121,36 +118,45 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * @param ServiceContract $service
      * @param Exception $e
-     * @return Response|\Illuminate\Http\Response|mixed|null|\Symfony\Component\HttpFoundation\Response
+     * @return Response
      */
-    public function render(ServiceContract $service, Exception $e)
+    public function render(Exception $e)
     {
-        if (method_exists($e, 'render') && $response = $e->render($service)) {
-            return new Response($response);
-        } elseif ($e instanceof Responsable) {
-            return $e->toResponse($service->getRequest());
-        }
+        $service = $this->container->make(ServiceContract::class);
 
-        $e = $this->prepareException($e);
-
-        if ($e instanceof HttpResponseException) {
-            return $e->getResponse();
+        if ($e instanceof ServiceException) {
+            $e->setService($service);
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e, $service);
         }
 
         return $this->prepareJsonResponse($service, $e);
+
+//        if (method_exists($e, 'render') && $response = $e->render($service)) {
+//            return new Response($response);
+//        } elseif ($e instanceof Responsable) {
+//            return $e->toResponse($service->getRequest());
+//        }
+//
+//        $e = $this->prepareException($e);
+//
+//        if ($e instanceof HttpResponseException) {
+//            return $e->getResponse();
+//        } elseif ($e instanceof ValidationException) {
+//            return $this->convertValidationExceptionToResponse($e, $service);
+//        }
+//
+//        return $this->prepareJsonResponse($service, $e);
     }
 
     /**
      * @param Exception $e
      * @return bool
      */
-    protected function isHttpException(Exception $e): bool
+    protected function isServiceException(Exception $e): bool
     {
-        return $e instanceof HttpExceptionInterface;
+        return $e instanceof ServiceException;
     }
 
     /**
@@ -168,7 +174,7 @@ class ExceptionHandler implements ExceptionHandlerContract
                 return Arr::except($trace, ['args']);
             })->all(),
         ] : [
-            'message' => $this->isHttpException($e) ? $e->getMessage() : 'Server Error',
+            'message' => $this->isServiceException($e) ? $e->getMessage() : 'Server Error',
         ];
     }
 
@@ -181,9 +187,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     {
         return new Response(
             $this->convertExceptionToArray($e),
-            $this->isHttpException($e) ? $e->getStatusCode() : 500,
-            $this->isHttpException($e) ? $e->getHeaders() : [],
-            JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES
+            $e->getCode() === 0 ? 500 : $e->getCode()
         );
     }
 
@@ -202,18 +206,5 @@ class ExceptionHandler implements ExceptionHandlerContract
             'message' => $e->getMessage(),
             'errors' => $e->errors(),
         ], $e->status);
-    }
-
-    /**
-     * @param Exception $e
-     * @return Exception|NotFoundHttpException
-     */
-    protected function prepareException(Exception $e)
-    {
-        if ($e instanceof ModelNotFoundException) {
-            $e = new NotFoundHttpException($e->getMessage(), $e);
-        }
-
-        return $e;
     }
 }

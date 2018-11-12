@@ -11,9 +11,11 @@ use Illuminate\Http\Request as BaseRequest;
  */
 class Request extends BaseRequest implements RequestContract
 {
+    /**
+     * @return RequestContract
+     */
     public static function createRequest(): RequestContract
     {
         return static::capture();
     }
-
 }

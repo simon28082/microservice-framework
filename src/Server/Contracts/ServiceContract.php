@@ -70,7 +70,7 @@ interface ServiceContract
      * @param ResponseContract $response
      * @return ResponseContract
      */
-    //public static function toResponse(RequestContract $request, ResponseContract $response): ResponseContract;
+    public static function toResponse(RequestContract $request, ResponseContract $response): ResponseContract;
 
     /**
      * @return string
