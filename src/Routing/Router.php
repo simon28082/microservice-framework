@@ -6,6 +6,7 @@ use Closure;
 use ArrayObject;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
+use Illuminate\Support\Arr;
 use JsonSerializable;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
@@ -192,7 +193,23 @@ class Router
      */
     public function mergeWithLastGroup($new)
     {
-        return RouteGroup::merge($new, end($this->groupStack));
+        $old = end($this->groupStack);
+
+        if (isset($new['namespace'])) {
+            $namespace = isset($old['namespace']) && strpos($new['namespace'], '\\') !== 0
+                ? trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\')
+                : trim($new['namespace'], '\\');
+        } else {
+            $namespace = $old['namespace'] ?? null;
+        }
+
+        $new = array_merge($new, [
+            'namespace' => $namespace,
+        ]);
+
+        return array_merge_recursive(Arr::except(
+            $old, ['namespace',]
+        ), $new);
     }
 
     /**
@@ -210,22 +227,6 @@ class Router
 
             require $routes;
         }
-    }
-
-    /**
-     * Get the prefix from the last group on the stack.
-     *
-     * @return string
-     */
-    public function getLastGroupPrefix()
-    {
-        if (!empty($this->groupStack)) {
-            $last = end($this->groupStack);
-
-            return $last['prefix'] ?? '';
-        }
-
-        return '';
     }
 
     /**
@@ -446,13 +447,7 @@ class Router
 
     public function prepareResponse(ServiceContract $service, $response)
     {
-        dd($this->container->make(ResponseContract::class));
-        //这里是null===========###################
-        $response = $this->container->make(ResponseContract::class)::createResponse($response);
-        return $service::toResponse(
-            $service->getRequest(),
-            $service->setResponse($response)->getResponse()
-        );
+        return $service->createResponse($response)->getResponse();
     }
 
     /**

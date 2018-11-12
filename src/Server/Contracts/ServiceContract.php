@@ -24,7 +24,7 @@ interface ServiceContract
     /**
      * @return void
      */
-    public function bindKernel(): void;
+    public function baseBinding(): void;
 
     /**
      * @param Route $route
@@ -49,10 +49,10 @@ interface ServiceContract
     public function getRequest(): RequestContract;
 
     /**
-     * @param mixed $response
+     * @param ResponseContract $response
      * @return ServiceContract
      */
-    public function setResponse($response): ServiceContract;
+    public function setResponse(ResponseContract $response): ServiceContract;
 
     /**
      * @return ResponseContract
@@ -60,11 +60,17 @@ interface ServiceContract
     public function getResponse(): ResponseContract;
 
     /**
+     * @param mixed $response
+     * @return ServiceContract
+     */
+    public function createResponse($response): ServiceContract;
+
+    /**
      * @param RequestContract $request
      * @param ResponseContract $response
      * @return ResponseContract
      */
-    public static function toResponse(RequestContract $request, ResponseContract $response): ResponseContract;
+    //public static function toResponse(RequestContract $request, ResponseContract $response): ResponseContract;
 
     /**
      * @return string

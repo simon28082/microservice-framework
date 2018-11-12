@@ -877,7 +877,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'cache' => [\Illuminate\Cache\CacheManager::class, \Illuminate\Contracts\Cache\Factory::class],
                      'cache.store' => [\Illuminate\Cache\Repository::class, \Illuminate\Contracts\Cache\Repository::class],
                      'config' => [\Illuminate\Config\Repository::class, \Illuminate\Contracts\Config\Repository::class],
-                     //'encrypter' => [\Illuminate\Encryption\Encrypter::class, \Illuminate\Contracts\Encryption\Encrypter::class],
+                     'encrypter' => [\Illuminate\Encryption\Encrypter::class, \Illuminate\Contracts\Encryption\Encrypter::class],
                      'db' => [\Illuminate\Database\DatabaseManager::class],
                      'db.connection' => [\Illuminate\Database\Connection::class, \Illuminate\Database\ConnectionInterface::class],
                      'events' => [\Illuminate\Events\Dispatcher::class, \Illuminate\Contracts\Events\Dispatcher::class],
@@ -895,6 +895,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],
                      'router' => [\CrCms\Microservice\Routing\Router::class, ],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
+                     'service' => [\CrCms\Microservice\Server\Contracts\ServiceContract::class],
                  ] as $key => $aliases) {
             foreach ($aliases as $alias) {
                 $this->alias($key, $alias);

@@ -9,19 +9,6 @@
 
 namespace CrCms\Microservice\Server\Http\Exception;
 
-//use CrCms\Foundation\MicroService\Contracts\ExceptionHandlerContract;
-//use CrCms\Foundation\MicroService\Contracts\ServiceContract;
-//use CrCms\Foundation\MicroService\Exceptions\ExceptionHandler as BaseExceptionHandler;
-//use Illuminate\Contracts\Support\Responsable;
-//use Illuminate\Database\Eloquent\ModelNotFoundException;
-//use Illuminate\Http\Exceptions\HttpResponseException;
-//use Illuminate\Validation\ValidationException;
-//use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
-//use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-//use Exception as BaseException;
-//use Illuminate\Support\Arr;
-//use CrCms\Microservice\Microservice\Contracts\ExceptionHandlerContract;
-//use CrCms\Microservice\Microservice\Contracts\ServiceContract;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
 use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Contracts\Container\Container;
@@ -62,11 +49,6 @@ class ExceptionHandler implements ExceptionHandlerContract
      * @var array
      */
     protected $internalDontReport = [
-//        HttpException::class,
-//        HttpResponseException::class,
-//        ModelNotFoundException::class,
-//        TokenMismatchException::class,
-//        ValidationException::class,
     ];
 
     /**
@@ -80,10 +62,8 @@ class ExceptionHandler implements ExceptionHandlerContract
     ];
 
     /**
-     * Create a new exception handler instance.
-     *
-     * @param  \Illuminate\Contracts\Container\Container $container
-     * @return void
+     * ExceptionHandler constructor.
+     * @param Container $container
      */
     public function __construct(Container $container)
     {
@@ -91,12 +71,9 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * Report or log an exception.
-     *
-     * @param  \Exception $e
-     * @return mixed
-     *
-     * @throws \Exception
+     * @param Exception $e
+     * @return mixed|void
+     * @throws Exception
      */
     public function report(Exception $e)
     {
@@ -120,9 +97,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * Determine if the exception should be reported.
-     *
-     * @param  \Exception $e
+     * @param Exception $e
      * @return bool
      */
     public function shouldReport(Exception $e)
@@ -145,6 +120,11 @@ class ExceptionHandler implements ExceptionHandlerContract
         }));
     }
 
+    /**
+     * @param ServiceContract $service
+     * @param Exception $e
+     * @return Response|\Illuminate\Http\Response|mixed|null|\Symfony\Component\HttpFoundation\Response
+     */
     public function render(ServiceContract $service, Exception $e)
     {
         if (method_exists($e, 'render') && $response = $e->render($service)) {
@@ -165,9 +145,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * Determine if the given exception is an HTTP exception.
-     *
-     * @param BaseException $e
+     * @param Exception $e
      * @return bool
      */
     protected function isHttpException(Exception $e): bool
@@ -175,6 +153,10 @@ class ExceptionHandler implements ExceptionHandlerContract
         return $e instanceof HttpExceptionInterface;
     }
 
+    /**
+     * @param Exception $e
+     * @return array
+     */
     protected function convertExceptionToArray(Exception $e)
     {
         return config('app.debug') ? [
@@ -191,13 +173,11 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * Prepare a JSON response for the given exception.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Exception $e
-     * @return \Illuminate\Http\JsonResponse
+     * @param ServiceContract $service
+     * @param Exception $e
+     * @return Response
      */
-    protected function prepareJsonResponse(ServiceContract $service, \Throwable $e)
+    protected function prepareJsonResponse(ServiceContract $service, Exception $e)
     {
         return new Response(
             $this->convertExceptionToArray($e),
@@ -208,11 +188,9 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * Create a response object from the given validation exception.
-     *
      * @param ValidationException $e
      * @param ServiceContract $service
-     * @return Response|null|\Symfony\Component\HttpFoundation\Response\
+     * @return Response|null|\Symfony\Component\HttpFoundation\Response
      */
     protected function convertValidationExceptionToResponse(ValidationException $e, ServiceContract $service)
     {
@@ -227,12 +205,10 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * Prepare exception for rendering.
-     *
-     * @param  \Exception $e
-     * @return \Exception
+     * @param Exception $e
+     * @return Exception|NotFoundHttpException
      */
-    protected function prepareException(\Throwable $e)
+    protected function prepareException(Exception $e)
     {
         if ($e instanceof ModelNotFoundException) {
             $e = new NotFoundHttpException($e->getMessage(), $e);

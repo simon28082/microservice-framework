@@ -32,18 +32,18 @@ class Response extends JsonResponse implements ResponseContract
     public static function createResponse($response): ResponseContract
     {
         if ($response instanceof Model && $response->wasRecentlyCreated) {
-            $response = new Response($response, 201);
+            $response = new static($response, 201);
         } elseif ($response instanceof JsonResponse) {
-            $response = new Response($response->getData(), $response->getStatusCode(), $response->headers->all(), $response->getEncodingOptions());
+            $response = new static($response->getData(), $response->getStatusCode(), $response->headers->all(), $response->getEncodingOptions());
         } elseif (!$response instanceof SymfonyResponse &&
             ($response instanceof Arrayable ||
                 $response instanceof Jsonable ||
                 $response instanceof ArrayObject ||
                 $response instanceof JsonSerializable ||
                 is_array($response))) {
-            $response = new Response($response);
+            $response = new static($response);
         } else {
-            $response = new Response($response);
+            $response = new static($response);
         }
 
         if ($response->getStatusCode() === Response::HTTP_NOT_MODIFIED) {

@@ -29,29 +29,44 @@ class Service implements ServiceContract
 
     protected $indexes;
 
-    public function __construct(Container $app,RequestContract $request)
+    public function __construct(Container $app, RequestContract $request)
     {
         $this->app = $app;
-        $this->bindKernel();
+        $this->baseBinding();
         $this->setRequest($request);
+        $this->app->bind(RequestContract::class, function ($app) {
+            return $this->request;
+        });
+        $this->app->bind(ResponseContract::class, function ($app) {
+            return $this->response;
+        });
+        //$this->setResponse(new Response());
+        //$this->app->bind(ResponseContract::class, Response::class);
     }
 
-    public function bindKernel(): void
+    public function createResponse($response): ServiceContract
+    {
+        $this->response = Response::createResponse($response);
+        return $this;
+    }
+
+    public function baseBinding(): void
     {
         $this->app->singleton(
             ExceptionHandlerContract::class,
-                ExceptionHandler::class
+            ExceptionHandler::class
         );
 
-        $this->app->bind(RequestContract::class,function($app){
-            //Request::class
-            return $this->request;
-        });
-        $this->app->singleton(ResponseContract::class,function(){
-            return $this->response;
-        });
+
+//        $this->app->bind(ResponseContract::class, function () {
+//            return $this->response;
+//        });
     }
 
+//    public static function createResponse($response)
+//    {
+//
+//    }
 
     public function setRoute(Route $route): ServiceContract
     {
@@ -83,9 +98,9 @@ class Service implements ServiceContract
         return $this;
     }
 
-    public function setResponse($response): ServiceContract
+    public function setResponse(ResponseContract $response): ServiceContract
     {
-        $this->response = HttpResponse::createReponse($response);
+        $this->response = $response;
         return $this;
     }
 
