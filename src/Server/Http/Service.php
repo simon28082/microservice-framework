@@ -2,12 +2,11 @@
 
 namespace CrCms\Microservice\Server\Http;
 
-use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Routing\Route;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
-use CrCms\Microservice\Server\Http\Exception\ExceptionHandler;
+use CrCms\Microservice\Server\Events\ServiceHandling;
 use Illuminate\Contracts\Container\Container;
 
 /**
@@ -51,6 +50,7 @@ class Service implements ServiceContract
         $this->app = $app;
         $this->setRequest($request);
         $this->baseBinding();
+        $this->registerEvent();
     }
 
     /**
@@ -64,6 +64,25 @@ class Service implements ServiceContract
 
         $this->app->bind(ResponseContract::class, function () {
             return $this->response;
+        });
+    }
+
+    /**
+     * @return void
+     */
+    public function registerEvent(): void
+    {
+        $this->app['events']->listen(ServiceHandling::class, function (ServiceHandling $event) {
+            if ($event->service->getRequest()->getMethod() !== 'POST') {
+                $methods = collect($this->app->make('router')->getRoutes()->get())->mapWithKeys(function (Route $route) {
+                    $uses = $route->getAction('uses');
+                    $uses = $uses instanceof \Closure ? 'Closure' : $uses;
+                    return [$route->mark() => $uses];
+                })->toArray();
+                return new Response([
+                    'methods' => $methods
+                ], 200);
+            }
         });
     }
 
@@ -91,14 +110,14 @@ class Service implements ServiceContract
      */
     public function certification(): bool
     {
-        $token = $this->request->headers->get('X-CRCMS-Microservice-Hash');
-        $hash = hash_hmac('ripemd256', serialize($this->request->all()), config('ms.secret'));
-        if ($token !== $hash) {
-            //throw new AccessDeniedHttpException("Microservice Hash error:" . strval($token));
-            throw new \Exception("Microservice Hash error:" . strval($token));
-            return false;
-        }
-
+//        $token = $this->request->headers->get('X-CRCMS-Microservice-Hash');
+//        $hash = hash_hmac('ripemd256', serialize($this->request->all()), config('ms.secret'));
+//        if ($token !== $hash) {
+//            //throw new AccessDeniedHttpException("Microservice Hash error:" . strval($token));
+//            throw new \Exception("Microservice Hash error:" . strval($token));
+//            return false;
+//        }
+//
         return true;
     }
 
@@ -145,16 +164,6 @@ class Service implements ServiceContract
     {
         return $this->request->get('method');
     }
-
-//    public function indexes(?string $key = null)
-//    {
-//        if (is_null($this->indexes)) {
-//            $method = explode('.', $this->request->get('method'));
-//            $this->indexes = ['name' => $method[0], 'method' => $method[1] ?? null];
-//        }
-//
-//        return $this->indexes[$key];
-//    }
 
     /**
      * @param mixed $response

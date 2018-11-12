@@ -5,6 +5,8 @@ namespace CrCms\Microservice\Server;
 use CrCms\Microservice\Foundation\Application;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Events\ServiceHandled;
+use CrCms\Microservice\Server\Events\ServiceHandling;
 use Exception;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
@@ -15,6 +17,10 @@ use CrCms\Microservice\Server\Contracts\KernelContract;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use CrCms\Microservice\Routing\Router;
 
+/**
+ * Class Kernel
+ * @package CrCms\Microservice\Server
+ */
 class Kernel implements KernelContract
 {
     /**
@@ -81,8 +87,8 @@ class Kernel implements KernelContract
     /**
      * Create a new HTTP kernel instance.
      *
-     * @param  ApplicationContract  $app
-     * @param  Router  $router
+     * @param  ApplicationContract $app
+     * @param  Router $router
      * @return void
      */
     public function __construct(ApplicationContract $app, Router $router)
@@ -101,6 +107,10 @@ class Kernel implements KernelContract
         }
     }
 
+    /**
+     * @param ServiceContract $service
+     * @return ResponseContract
+     */
     public function handle(ServiceContract $service): ResponseContract
     {
         try {
@@ -113,13 +123,17 @@ class Kernel implements KernelContract
             $response = $this->renderException($e);
         }
 
-//        $this->app['events']->dispatch(
-//            new RequestHandled($request, $response)
-//        );
+        $this->app['events']->dispatch(
+            new ServiceHandled($service)
+        );
 
         return $response;
     }
 
+    /**
+     * @param ServiceContract $service
+     * @return mixed
+     */
     protected function sendRequestThroughRouter(ServiceContract $service)
     {
         $this->app->instance('service', $service);
@@ -127,6 +141,12 @@ class Kernel implements KernelContract
         Facade::clearResolvedInstance('service');
 
         $this->bootstrap();
+
+        if ((bool)$response = $this->app['events']->until(
+            new ServiceHandling($service)
+        )) {
+            return $response;
+        }
 
         return (new Pipeline($this->app))
             ->send($service)
@@ -141,7 +161,7 @@ class Kernel implements KernelContract
      */
     public function bootstrap(): void
     {
-        if (! $this->app->hasBeenBootstrapped()) {
+        if (!$this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers());
         }
     }
@@ -171,6 +191,9 @@ class Kernel implements KernelContract
         $this->app->terminate();
     }
 
+    /**
+     * @param ServiceContract $service
+     */
     protected function terminateMiddleware(ServiceContract $service)
     {
         $middlewares = $this->app->shouldSkipMiddleware() ? [] : array_merge(
@@ -179,7 +202,7 @@ class Kernel implements KernelContract
         );
 
         foreach ($middlewares as $middleware) {
-            if (! is_string($middleware)) {
+            if (!is_string($middleware)) {
                 continue;
             }
 
@@ -193,6 +216,10 @@ class Kernel implements KernelContract
         }
     }
 
+    /**
+     * @param ServiceContract $service
+     * @return array
+     */
     protected function gatherRouteMiddleware(ServiceContract $service)
     {
         if ($route = $service->route()) {
@@ -202,6 +229,10 @@ class Kernel implements KernelContract
         return [];
     }
 
+    /**
+     * @param $middleware
+     * @return array
+     */
     protected function parseMiddleware($middleware)
     {
         list($name, $parameters) = array_pad(explode(':', $middleware, 2), 2, []);
@@ -216,7 +247,7 @@ class Kernel implements KernelContract
     /**
      * Determine if the kernel has a given middleware.
      *
-     * @param  string  $middleware
+     * @param  string $middleware
      * @return bool
      */
     public function hasMiddleware($middleware)
@@ -227,7 +258,7 @@ class Kernel implements KernelContract
     /**
      * Add a new middleware to beginning of the stack if it does not already exist.
      *
-     * @param  string  $middleware
+     * @param  string $middleware
      * @return $this
      */
     public function prependMiddleware($middleware)
@@ -242,7 +273,7 @@ class Kernel implements KernelContract
     /**
      * Add a new middleware to end of the stack if it does not already exist.
      *
-     * @param  string  $middleware
+     * @param  string $middleware
      * @return $this
      */
     public function pushMiddleware($middleware)
@@ -254,21 +285,35 @@ class Kernel implements KernelContract
         return $this;
     }
 
+    /**
+     * @return array
+     */
     protected function bootstrappers()
     {
         return $this->bootstrappers;
     }
 
+    /**
+     * @param Exception $e
+     */
     protected function reportException(Exception $e)
     {
         $this->app[ExceptionHandlerContract::class]->report($e);
     }
 
+    /**
+     * @param ServiceContract $service
+     * @param Exception $e
+     * @return mixed
+     */
     protected function renderException(ServiceContract $service, Exception $e)
     {
         return $this->app[ExceptionHandlerContract::class]->render($e);
     }
 
+    /**
+     * @return ApplicationContract
+     */
     public function getApplication(): ApplicationContract
     {
         return $this->app;

@@ -16,12 +16,6 @@ interface ServiceContract
     public function name(): string;
 
     /**
-     * @param null|string $key
-     * @return array|string
-     */
-    //public function indexes(?string $key = null);
-
-    /**
      * @return void
      */
     public function baseBinding(): void;
@@ -71,11 +65,6 @@ interface ServiceContract
      * @return ResponseContract
      */
     public static function toResponse(RequestContract $request, ResponseContract $response): ResponseContract;
-
-    /**
-     * @return string
-     */
-//    public static function exceptionHandler(): string;
 
     /**
      * @return bool
