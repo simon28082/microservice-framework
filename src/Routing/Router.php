@@ -3,30 +3,19 @@
 namespace CrCms\Microservice\Routing;
 
 use Closure;
-use ArrayObject;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
 use Illuminate\Support\Arr;
-use JsonSerializable;
 use Illuminate\Support\Str;
-use Illuminate\Http\Request;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
-use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Traits\Macroable;
-use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Contracts\Events\Dispatcher;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Responsable;
-use Illuminate\Contracts\Routing\BindingRegistrar;
-use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
-use Illuminate\Contracts\Routing\Registrar as RegistrarContract;
-use Symfony\Bridge\PsrHttpMessage\Factory\HttpFoundationFactory;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use CrCms\Microservice\Routing\Route;
-use CrCms\Foundation\MicroService\Http\Response;
 
+/**
+ * Class Router
+ * @package CrCms\Microservice\Routing
+ */
 class Router
 {
     use Macroable {
@@ -110,22 +99,36 @@ class Router
         $this->container = $container ?: new Container;
     }
 
+    /**
+     * @param $name
+     * @param $action
+     * @return \CrCms\Microservice\Routing\Route
+     */
     public function register($name, $action)
     {
         return $this->multiple($name, $action);
-
     }
 
+    /**
+     * @param $name
+     * @param $action
+     * @return \CrCms\Microservice\Routing\Route
+     */
     public function single($name, $action)
     {
         return $this->addRoute($name, $action);
     }
 
+    /**
+     * @param $name
+     * @param $action
+     * @return \CrCms\Microservice\Routing\Route
+     * @throws \ReflectionException
+     */
     public function multiple($name, $action)
     {
-        if (!$action instanceof Closure) {
+        if (is_string($action) && strpos($action, '@') === false) {
             $namespaceAction = $this->convertToControllerAction($action);
-
             $methods = (new ReflectionAction($this))->getMethods($namespaceAction['uses']);
             foreach ($methods as $method) {
                 $uses = isset($action['uses']) ? "{$action['uses']}@{$method}" : "{$action}@{$method}";
@@ -134,21 +137,6 @@ class Router
         } else {
             return $this->single($name, $action);
         }
-    }
-
-    /**
-     * Register a new Fallback route with the router.
-     *
-     * @param  \Closure|array|string|null $action
-     * @return \CrCms\Microservice\Routing\Route
-     */
-    public function fallback($action)
-    {
-        $placeholder = 'fallbackPlaceholder';
-
-        return $this->addRoute(
-            'GET', "{{$placeholder}}", $action
-        )->where($placeholder, '.*')->fallback();
     }
 
     /**
@@ -197,7 +185,7 @@ class Router
 
         if (isset($new['namespace'])) {
             $namespace = isset($old['namespace']) && strpos($new['namespace'], '\\') !== 0
-                ? trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\')
+                ? trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\')
                 : trim($new['namespace'], '\\');
         } else {
             $namespace = $old['namespace'] ?? null;
@@ -230,11 +218,8 @@ class Router
     }
 
     /**
-     * Add a route to the underlying route collection.
-     *
-     * @param  array|string $methods
-     * @param  string $uri
-     * @param  \Closure|array|string|null $action
+     * @param $name
+     * @param $action
      * @return \CrCms\Microservice\Routing\Route
      */
     public function addRoute($name, $action)
@@ -243,11 +228,8 @@ class Router
     }
 
     /**
-     * Create a new route instance.
-     *
-     * @param  array|string $methods
-     * @param  string $uri
-     * @param  mixed $action
+     * @param $name
+     * @param $action
      * @return \CrCms\Microservice\Routing\Route
      */
     protected function createRoute($name, $action)
@@ -330,11 +312,8 @@ class Router
     }
 
     /**
-     * Create a new Route object.
-     *
-     * @param  array|string $methods
-     * @param  string $uri
-     * @param  mixed $action
+     * @param $name
+     * @param $action
      * @return \CrCms\Microservice\Routing\Route
      */
     protected function newRoute($name, $action)
@@ -345,17 +324,17 @@ class Router
     }
 
     /**
-     * Merge the group stack with the controller action.
-     *
-     * @param  \CrCms\Microservice\Routing\Route $route
-     * @return void
+     * @param \CrCms\Microservice\Routing\Route $route
      */
-    protected function mergeGroupAttributesIntoRoute($route)
+    protected function mergeGroupAttributesIntoRoute(Route $route)
     {
         $route->setAction($this->mergeWithLastGroup($route->getAction()));
     }
 
-
+    /**
+     * @param ServiceContract $service
+     * @return mixed
+     */
     public function dispatch(ServiceContract $service)
     {
         $this->currentService = $service;
@@ -363,11 +342,19 @@ class Router
         return $this->dispatchToRoute($service);
     }
 
+    /**
+     * @param ServiceContract $service
+     * @return mixed
+     */
     public function dispatchToRoute(ServiceContract $service)
     {
         return $this->runRoute($service, $this->findRoute($service));
     }
 
+    /**
+     * @param ServiceContract $service
+     * @return array
+     */
     protected function findRoute(ServiceContract $service)
     {
         $this->current = $route = $this->routes->match($service);
@@ -377,6 +364,11 @@ class Router
         return $route;
     }
 
+    /**
+     * @param ServiceContract $service
+     * @param \CrCms\Microservice\Routing\Route $route
+     * @return mixed
+     */
     protected function runRoute(ServiceContract $service, Route $route)
     {
         $service->setRoute($route);
@@ -389,6 +381,11 @@ class Router
 //        );
     }
 
+    /**
+     * @param \CrCms\Microservice\Routing\Route $route
+     * @param ServiceContract $service
+     * @return mixed
+     */
     protected function runRouteWithinStack(Route $route, ServiceContract $service)
     {
         $shouldSkipMiddleware = $this->container->bound('middleware.disable') &&
@@ -406,6 +403,10 @@ class Router
             });
     }
 
+    /**
+     * @param \CrCms\Microservice\Routing\Route $route
+     * @return array
+     */
     public function gatherRouteMiddleware(Route $route)
     {
         $middleware = collect($route->gatherMiddleware())->map(function ($name) {
@@ -415,11 +416,20 @@ class Router
         return $this->sortMiddleware($middleware);
     }
 
+    /**
+     * @param Collection $middlewares
+     * @return array
+     */
     protected function sortMiddleware(Collection $middlewares)
     {
         return (new SortedMiddleware($this->middlewarePriority, $middlewares))->all();
     }
 
+    /**
+     * @param ServiceContract $service
+     * @param $response
+     * @return ResponseContract
+     */
     public function prepareResponse(ServiceContract $service, $response)
     {
         return $service::toResponse(
@@ -559,24 +569,14 @@ class Router
     }
 
     /**
-     * Get a route parameter for the current route.
-     *
-     * @param  string $key
-     * @param  string $default
-     * @return mixed
+     * @return ServiceContract
      */
-//    public function input($key, $default = null)
-//    {
-//        return $this->current()->parameter($key, $default);
-//    }
     public function getCurrentService()
     {
         return $this->currentService;
     }
 
     /**
-     * Get the currently dispatched route instance.
-     *
      * @return \CrCms\Microservice\Routing\Route
      */
     public function getCurrentRoute()
@@ -585,8 +585,6 @@ class Router
     }
 
     /**
-     * Get the currently dispatched route instance.
-     *
      * @return \CrCms\Microservice\Routing\Route
      */
     public function current()

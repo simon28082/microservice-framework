@@ -5,12 +5,12 @@ namespace CrCms\Microservice\Bootstrap;
 use Exception;
 use ErrorException;
 use Illuminate\Contracts\Foundation\Application;
-use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use CrCms\Microservice\{
     Console\Contracts\ExceptionHandlerContract as ConsoleExceptionHandlerContract,
     Server\Contracts\ExceptionHandlerContract as ServerExceptionHandlerContract,
+    Server\Http\Response
 };
 
 class HandleExceptions
@@ -86,7 +86,7 @@ class HandleExceptions
             //
         }
 
-        $this->render($e);
+        return $this->render($e);
     }
 
     /**
@@ -97,7 +97,7 @@ class HandleExceptions
      */
     protected function render(Exception $e)
     {
-        $this->getExceptionHandler()->render($e);
+        return $this->getExceptionHandler()->render($e);
     }
 
     /**

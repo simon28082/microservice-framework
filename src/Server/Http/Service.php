@@ -58,11 +58,6 @@ class Service implements ServiceContract
      */
     public function baseBinding(): void
     {
-        $this->app->singleton(
-            ExceptionHandlerContract::class,
-            ExceptionHandler::class
-        );
-
         $this->app->bind(RequestContract::class, function ($app) {
             return $this->request;
         });

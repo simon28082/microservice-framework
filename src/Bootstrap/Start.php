@@ -15,8 +15,9 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use CrCms\Microservice\Console\Kernel;
-use CrCms\Microservice\Console\Contracts\ExceptionHandlerContract;
-use CrCms\Microservice\Console\ExceptionHandler;
+use CrCms\Microservice\Console\Contracts\ExceptionHandlerContract as ConsoleExceptionHandlerContract;
+use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract as ServerExceptionHandlerContract;
+use CrCms\Microservice\Console\ExceptionHandler as ConsoleExceptionHandler;
 use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
 use CrCms\Microservice\Server\Kernel as ServerKernel;
 
@@ -32,12 +33,29 @@ class Start
     protected $app;
 
     /**
+     * @var array
+     */
+    protected $servers = [
+        'http' => [
+            'exception' => \CrCms\Microservice\Server\Http\Exception\ExceptionHandler::class
+        ]
+    ];
+
+    /**
+     * @var string
+     */
+    protected $mode;
+
+    /**
      * @param array $params
      * @param null|string $basePath
+     * @param null|string $mode
+     * @return void
      */
-    public static function run(array $params = [], ?string $basePath = null)
+    public static function run(array $params = [], ?string $basePath = null, ?string $mode = null): void
     {
         $instance = new static;
+        $instance->mode($mode);
         $instance->createApplication($basePath)->baseKernelBinding();
 
         $instance->getApplication()->runningInConsole() ?
@@ -46,9 +64,9 @@ class Start
 
     /**
      * @param string $basePath
-     * @return $this
+     * @return Start
      */
-    public function createApplication(string $basePath)
+    public function createApplication(string $basePath): self
     {
         $this->app = new Application($basePath);
         return $this;
@@ -63,10 +81,31 @@ class Start
     }
 
     /**
+     * @param null|string $mode
+     * @return Start
+     */
+    protected function mode(?string $mode = null): self
+    {
+        $envMode = getenv('CRCMS_MODE');
+        if ($envMode !== false) {
+            $mode = $envMode;
+        }
+        $mode = strtolower($mode);
+        if (!array_key_exists($mode, $this->servers)) {
+            $mode = 'http';
+        }
+
+        putenv("CRCMS_MODE={$mode}");
+        $this->mode = $mode;
+
+        return $this;
+    }
+
+    /**
      * @param array $params
      * @return void
      */
-    protected function runConsole(array $params)
+    protected function runConsole(array $params): void
     {
         $kernel = $this->app->make(KernelContract::class);
 
@@ -83,7 +122,7 @@ class Start
     /**
      * @return void
      */
-    protected function baseKernelBinding():  void
+    protected function baseKernelBinding(): void
     {
         $this->app->singleton(
             KernelContract::class,
@@ -91,13 +130,18 @@ class Start
         );
 
         $this->app->singleton(
-            ExceptionHandlerContract::class,
-            ExceptionHandler::class
+            ConsoleExceptionHandlerContract::class,
+            ConsoleExceptionHandler::class
         );
 
         $this->app->singleton(
             ServerKernelContract::class,
             ServerKernel::class
+        );
+
+        $this->app->singleton(
+            ServerExceptionHandlerContract::class,
+            $this->servers[$this->mode]['exception']
         );
     }
 
@@ -105,32 +149,16 @@ class Start
      * @param array $params
      * @return void
      */
-    protected function runApplication(array $params)
+    protected function runApplication(array $params): void
     {
+        $service = Factory::service($this->app, $this->mode);
+
         $kernel = $this->app->make(ServerKernelContract::class);
-//        $response = $kernel->handle(
-//            $request = Illuminate\Http\Request::capture()
-//        );
-//        $response->send();
-//        $kernel->terminate($request, $response);
 
-        $kernel->bootstrap();
-
-        $service = Factory::service($this->app,$this->app['config']->get('app.mode'));
-
-        //这里还有问题，一旦被Service之前有异常或出错，则会报ExceptionHandlerContract没有绑定
-//        $this->singleton(
-//            ExceptionHandlerContract::class,
-//            $service::exceptionHandler()
-//        );
-
-        $response = $kernel->handle(
-            $service
-        );
+        $response = $kernel->handle($service);
 
         $response->send();
 
         $kernel->terminate($service);
-
     }
 }

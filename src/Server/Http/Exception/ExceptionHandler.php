@@ -123,31 +123,13 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function render(Exception $e)
     {
-        $service = $this->container->make(ServiceContract::class);
-
-        if ($e instanceof ServiceException) {
-            $e->setService($service);
+        if ($this->isServiceException($e)) {
+            $e->setService($this->container->make(ServiceContract::class));
         } elseif ($e instanceof ValidationException) {
-            return $this->convertValidationExceptionToResponse($e, $service);
+            return $this->convertValidationExceptionToResponse($e);
         }
 
-        return $this->prepareJsonResponse($service, $e);
-
-//        if (method_exists($e, 'render') && $response = $e->render($service)) {
-//            return new Response($response);
-//        } elseif ($e instanceof Responsable) {
-//            return $e->toResponse($service->getRequest());
-//        }
-//
-//        $e = $this->prepareException($e);
-//
-//        if ($e instanceof HttpResponseException) {
-//            return $e->getResponse();
-//        } elseif ($e instanceof ValidationException) {
-//            return $this->convertValidationExceptionToResponse($e, $service);
-//        }
-//
-//        return $this->prepareJsonResponse($service, $e);
+        return $this->prepareJsonResponse($e);
     }
 
     /**
@@ -179,11 +161,10 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * @param ServiceContract $service
      * @param Exception $e
      * @return Response
      */
-    protected function prepareJsonResponse(ServiceContract $service, Exception $e)
+    protected function prepareJsonResponse(Exception $e)
     {
         return new Response(
             $this->convertExceptionToArray($e),
@@ -193,10 +174,9 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param ValidationException $e
-     * @param ServiceContract $service
      * @return Response|null|\Symfony\Component\HttpFoundation\Response
      */
-    protected function convertValidationExceptionToResponse(ValidationException $e, ServiceContract $service)
+    protected function convertValidationExceptionToResponse(ValidationException $e)
     {
         if ($e->response) {
             return $e->response;

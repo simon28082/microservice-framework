@@ -3,12 +3,8 @@
 namespace CrCms\Microservice\Routing;
 
 use Illuminate\Support\ServiceProvider;
-use Psr\Http\Message\ResponseInterface;
-use Zend\Diactoros\Response as PsrResponse;
-use Psr\Http\Message\ServerRequestInterface;
-use Symfony\Bridge\PsrHttpMessage\Factory\DiactorosFactory;
-use Illuminate\Contracts\View\Factory as ViewFactoryContract;
-use Illuminate\Contracts\Routing\ResponseFactory as ResponseFactoryContract;
+//use Psr\Http\Message\ResponseInterface;
+//use Psr\Http\Message\ServerRequestInterface;
 use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 
 class RoutingServiceProvider extends ServiceProvider
@@ -21,11 +17,6 @@ class RoutingServiceProvider extends ServiceProvider
     public function register()
     {
         $this->registerRouter();
-//        $this->registerUrlGenerator();
-//        $this->registerRedirector();
-//        $this->registerPsrRequest();
-//        $this->registerPsrResponse();
-//        $this->registerResponseFactory();
         $this->registerControllerDispatcher();
     }
 
@@ -38,75 +29,6 @@ class RoutingServiceProvider extends ServiceProvider
     {
         $this->app->singleton('router', function ($app) {
             return new Router($app['events'], $app);
-        });
-    }
-
-    /**
-     * Get the URL generator request rebinder.
-     *
-     * @return \Closure
-     */
-    protected function requestRebinder()
-    {
-        return function ($app, $request) {
-            $app['url']->setRequest($request);
-        };
-    }
-
-    /**
-     * Register the Redirector service.
-     *
-     * @return void
-     */
-    protected function registerRedirector()
-    {
-        $this->app->singleton('redirect', function ($app) {
-            $redirector = new Redirector($app['url']);
-
-            // If the session is set on the application instance, we'll inject it into
-            // the redirector instance. This allows the redirect responses to allow
-            // for the quite convenient "with" methods that flash to the session.
-            if (isset($app['session.store'])) {
-                $redirector->setSession($app['session.store']);
-            }
-
-            return $redirector;
-        });
-    }
-
-    /**
-     * Register a binding for the PSR-7 request implementation.
-     *
-     * @return void
-     */
-    protected function registerPsrRequest()
-    {
-        $this->app->bind(ServerRequestInterface::class, function ($app) {
-            return (new DiactorosFactory)->createRequest($app->make('request'));
-        });
-    }
-
-    /**
-     * Register a binding for the PSR-7 response implementation.
-     *
-     * @return void
-     */
-    protected function registerPsrResponse()
-    {
-        $this->app->bind(ResponseInterface::class, function () {
-            return new PsrResponse;
-        });
-    }
-
-    /**
-     * Register the response factory implementation.
-     *
-     * @return void
-     */
-    protected function registerResponseFactory()
-    {
-        $this->app->singleton(ResponseFactoryContract::class, function ($app) {
-            return new ResponseFactory($app[ViewFactoryContract::class], $app['redirect']);
         });
     }
 
