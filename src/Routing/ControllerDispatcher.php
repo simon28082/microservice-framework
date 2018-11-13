@@ -41,10 +41,6 @@ class ControllerDispatcher implements ControllerDispatcherContract
             [], $controller, $method
         );
 
-        if (method_exists($controller, 'callAction')) {
-            return $controller->callAction($method, $parameters);
-        }
-
         return $controller->{$method}(...array_values($parameters));
     }
 
