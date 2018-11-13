@@ -8,7 +8,7 @@ use Throwable;
 use Illuminate\Pipeline\Pipeline as BasePipeline;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
-use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 /**
  * This extended pipeline catches any exceptions that occur during each slice.
@@ -80,7 +80,7 @@ class Pipeline extends BasePipeline
 
         $handler->report($e);
 
-        $response = $handler->render($e);
+        $response = $handler->render($passable, $e);
 
         if (method_exists($response, 'withException')) {
             $response->withException($e);

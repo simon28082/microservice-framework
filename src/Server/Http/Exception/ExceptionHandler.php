@@ -18,7 +18,10 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
-use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
+//use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Symfony\Component\Console\Application as ConsoleApplication;
+use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Class ExceptionHandler
@@ -118,18 +121,28 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
+     * @param ServiceContract $service
      * @param Exception $e
-     * @return Response
+     * @return Response|null|\Symfony\Component\HttpFoundation\Response
      */
-    public function render(Exception $e)
+    public function render($service, Exception $e)
     {
         if ($this->isServiceException($e)) {
-            $e->setService($this->container->make(ServiceContract::class));
+            $e->setService($service);
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e);
         }
 
         return $this->prepareJsonResponse($e);
+    }
+
+    /**
+     * @param \Symfony\Component\Console\Output\OutputInterface $output
+     * @param Exception $e
+     */
+    public function renderForConsole($output, Exception $e)
+    {
+        (new ConsoleApplication)->renderException($e, $output);
     }
 
     /**

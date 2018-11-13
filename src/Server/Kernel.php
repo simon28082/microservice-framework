@@ -12,7 +12,7 @@ use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
 use CrCms\Microservice\Routing\Pipeline;
 use Illuminate\Support\Facades\Facade;
-use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use CrCms\Microservice\Server\Contracts\KernelContract;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use CrCms\Microservice\Routing\Router;
@@ -312,7 +312,7 @@ class Kernel implements KernelContract
      */
     protected function renderException(ServiceContract $service, Exception $e)
     {
-        return $this->app[ExceptionHandlerContract::class]->render($e);
+        return $this->app[ExceptionHandlerContract::class]->render($service, $e);
     }
 
     /**

@@ -15,9 +15,7 @@ use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use CrCms\Microservice\Console\Kernel;
-use CrCms\Microservice\Console\Contracts\ExceptionHandlerContract as ConsoleExceptionHandlerContract;
-use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract as ServerExceptionHandlerContract;
-use CrCms\Microservice\Console\ExceptionHandler as ConsoleExceptionHandler;
+use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
 use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
 use CrCms\Microservice\Server\Kernel as ServerKernel;
 
@@ -151,11 +149,6 @@ class Start
         $this->app->singleton(
             KernelContract::class,
             Kernel::class
-        );
-
-        $this->app->singleton(
-            ConsoleExceptionHandlerContract::class,
-            ConsoleExceptionHandler::class
         );
 
         $this->app->singleton(
