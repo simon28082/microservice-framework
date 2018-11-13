@@ -168,7 +168,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     {
         return new Response(
             $this->convertExceptionToArray($e),
-            $e->getCode() === 0 ? 500 : $e->getCode()
+            $e->getCode() <= 0 ? 500 : $e->getCode()
         );
     }
 
