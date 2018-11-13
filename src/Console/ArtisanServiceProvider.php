@@ -45,6 +45,7 @@ use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand
 use Illuminate\Database\Console\Migrations\InstallCommand as MigrateInstallCommand;
 use Illuminate\Database\Console\Migrations\RefreshCommand as MigrateRefreshCommand;
 use Illuminate\Database\Console\Migrations\RollbackCommand as MigrateRollbackCommand;
+use CrCms\Microservice\Console\Commands\InitializeMakeCommand;
 
 class ArtisanServiceProvider extends ServiceProvider
 {
@@ -107,6 +108,7 @@ class ArtisanServiceProvider extends ServiceProvider
 //        'MailMake' => 'command.mail.make',
 //        'MiddlewareMake' => 'command.middleware.make',
         'MigrateMake' => 'command.migrate.make',
+        'InitializeMake' => 'command.initialize.make',
 //        'ModelMake' => 'command.model.make',
 //        'NotificationMake' => 'command.notification.make',
 //        'NotificationTable' => 'command.notification.table',
@@ -152,8 +154,20 @@ class ArtisanServiceProvider extends ServiceProvider
     }
 
     /**
-     * register SwooleServer
+     * register Initialize
      * 
+     * @return void
+     */
+    protected function registerInitializeMakeCommand()
+    {
+        $this->app->singleton('command.initialize.make', function ($app) {
+            return new InitializeMakeCommand($app['files']);
+        });
+    }
+
+    /**
+     * register SwooleServer
+     *
      * @return void
      */
     protected function registerSwooleServerCommand()
