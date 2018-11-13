@@ -104,13 +104,13 @@ class Router
      * @param $action
      * @return \CrCms\Microservice\Routing\Route
      */
-    public function register($name, $action)
+    public function register($name, $action, array $options = [])
     {
         if (
             is_array($action) ||
             (is_string($action) && strpos($action, '@') === false)
         ) {
-            return $this->multiple($name, $action);
+            return $this->multiple($name, $action, $options);
         } else {
             return $this->single($name, $action);
         }
@@ -132,10 +132,15 @@ class Router
      * @return \CrCms\Microservice\Routing\Route
      * @throws \ReflectionException
      */
-    public function multiple($name, $action)
+    public function multiple($name, $action, array $options = [])
     {
         $namespaceAction = $this->convertToControllerAction($action);
         $methods = (new ReflectionAction($this))->getMethods($namespaceAction['uses']);
+        if (isset($options['only'])) {
+            $methods = array_intersect($methods, $options['only']);
+        } elseif (isset($options['except'])) {
+            $methods = array_diff($methods, $options['except']);
+        }
         foreach ($methods as $method) {
             $uses = isset($action['uses']) ? "{$action['uses']}@{$method}" : "{$action}@{$method}";
             $this->single("{$name}.{$method}", array_merge($namespaceAction, ['controller' => $uses, 'uses' => $uses]));

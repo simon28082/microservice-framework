@@ -44,7 +44,7 @@ class RouteRegistrar
      * @var array
      */
     protected $allowedAttributes = [
-        'middleware', 'namespace',
+        'middleware', 'namespace', //'options'
     ];
 
     /**
@@ -92,18 +92,19 @@ class RouteRegistrar
     /**
      * Register a new route with the router.
      *
-     * @param  string $method
-     * @param  string $uri
-     * @param  \Closure|array|string|null $action
-     * @return \CrCms\Microservice\Routing\Route
+     * @param string $method
+     * @param string $name
+     * @param null $action
+     * @param array $options
+     * @return mixed
      */
-    protected function registerRoute($method, $uri, $action = null)
+    protected function registerRoute($method, $name, $action = null, array $options = [])
     {
         if (!is_array($action)) {
             $action = array_merge($this->attributes, $action ? ['uses' => $action] : []);
         }
 
-        return $this->router->{$method}($uri, $this->compileAction($action));
+        return $this->router->{$method}($name, $this->compileAction($action), $options);
     }
 
     /**
