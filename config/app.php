@@ -146,7 +146,7 @@ return [
         Illuminate\Cache\CacheServiceProvider::class,
 //        Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
         Illuminate\Database\DatabaseServiceProvider::class,
-//        Illuminate\Encryption\EncryptionServiceProvider::class,
+        Illuminate\Encryption\EncryptionServiceProvider::class,
         Illuminate\Filesystem\FilesystemServiceProvider::class,
         Illuminate\Hashing\HashServiceProvider::class,
 //        Illuminate\Notifications\NotificationServiceProvider::class,

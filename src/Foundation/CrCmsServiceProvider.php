@@ -9,44 +9,19 @@
 
 namespace CrCms\Microservice\Foundation;
 
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
-use Illuminate\Support\ServiceProvider;
+use CrCms\Microservice\Transporters\DataServiceProvider;
+use Illuminate\Support\AggregateServiceProvider;
 
 /**
  * Class CrCmsServiceProvider
  * @package CrCms\Microservice\src\Foundation
  */
-class CrCmsServiceProvider extends ServiceProvider
+class CrCmsServiceProvider extends AggregateServiceProvider
 {
     /**
-     * Bootstrap any application services.
-     *
-     * @return void
+     * @var array
      */
-    public function boot()
-    {
-        $this->app->afterResolving(ValidatesWhenResolved::class, function ($resolved) {
-            $resolved->validateResolved();
-        });
-    }
-
-
-    /**
-     * Register any application services.
-     *
-     * @return void
-     */
-    public function register()
-    {
-
-    }
-
-    /**
-     * @return array
-     */
-    public function provides(): array
-    {
-        return [
-        ];
-    }
+    protected $providers = [
+        DataServiceProvider::class,
+    ];
 }

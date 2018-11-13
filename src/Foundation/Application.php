@@ -886,7 +886,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'filesystem.cloud' => [\Illuminate\Contracts\Filesystem\Cloud::class],
                      'hash' => [\Illuminate\Hashing\HashManager::class],
                      'hash.driver' => [\Illuminate\Contracts\Hashing\Hasher::class],
-//                     'translator' => [\Illuminate\Translation\Translator::class, \Illuminate\Contracts\Translation\Translator::class],
+                     'translator' => [\Illuminate\Translation\Translator::class, \Illuminate\Contracts\Translation\Translator::class],
                      'log' => [\Illuminate\Log\LogManager::class, \Psr\Log\LoggerInterface::class],
                      'queue' => [\Illuminate\Queue\QueueManager::class, \Illuminate\Contracts\Queue\Factory::class, \Illuminate\Contracts\Queue\Monitor::class],
                      'queue.connection' => [\Illuminate\Contracts\Queue\Queue::class],

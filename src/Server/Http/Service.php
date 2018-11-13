@@ -3,124 +3,22 @@
 namespace CrCms\Microservice\Server\Http;
 
 use CrCms\Foundation\Transporters\AbstractDataProvider;
-use CrCms\Foundation\Transporters\DataProvider;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Routing\Route;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
 use CrCms\Microservice\Server\Events\ServiceHandling;
-use CrCms\Microservice\Server\Exceptions\UnauthorizedException;
+use CrCms\Microservice\Transporters\DataProvider;
 use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Validation\Factory;
-use Illuminate\Contracts\Validation\ValidatesWhenResolved;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\ValidatesWhenResolvedTrait;
-use Illuminate\Validation\ValidationException;
+use BadMethodCallException;
 
 /**
  * Class Service
  * @package CrCms\Foundation\MicroService\Http
  */
-class Service implements ServiceContract,ValidatesWhenResolved
+class Service implements ServiceContract
 {
-    use ValidatesWhenResolvedTrait;
-
-    protected function failedAuthorization()
-    {
-        throw new UnauthorizedException("No Access");
-    }
-
-    /**
-     * Get the validator instance for the request.
-     *
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function getValidatorInstance()
-    {
-        $factory = $this->app->make(Factory::class);
-
-        if (method_exists($this, 'validator')) {
-            $validator = $this->app->call([$this, 'validator'], compact('factory'));
-        } else {
-            $validator = $this->createDefaultValidator($factory);
-        }
-
-        if (method_exists($this, 'withValidator')) {
-            $this->withValidator($validator);
-        }
-
-        return $validator;
-    }
-
-    /**
-     * Create the default validator instance.
-     *
-     * @param  \Illuminate\Contracts\Validation\Factory  $factory
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function createDefaultValidator(Factory $factory)
-    {
-        return $factory->make(
-            $this->validationData(), $this->app->call([$this, 'rules']),
-            $this->messages(), $this->attributes()
-        );
-    }
-
-    public function rules()
-    {
-        return [];
-    }
-
-    /**
-     * Get data to be validated from the request.
-     *
-     * @return array
-     */
-    protected function validationData()
-    {
-        return $this->dataProvider->all();
-    }
-
-
-    /**
-     * Get custom messages for validator errors.
-     *
-     * @return array
-     */
-    public function messages()
-    {
-        return [];
-    }
-
-    /**
-     * Get custom attributes for validator errors.
-     *
-     * @return array
-     */
-    public function attributes()
-    {
-        return [];
-    }
-
-    /**
-     * Handle a failed validation attempt.
-     *
-     * @param  \Illuminate\Contracts\Validation\Validator  $validator
-     * @return void
-     *
-     * @throws \Illuminate\Validation\ValidationException
-     */
-    protected function failedValidation(Validator $validator)
-    {
-        throw (new ValidationException($validator))
-            ->errorBag('default');
-    }
-
-
-//    public function authorize()
-//    {
-//        return false;
-//    }
+    //use ValidateConcern;
 
     /**
      * @var Request
@@ -156,7 +54,7 @@ class Service implements ServiceContract,ValidatesWhenResolved
     {
         $this->app = $app;
         $this->setRequest($request);
-        $this->setDataProvider(new DataProvider($this->request->input('data',[])));
+        $this->setDataProvider(new DataProvider($this->request->input('data', [])));
         $this->registerEvent();
     }
 
@@ -296,7 +194,7 @@ class Service implements ServiceContract,ValidatesWhenResolved
      */
     public function name(): string
     {
-        return $this->request->get('callxx');
+        return $this->request->get('call');
     }
 
     /**
@@ -317,5 +215,19 @@ class Service implements ServiceContract,ValidatesWhenResolved
     public static function toResponse(RequestContract $request, ResponseContract $response): ResponseContract
     {
         return $response->prepare($request);
+    }
+
+    /**
+     * @param string $name
+     * @param array $arguments
+     * @return mixed
+     */
+    public function __call(string $name, array $arguments)
+    {
+        if (method_exists($this->dataProvider, $name)) {
+            return $this->dataProvider->{$name}(...$arguments);
+        }
+
+        throw new BadMethodCallException('Undefined method ' . get_class($this) . '::' . $name);
     }
 }
