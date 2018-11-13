@@ -167,7 +167,9 @@ class Kernel implements KernelContract
      */
     protected function schedule(Schedule $schedule)
     {
-        //
+        foreach (config('mount.schedules') as $scheduleCommand) {
+            (new $scheduleCommand)->handle($schedule);
+        }
     }
 
     /**

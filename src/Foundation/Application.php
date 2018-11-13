@@ -427,7 +427,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function registerConfiguredProviders()
     {
-        $providers = Collection::make($this->config['app.providers'])
+        $providers = Collection::make($this->config['mount.providers'])
             ->partition(function ($provider) {
                 return Str::startsWith($provider, 'Illuminate\\');
             });
