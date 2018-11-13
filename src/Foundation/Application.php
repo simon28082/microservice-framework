@@ -55,6 +55,11 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * @var string
      */
+    protected $resourcePath;
+
+    /**
+     * @var string
+     */
     protected $environmentPath;
 
     /**
@@ -323,7 +328,11 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function resourcePath($path = '')
     {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'resources' . ($path ? DIRECTORY_SEPARATOR . $path : $path);
+        if (is_null($this->resourcePath)) {
+            $this->resourcePath = $this->basePath . DIRECTORY_SEPARATOR . 'resources';
+        }
+
+        return $path ? $this->resourcePath . DIRECTORY_SEPARATOR . $path : $this->resourcePath;
     }
 
     /**

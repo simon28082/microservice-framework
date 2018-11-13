@@ -34,7 +34,7 @@ class InitializeMakeCommand extends Command
     /**
      * @var array
      */
-    protected $modules = ['storage', 'config', 'database', 'modules', 'extensions', 'routes'];
+    protected $modules = ['resource', 'storage', 'config', 'database', 'modules', 'extensions', 'routes'];
 
     /**
      * AutoCreateStorageCommand constructor.
@@ -59,6 +59,29 @@ class InitializeMakeCommand extends Command
     }
 
     /**
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function createResource()
+    {
+        if (!$this->files->exists(resource_path())) {
+            $this->autoCreateDirs([resource_path()]);
+        }
+
+        if (!$this->files->exists(app()->langPath())) {
+            $langPath = app()->langPath();
+            $localPath = $langPath.'/'.config('app.locale');
+            $this->autoCreateDirs([
+                $langPath,
+                $localPath,
+            ]);
+
+            $this->files->put($localPath.'/pagination.php', $this->files->get(__DIR__ . '/stubs/lang/'.config('app.locale').'/pagination.stub'));
+            $this->files->put($localPath.'/validation.php', $this->files->get(__DIR__ . '/stubs/lang/'.config('app.locale').'/validation.stub'));
+        }
+    }
+
+    /**
      * @return void
      */
     protected function createDatabase(): void
@@ -74,7 +97,6 @@ class InitializeMakeCommand extends Command
             $this->files->put(database_path('migrations/2014_10_12_000000_create_users_table.php'), $this->files->get(__DIR__ . '/stubs/migration.stub'));
             $this->files->put(database_path('seeds/DatabaseSeeder.php'), $this->files->get(__DIR__ . '/stubs/seed.stub'));
         }
-
     }
 
     /**

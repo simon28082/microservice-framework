@@ -66,6 +66,16 @@ function config_path(?string $path = null): string
 }
 
 /**
+ * @param null|string $path
+ * @return string
+ * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ */
+function resource_path(?string $path = null): string
+{
+    return app()->resourcePath($path);
+}
+
+/**
  * Translate the given message.
  *
  * @param  string|null $id
