@@ -9,10 +9,10 @@
 
 namespace CrCms\Microservice\Server\Http;
 
-use CrCms\Foundation\Swoole\Server\AbstractServer;
-use CrCms\Foundation\MicroService\Events\RequestEvent;
-use CrCms\Foundation\Swoole\Server\Contracts\ServerContract;
-use CrCms\Foundation\MicroService\Contracts\Kernel;
+use CrCms\Microservice\Server\Http\Events\RequestEvent;
+use CrCms\Microservice\Server\Kernel;
+use CrCms\Server\Server\AbstractServer;
+use CrCms\Server\Server\Contracts\ServerContract;
 use Swoole\Http\Server as HttpServer;
 
 /**
@@ -34,12 +34,11 @@ class Server extends AbstractServer implements ServerContract
     public function bootstrap(): void
     {
         $this->app->make(Kernel::class)->bootstrap();
-        $this->app->getServerApplication()->bindServer($this);
     }
 
     /**
      * @param array $config
-     * @return SwooleServer
+     * @return void
      */
     public function createServer(): void
     {

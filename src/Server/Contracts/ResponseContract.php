@@ -25,4 +25,9 @@ interface ResponseContract
      * @return ResponseContract
      */
     public static function createResponse($response): ResponseContract;
+
+    /**
+     * @return mixed
+     */
+    public function getContent();
 }

@@ -8,7 +8,6 @@ use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Routing\Route;
 use CrCms\Microservice\Server\Contracts\ServiceContract;
 use CrCms\Microservice\Server\Events\ServiceHandling;
-use CrCms\Microservice\Transporters\DataProvider;
 use Illuminate\Contracts\Container\Container;
 use BadMethodCallException;
 
@@ -18,8 +17,6 @@ use BadMethodCallException;
  */
 class Service implements ServiceContract
 {
-    //use ValidateConcern;
-
     /**
      * @var Request
      */
@@ -54,7 +51,6 @@ class Service implements ServiceContract
     {
         $this->app = $app;
         $this->setRequest($request);
-        //$this->setDataProvider(new DataProvider($this->request->input('data', [])));
         $this->registerEvent();
     }
 

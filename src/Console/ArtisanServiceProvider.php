@@ -2,6 +2,7 @@
 
 namespace CrCms\Microservice\Console;
 
+use CrCms\Microservice\Console\Commands\SwooleServerCommand;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Queue\Console\TableCommand;
 use CrCms\Microservice\Console\Commands\UpCommand;
@@ -94,6 +95,7 @@ class ArtisanServiceProvider extends ServiceProvider
 //        'ScheduleRun' => ScheduleRunCommand::class,
 //        'StorageLink' => 'command.storage.link',
         'Up' => 'command.up',
+        'SwooleServer' => 'command.swoole.server'
     ];
 
     /**
@@ -155,6 +157,18 @@ class ArtisanServiceProvider extends ServiceProvider
         }
 
         $this->commands(array_values($commands));
+    }
+
+    /**
+     * register SwooleServer
+     * 
+     * @return void
+     */
+    protected function registerSwooleServerCommand()
+    {
+        $this->app->singleton('command.swoole.server', function ($app) {
+            return new SwooleServerCommand();
+        });
     }
 
     /**
