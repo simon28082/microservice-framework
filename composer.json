@@ -25,6 +25,7 @@
   "type": "framework",
   "require": {
     "php": "^7.2.4",
+    "nesbot/carbon": "^1.26.3",
     "illuminate/contracts": "5.7.*",
     "illuminate/container": "5.7.*",
     "illuminate/support": "5.7.*",

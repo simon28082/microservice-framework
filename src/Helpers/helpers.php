@@ -7,6 +7,7 @@
  */
 
 use Illuminate\Container\Container;
+use CrCms\Microservice\Server\ResponseResource;
 
 /**
  * @param null $abstract
@@ -166,4 +167,13 @@ function logger($message = null, array $context = [])
     }
 
     return app('log')->debug($message, $context);
+}
+
+/**
+ * @return ResponseResource
+ * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ */
+function response(): ResponseResource
+{
+    return app(ResponseResource::class);
 }

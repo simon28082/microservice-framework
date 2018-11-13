@@ -895,6 +895,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'router' => [\CrCms\Microservice\Routing\Router::class,],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
                      'service' => [\CrCms\Microservice\Server\Contracts\ServiceContract::class],
+                     'request' => [\CrCms\Microservice\Server\Contracts\RequestContract::class],
                  ] as $key => $aliases) {
             foreach ($aliases as $alias) {
                 $this->alias($key, $alias);

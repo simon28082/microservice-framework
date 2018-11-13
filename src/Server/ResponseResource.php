@@ -145,6 +145,15 @@ class ResponseResource
     }
 
     /**
+     * @param $data
+     * @return JsonResponse
+     */
+    public function json($data): JsonResponse
+    {
+        return new JsonResponse($data, 200);
+    }
+
+    /**
      * @param array|Collection|\JsonSerializable|\Traversable $data
      * @param string $key
      * @return JsonResponse
