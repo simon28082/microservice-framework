@@ -2,45 +2,40 @@
 
 namespace CrCms\Microservice\Routing;
 
-//use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Traits\ForwardsCalls;
 
+/**
+ * Class RouteServiceProvider
+ * @package CrCms\Microservice\Routing
+ */
 class RouteServiceProvider extends ServiceProvider
 {
-use ForwardsCalls;
-    public function boot()
-    {
-        require base_path('routes/service.php');
-//        if (file_exists($routePath)) {
-//            Route::middleware('micro_service')
-//                ->group($routePath);
-//        }
-    }
+    use ForwardsCalls;
 
     /**
-     * Define the routes for the application.
-     *
-     * @return void
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    public function map()
-    {
-        $this->mapServiceRoutes();
-    }
-
-    /**
-     * @return void
-     */
-    protected function mapServiceRoutes(): void
+    public function boot(): void
     {
         $routePath = base_path('routes/service.php');
         if (file_exists($routePath)) {
-            Route::middleware('micro_service')
-                ->group($routePath);
+            require $routePath;
         }
     }
 
+    /**
+     *
+     */
+    public function register(): void
+    {
+    }
+
+    /**
+     * @param string $method
+     * @param array $parameters
+     * @return mixed
+     */
     public function __call($method, $parameters)
     {
         return $this->forwardCallTo(
