@@ -4,12 +4,12 @@ namespace CrCms\Microservice\Routing;
 
 use BadMethodCallException;
 use CrCms\Foundation\Helpers\InstanceConcern;
-use CrCms\Foundation\Services\ResponseTrait;
+use CrCms\Microservice\Server\ResponseResource;
 use InvalidArgumentException;
 
 abstract class Controller
 {
-    use InstanceConcern, ResponseTrait {
+    use InstanceConcern {
         InstanceConcern::__get as __instanceGet;
     }
 
@@ -45,6 +45,14 @@ abstract class Controller
     public function getMiddleware()
     {
         return $this->middleware;
+    }
+
+    /**
+     * @return ResponseResource
+     */
+    protected function response(): ResponseResource
+    {
+        return $this->app->make(ResponseResource::class);
     }
 
     /**
