@@ -3,12 +3,12 @@
 namespace CrCms\Microservice\Routing;
 
 use Closure;
-use CrCms\Foundation\MicroService\Contracts\ServiceContract;
 use Exception;
 use Throwable;
-use CrCms\Foundation\MicroService\Contracts\ExceptionHandlerContract as ExceptionHandler;
 use Illuminate\Pipeline\Pipeline as BasePipeline;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
+use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
 
 /**
  * This extended pipeline catches any exceptions that occur during each slice.
@@ -20,7 +20,7 @@ class Pipeline extends BasePipeline
     /**
      * Get the final piece of the Closure onion.
      *
-     * @param  \Closure  $destination
+     * @param  \Closure $destination
      * @return \Closure
      */
     protected function prepareDestination(Closure $destination)
@@ -63,24 +63,24 @@ class Pipeline extends BasePipeline
     /**
      * Handle the given exception.
      *
-     * @param  mixed  $passable
-     * @param  \Exception  $e
+     * @param  mixed $passable
+     * @param  \Exception $e
      * @return mixed
      *
      * @throws \Exception
      */
     protected function handleException($passable, Exception $e)
     {
-        if (! $this->container->bound(ExceptionHandler::class) ||
-            ! $passable instanceof ServiceContract) {
+        if (!$this->container->bound(ExceptionHandlerContract::class) ||
+            !$passable instanceof ServiceContract) {
             throw $e;
         }
 
-        $handler = $this->container->make(ExceptionHandler::class);
+        $handler = $this->container->make(ExceptionHandlerContract::class);
 
         $handler->report($e);
 
-        $response = $handler->render($passable, $e);
+        $response = $handler->render($e);
 
         if (method_exists($response, 'withException')) {
             $response->withException($e);

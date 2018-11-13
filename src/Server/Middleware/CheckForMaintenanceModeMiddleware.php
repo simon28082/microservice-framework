@@ -8,10 +8,10 @@ use Illuminate\Contracts\Foundation\Application;
 use Closure;
 
 /**
- * Class CheckForMaintenanceMode
+ * Class CheckForMaintenanceModeMiddleware
  * @package CrCms\Microservice\Server\Middleware
  */
-class CheckForMaintenanceMode
+class CheckForMaintenanceModeMiddleware
 {
     /**
      * CheckForMaintenanceMode constructor.

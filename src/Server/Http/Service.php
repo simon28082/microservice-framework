@@ -54,7 +54,7 @@ class Service implements ServiceContract
     {
         $this->app = $app;
         $this->setRequest($request);
-        $this->setDataProvider(new DataProvider($this->request->input('data', [])));
+        //$this->setDataProvider(new DataProvider($this->request->input('data', [])));
         $this->registerEvent();
     }
 
@@ -97,9 +97,9 @@ class Service implements ServiceContract
     {
         $this->app['events']->listen(ServiceHandling::class, function (ServiceHandling $event) {
             $this->baseBinding();
-//            if ($event->service->getRequest()->getMethod() !== 'POST') {
-//                return $this->allServices();
-//            }
+            if ($event->service->getRequest()->getMethod() !== 'POST') {
+                return $this->allServices();
+            }
         });
     }
 

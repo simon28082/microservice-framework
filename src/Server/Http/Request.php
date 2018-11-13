@@ -18,4 +18,14 @@ class Request extends BaseRequest implements RequestContract
     {
         return static::capture();
     }
+
+    public function rawData()
+    {
+        return $this->all();
+    }
+
+    public function data(): array
+    {
+        return $this->input('data', []);
+    }
 }
