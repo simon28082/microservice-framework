@@ -5,13 +5,10 @@ namespace CrCms\Microservice\Bootstrap;
 use Exception;
 use ErrorException;
 use Illuminate\Contracts\Foundation\Application;
+use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use CrCms\Microservice\{
-    Console\Contracts\ExceptionHandlerContract as ConsoleExceptionHandlerContract,
-    Server\Contracts\ExceptionHandlerContract as ServerExceptionHandlerContract,
-    Server\Http\Response
-};
+use Illuminate\Contracts\Debug\ExceptionHandler;
 
 class HandleExceptions
 {
@@ -86,18 +83,33 @@ class HandleExceptions
             //
         }
 
-        return $this->render($e);
+        if ($this->app->runningInConsole()) {
+            $this->renderForConsole($e);
+        } else {
+            $this->renderApplication($e);
+        }
     }
 
     /**
      * Render an exception to the console.
      *
-     * @param  \Exception $e
+     * @param  \Exception  $e
      * @return void
      */
-    protected function render(Exception $e)
+    protected function renderForConsole(Exception $e)
     {
-        return $this->getExceptionHandler()->render($e);
+        $this->getExceptionHandler()->renderForConsole(new ConsoleOutput, $e);
+    }
+
+    /**
+     * Render an exception as an HTTP response and send it.
+     *
+     * @param  \Exception  $e
+     * @return void
+     */
+    protected function renderApplication(Exception $e)
+    {
+        $this->getExceptionHandler()->render($this->app['service'], $e)->send();
     }
 
     /**
@@ -144,8 +156,6 @@ class HandleExceptions
      */
     protected function getExceptionHandler()
     {
-        return $this->app->runningInConsole() ?
-            $this->app->make(ConsoleExceptionHandlerContract::class) :
-            $this->app->make(ServerExceptionHandlerContract::class);
+        return $this->app->make(ExceptionHandler::class);
     }
 }
