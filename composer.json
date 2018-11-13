@@ -26,6 +26,7 @@
   "require": {
     "php": "^7.2.4",
     "nesbot/carbon": "^1.26.3",
+    "league/flysystem": "^1.0.8",
     "illuminate/contracts": "5.7.*",
     "illuminate/container": "5.7.*",
     "illuminate/support": "5.7.*",
