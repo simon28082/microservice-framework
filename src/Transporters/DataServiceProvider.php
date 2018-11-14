@@ -10,13 +10,13 @@
 namespace CrCms\Microservice\Transporters;
 
 use Illuminate\Contracts\Validation\ValidatesWhenResolved;
-use Illuminate\Support\AggregateServiceProvider;
+use Illuminate\Support\ServiceProvider;
 
 /**
  * Class DataServiceProvider
  * @package CrCms\Microservice\Transporters
  */
-class DataServiceProvider extends AggregateServiceProvider
+class DataServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
