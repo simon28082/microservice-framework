@@ -9,7 +9,8 @@
 
 namespace CrCms\Microservice\Foundation;
 
-use CrCms\Microservice\Transporters\DataServiceProvider;
+use CrCms\Foundation\Transporters\DataServiceProvider;
+use CrCms\Microservice\Server\ServerServiceProvider;
 use Illuminate\Support\AggregateServiceProvider;
 
 /**
@@ -23,5 +24,6 @@ class CrCmsServiceProvider extends AggregateServiceProvider
      */
     protected $providers = [
         DataServiceProvider::class,
+        //ServerServiceProvider::class,
     ];
 }

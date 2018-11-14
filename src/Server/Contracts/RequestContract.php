@@ -2,6 +2,8 @@
 
 namespace CrCms\Microservice\Server\Contracts;
 
+use CrCms\Microservice\Routing\Route;
+
 /**
  * Interface RequestContract
  * @package CrCms\Foundation\MicroService\Contracts
@@ -11,7 +13,23 @@ interface RequestContract
     /**
      * @return mixed
      */
-    public static function createRequest(): RequestContract;
+    //public static function createRequest(): RequestContract;
+
+    /**
+     * @return string
+     */
+    public function currentCall(): string;
+
+    /**
+     * @param Route $route
+     * @return RequestContract
+     */
+    public function setRoute(Route $route): RequestContract;
+
+    /**
+     * @return Route
+     */
+    public function getRoute(): Route;
 
     /**
      * @return mixed
@@ -21,5 +39,5 @@ interface RequestContract
     /**
      * @return array
      */
-    public function data(): array ;
+    public function all(): array ;
 }

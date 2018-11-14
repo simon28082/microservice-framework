@@ -3,8 +3,8 @@
 namespace CrCms\Microservice\Routing;
 
 use Closure;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use CrCms\Microservice\Server\Contracts\ServiceContract;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
@@ -51,9 +51,9 @@ class Router
     protected $current;
 
     /**
-     * @var ServiceContract
+     * @var RequestContract
      */
-    protected $currentService;
+    protected $currentRequest;
 
     /**
      * All of the short-hand keys for middlewares.
@@ -340,32 +340,32 @@ class Router
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @return mixed
      */
-    public function dispatch(ServiceContract $service)
+    public function dispatch(RequestContract $request)
     {
-        $this->currentService = $service;
+        $this->currentRequest = $request;
 
-        return $this->dispatchToRoute($service);
+        return $this->dispatchToRoute($request);
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @return mixed
      */
-    public function dispatchToRoute(ServiceContract $service)
+    public function dispatchToRoute(RequestContract $request)
     {
-        return $this->runRoute($service, $this->findRoute($service));
+        return $this->runRoute($request, $this->findRoute($request));
     }
 
     /**
-     * @param ServiceContract $service
-     * @return Route
+     * @param RequestContract $request
+     * @return array
      */
-    protected function findRoute(ServiceContract $service)
+    protected function findRoute(RequestContract $request)
     {
-        $this->current = $route = $this->routes->match($service);
+        $this->current = $route = $this->routes->match($request);
 
         $this->container->instance(Route::class, $route);
 
@@ -373,28 +373,29 @@ class Router
     }
 
     /**
-     * @param ServiceContract $service
-     * @param \CrCms\Microservice\Routing\Route $route
+     * @param RequestContract $request
+     * @param Route $route
      * @return mixed
      */
-    protected function runRoute(ServiceContract $service, Route $route)
+    protected function runRoute(RequestContract $request, Route $route)
     {
-        $service->setRoute($route);
+        $request->setRoute($route);
 
-        $this->events->dispatch(new Events\RouteMatched($route, $service));
+        $this->events->dispatch(new Events\RouteMatched($route, $request));
 
-        return $this->runRouteWithinStack($route, $service);
+        return $this->runRouteWithinStack($route, $request);
 //        return $this->prepareResponse($service,
 //            $this->runRouteWithinStack($route, $service)
 //        );
     }
 
     /**
-     * @param \CrCms\Microservice\Routing\Route $route
-     * @param ServiceContract $service
+     * @param Route $route
+     * @param RequestContract $request
      * @return mixed
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
-    protected function runRouteWithinStack(Route $route, ServiceContract $service)
+    protected function runRouteWithinStack(Route $route, RequestContract $request)
     {
         $shouldSkipMiddleware = $this->container->bound('middleware.disable') &&
             $this->container->make('middleware.disable') === true;
@@ -402,11 +403,11 @@ class Router
         $middleware = $shouldSkipMiddleware ? [] : $this->gatherRouteMiddleware($route);
 
         return (new Pipeline($this->container))
-            ->send($service)
+            ->send($request)
             ->through($middleware)
-            ->then(function ($service) use ($route) {
+            ->then(function ($request) use ($route) {
                 return $this->prepareResponse(
-                    $service, $route->run()
+                    $request, $route->run()
                 );
             });
     }
@@ -434,16 +435,16 @@ class Router
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @param $response
-     * @return ResponseContract
      */
-    public function prepareResponse(ServiceContract $service, $response)
+    public function prepareResponse(RequestContract $request, $response)
     {
-        return $service::toResponse(
-            $service->getRequest(),
-            $service->createResponse($response)->getResponse()
-        );
+        dd($response);
+//        return $service::toResponse(
+//            $service->getRequest(),
+//            $service->createResponse($response)->getResponse()
+//        );
     }
 
     /**
@@ -577,11 +578,11 @@ class Router
     }
 
     /**
-     * @return ServiceContract
+     * @return RequestContract
      */
-    public function getCurrentService()
+    public function getCurrentRequest()
     {
-        return $this->currentService;
+        return $this->currentRequest;
     }
 
     /**

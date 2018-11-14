@@ -3,10 +3,10 @@
 namespace CrCms\Microservice\Server;
 
 use CrCms\Microservice\Foundation\Application;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use CrCms\Microservice\Server\Contracts\ServiceContract;
-use CrCms\Microservice\Server\Events\ServiceHandled;
-use CrCms\Microservice\Server\Events\ServiceHandling;
+use CrCms\Microservice\Server\Events\RequestHandled;
+use CrCms\Microservice\Server\Events\RequestHandling;
 use Exception;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
@@ -112,56 +112,55 @@ class Kernel implements KernelContract
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @return ResponseContract
+     * @throws \ReflectionException
      */
-    public function handle(ServiceContract $service): ResponseContract
+    public function handle(RequestContract $request): ResponseContract
     {
         try {
-            $response = $this->sendRequestThroughRouter($service);
+            $response = $this->sendRequestThroughRouter($request);
         } catch (Exception $e) {
             $this->reportException($e);
-            $response = $this->renderException($service, $e);
+            $response = $this->renderException($request, $e);
         } catch (Throwable $e) {
             $this->reportException($e = new FatalThrowableError($e));
-            $response = $this->renderException($service, $e);
+            $response = $this->renderException($request, $e);
         }
 
         $this->app['events']->dispatch(
-            new ServiceHandled($service)
+            new RequestHandled($request, $response)
         );
 
         return $response;
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @return mixed
      */
-    protected function sendRequestThroughRouter(ServiceContract $service)
+    protected function sendRequestThroughRouter(RequestContract $request)
     {
-        $this->app->instance('service', $service);
+        $this->app->instance('request', $request);
 
         Facade::clearResolvedInstance('service');
 
         $this->bootstrap();
 
         if ((bool)$response = $this->app['events']->until(
-            new ServiceHandling($service)
+            new RequestHandling($request)
         )) {
             return $response;
         }
 
         return (new Pipeline($this->app))
-            ->send($service)
+            ->send($request)
             ->through($this->app->shouldSkipMiddleware() ? [] : $this->middleware)
             ->then($this->dispatchToRouter());
     }
 
     /**
-     * Bootstrap the application for HTTP requests.
      *
-     * @return void
      */
     public function bootstrap(): void
     {
@@ -177,31 +176,33 @@ class Kernel implements KernelContract
      */
     protected function dispatchToRouter()
     {
-        return function ($service) {
-            $this->app->instance('service', $service);
+        return function (RequestContract $request) {
+            $this->app->instance('request', $request);
 
-            return $this->router->dispatch($service);
+            return $this->router->dispatch($request);
         };
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
+     * @param ResponseContract $response
      * @return mixed|void
      */
-    public function terminate(ServiceContract $service)
+    public function terminate(RequestContract $request, ResponseContract $response)
     {
-        $this->terminateMiddleware($service);
+        $this->terminateMiddleware($request, $response);
 
         $this->app->terminate();
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
+     * @param ResponseContract $response
      */
-    protected function terminateMiddleware(ServiceContract $service)
+    protected function terminateMiddleware(RequestContract $request, ResponseContract $response)
     {
         $middlewares = $this->app->shouldSkipMiddleware() ? [] : array_merge(
-            $this->gatherRouteMiddleware($service),
+            $this->gatherRouteMiddleware($request),
             $this->middleware
         );
 
@@ -215,18 +216,18 @@ class Kernel implements KernelContract
             $instance = $this->app->make($name);
 
             if (method_exists($instance, 'terminate')) {
-                $instance->terminate($service);
+                $instance->terminate($request, $response);
             }
         }
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @return array
      */
-    protected function gatherRouteMiddleware(ServiceContract $service)
+    protected function gatherRouteMiddleware(RequestContract $request)
     {
-        if ($route = $service->getRoute()) {
+        if ($route = $request->getRoute()) {
             return $this->router->gatherRouteMiddleware($route);
         }
 
@@ -306,13 +307,13 @@ class Kernel implements KernelContract
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @param Exception $e
      * @return mixed
      */
-    protected function renderException(ServiceContract $service, Exception $e)
+    protected function renderException(RequestContract $request, Exception $e)
     {
-        return $this->app[ExceptionHandlerContract::class]->render($service, $e);
+        return $this->app[ExceptionHandlerContract::class]->render($request, $e);
     }
 
     /**

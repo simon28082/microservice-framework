@@ -4,10 +4,10 @@ namespace CrCms\Microservice\Routing;
 
 use Countable;
 use ArrayIterator;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 use IteratorAggregate;
 use Illuminate\Support\Arr;
 use UnexpectedValueException;
-use CrCms\Microservice\Server\Contracts\ServiceContract;
 
 /**
  * Class RouteCollection
@@ -144,15 +144,15 @@ class RouteCollection implements Countable, IteratorAggregate
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @return array
      */
-    public function match(ServiceContract $service)
+    public function match(RequestContract $request)
     {
-        $route = $this->get($service->name());
+        $route = $this->get($request->currentCall());
 
         if (is_null($route)) {
-            throw new UnexpectedValueException("The route[{$service->name()}] not found");
+            throw new UnexpectedValueException("The route[{$request->currentCall()}] not found");
         }
 
         return $route;

@@ -10,7 +10,7 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use CrCms\Microservice\Foundation\Application;
-use CrCms\Microservice\Server\Factory;
+use CrCms\Microservice\Server\Http\Request;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
@@ -88,7 +88,7 @@ class Start
      */
     public function createApplication(?string $basePath = null): self
     {
-        $basePath ? : $basePath = realpath(__DIR__.'/../../../../');
+        $basePath ?: $basePath = realpath(__DIR__ . '/../../../../');
 
         $this->app = new Application($basePath);
         return $this;
@@ -168,14 +168,14 @@ class Start
      */
     protected function runApplication(array $params): void
     {
-        $service = Factory::service($this->app, $this->mode);
-
         $kernel = $this->app->make(ServerKernelContract::class);
 
-        $response = $kernel->handle($service);
+        $request = new Request($this->app, \Illuminate\Http\Request::capture());
+
+        $response = $kernel->handle($request);
 
         $response->send();
 
-        $kernel->terminate($service);
+        $kernel->terminate($request, $response);
     }
 }

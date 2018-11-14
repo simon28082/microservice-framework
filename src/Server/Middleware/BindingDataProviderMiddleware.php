@@ -2,9 +2,8 @@
 
 namespace CrCms\Microservice\Server\Middleware;
 
-use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Exceptions\AccessDeniedException;
-use CrCms\Microservice\Transporters\DataProvider;
 use Closure;
 
 /**
@@ -14,21 +13,18 @@ use Closure;
 class BindingDataProviderMiddleware
 {
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @param Closure $next
      * @return mixed
      */
-    public function handle(ServiceContract $service, Closure $next)
+    public function handle(RequestContract $request, Closure $next)
     {
         // 数据解密或校验
-        $data = $service->getRequest()->data();
+        $data = $request->all();
         if (false) {
             throw new AccessDeniedException("Illegal data");
         }
 
-        // 存储数据
-        $service->setDataProvider(new DataProvider($data));
-
-        return $next($service);
+        return $next($request);
     }
 }

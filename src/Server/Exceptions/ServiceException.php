@@ -2,7 +2,8 @@
 
 namespace CrCms\Microservice\Server\Exceptions;
 
-use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Contracts\RequestContract;
+use CrCms\Microservice\Server\Contracts\ResponseContract;
 use RuntimeException;
 use Throwable;
 
@@ -13,9 +14,14 @@ use Throwable;
 class ServiceException extends RuntimeException
 {
     /**
-     * @var ServiceContract
+     * @var RequestContract
      */
-    protected $service;
+    protected $request;
+
+    /**
+     * @var ResponseContract
+     */
+    protected $response;
 
     /**
      * ServiceException constructor.
@@ -29,20 +35,38 @@ class ServiceException extends RuntimeException
     }
 
     /**
-     * @param ServiceContract $service
-     * @return $this
+     * @param RequestContract $request
+     * @return ServiceException
      */
-    public function setService(ServiceContract $service)
+    public function setRequest(RequestContract $request): self
     {
-        $this->service = $service;
+        $this->request = $request;
         return $this;
     }
 
     /**
-     * @return ServiceContract
+     * @return RequestContract
      */
-    public function getService(): ServiceContract
+    public function getRequest(): RequestContract
     {
-        return $this->service;
+        return $this->request;
+    }
+
+    /**
+     * @return ResponseContract
+     */
+    public function getResponse(): ResponseContract
+    {
+        return $this->response;
+    }
+
+    /**
+     * @param ResponseContract $response
+     * @return ServiceException
+     */
+    public function setResponse(ResponseContract $response): self
+    {
+        $this->response = $response;
+        return $this;
     }
 }

@@ -16,16 +16,17 @@ interface KernelContract
     public function bootstrap(): void;
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @return ResponseContract
      */
-    public function handle(ServiceContract $service): ResponseContract;
+    public function handle(RequestContract $request): ResponseContract;
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
+     * @param ResponseContract $response
      * @return mixed
      */
-    public function terminate(ServiceContract $service);
+    public function terminate(RequestContract $request, ResponseContract $response);
 
     /**
      * @return ApplicationContract

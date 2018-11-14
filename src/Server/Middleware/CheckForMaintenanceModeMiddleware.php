@@ -2,7 +2,7 @@
 
 namespace CrCms\Microservice\Server\Middleware;
 
-use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Exceptions\ServiceUnavailableException;
 use Illuminate\Contracts\Foundation\Application;
 use Closure;
@@ -23,17 +23,17 @@ class CheckForMaintenanceModeMiddleware
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @param Closure $next
      * @return mixed
      */
-    public function handle(ServiceContract $service, Closure $next)
+    public function handle(RequestContract $request, Closure $next)
     {
         if ($this->app->isDownForMaintenance()) {
             //$data = json_decode(file_get_contents($this->app->storagePath() . '/framework/down'), true);
             throw new ServiceUnavailableException("The service is maintaining state", 503);
         }
 
-        return $next($service);
+        return $next($request);
     }
 }

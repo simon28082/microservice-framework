@@ -3,8 +3,12 @@
 namespace CrCms\Microservice\Routing\Events;
 
 use CrCms\Microservice\Routing\Route;
-use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 
+/**
+ * Class RouteMatched
+ * @package CrCms\Microservice\Routing\Events
+ */
 class RouteMatched
 {
     /**
@@ -15,18 +19,18 @@ class RouteMatched
     public $route;
 
     /**
-     * @var ServiceContract
+     * @var RequestContract
      */
-    public $service;
+    public $request;
 
     /**
      * RouteMatched constructor.
      * @param Route $route
-     * @param ServiceContract $service
+     * @param RequestContract $request
      */
-    public function __construct(Route $route, ServiceContract $service)
+    public function __construct(Route $route, RequestContract $request)
     {
         $this->route = $route;
-        $this->service = $service;
+        $this->request = $request;
     }
 }

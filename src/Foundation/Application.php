@@ -30,7 +30,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * @var string
      */
-    const VERSION = '0.0.1';
+    const VERSION = '0.0.1-dev3';
 
     /**
      * @var string
@@ -902,7 +902,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],
                      'router' => [\CrCms\Microservice\Routing\Router::class,],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
-                     'service' => [\CrCms\Microservice\Server\Contracts\ServiceContract::class],
                      'request' => [\CrCms\Microservice\Server\Contracts\RequestContract::class],
                  ] as $key => $aliases) {
             foreach ($aliases as $alias) {

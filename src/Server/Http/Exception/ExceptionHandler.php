@@ -9,19 +9,16 @@
 
 namespace CrCms\Microservice\Server\Http\Exception;
 
-use CrCms\Microservice\Server\Contracts\ServiceContract;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Exceptions\ServiceException;
 use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Contracts\Container\Container;
 use Exception;
-use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
-//use CrCms\Microservice\Server\Contracts\ExceptionHandlerContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Symfony\Component\Console\Application as ConsoleApplication;
-use Symfony\Component\Console\Output\ConsoleOutput;
 
 /**
  * Class ExceptionHandler
@@ -121,14 +118,14 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * @param ServiceContract $service
+     * @param RequestContract $request
      * @param Exception $e
      * @return Response|null|\Symfony\Component\HttpFoundation\Response
      */
-    public function render($service, Exception $e)
+    public function render($request, Exception $e)
     {
         if ($this->isServiceException($e)) {
-            $e->setService($service);
+            $e->setRequest($request);
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e);
         }

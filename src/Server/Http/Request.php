@@ -2,30 +2,89 @@
 
 namespace CrCms\Microservice\Server\Http;
 
+use CrCms\Microservice\Routing\Route;
 use CrCms\Microservice\Server\Contracts\RequestContract;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request as BaseRequest;
 
 /**
  * Class Request
  * @package CrCms\Foundation\MicroService\Http
  */
-class Request extends BaseRequest implements RequestContract
+class Request implements RequestContract
 {
     /**
+     * @var BaseRequest
+     */
+    protected $request;
+
+    /**
+     * @var Route
+     */
+    protected $route;
+
+    /**
+     * @var Container
+     */
+    protected $app;
+
+    /**
+     * Request constructor.
+     * @param BaseRequest $request
+     */
+    public function __construct(Container $app, BaseRequest $request)
+    {
+        $this->app = $app;
+        $this->request = $request;
+    }
+
+    /**
+     * @return string
+     */
+    public function currentCall(): string
+    {
+        return $this->request->input('call');
+    }
+
+    /**
+     * @param Route $route
      * @return RequestContract
      */
-    public static function createRequest(): RequestContract
+    public function setRoute(Route $route): RequestContract
     {
-        return static::capture();
+        $this->route = $route;
+        return $this;
     }
 
+    /**
+     * @return Route
+     */
+    public function getRoute(): Route
+    {
+        return $this->route;
+    }
+
+    /**
+     * @return string
+     */
     public function rawData()
     {
-        return $this->all();
+        return file_get_contents('php://input');
     }
 
-    public function data(): array
+    /**
+     * @return array
+     */
+    public function all(): array
     {
-        return $this->input('data', []);
+        return $this->request->input('data', []);
+    }
+
+    /**
+     * @return string
+     */
+    public function method(): string
+    {
+        return $this->request->method();
     }
 }
