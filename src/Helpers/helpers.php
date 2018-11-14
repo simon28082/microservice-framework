@@ -60,6 +60,17 @@ function database_path(?string $path = null): string
  * @return string
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
  */
+function app_path(?string $path = null): string
+{
+    $appPath = base_path('app');
+    return $path ? $appPath . DIRECTORY_SEPARATOR . $path : $appPath;
+}
+
+/**
+ * @param null|string $path
+ * @return string
+ * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ */
 function config_path(?string $path = null): string
 {
     return app()->configPath($path);
