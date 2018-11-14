@@ -244,7 +244,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
         return isset($this->deferredServices[$service]);
     }
 
-
     /**
      * Get the path to the database directory.
      *
@@ -438,7 +437,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
     {
         $providers = Collection::make($this->config['mount.providers'])
             ->partition(function ($provider) {
-                return Str::startsWith($provider, 'Illuminate\\');
+                return Str::startsWith($provider, 'Illuminate\\') || Str::startsWith($provider, 'CrCms\\Microservice\\');
             });
 
         $providers->splice(1, 0, [$this->make(PackageManifest::class)->providers()]);
