@@ -7,7 +7,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
-use CrCms\Foundation\Http\Resources\Resource;
+use CrCms\Foundation\Resources\Resource;
 use JsonSerializable;
 use Traversable;
 

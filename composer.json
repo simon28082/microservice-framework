@@ -25,6 +25,7 @@
   "type": "framework",
   "require": {
     "php": "^7.2.4",
+    "crcms/foundation": "dev-master",
     "nesbot/carbon": "^1.26.3",
     "league/flysystem": "^1.0.8",
     "illuminate/contracts": "5.7.*",
