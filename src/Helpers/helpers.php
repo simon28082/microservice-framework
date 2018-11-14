@@ -176,6 +176,40 @@ function encrypt($value, $serialize = true)
 }
 
 /**
+ * @param $value
+ * @param bool $unserialize
+ * @return mixed
+ * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ */
+function decrypt($value, $unserialize = true)
+{
+    return app('encrypter')->decrypt($value, $unserialize);
+}
+
+/**
+ * @param $job
+ * @return PendingDispatch
+ */
+function dispatch($job)
+{
+    if ($job instanceof Closure) {
+        $job = new CallQueuedClosure(new SerializableClosure($job));
+    }
+
+    return new PendingDispatch($job);
+}
+
+/**
+ * @param mixed ...$args
+ * @return mixed
+ * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ */
+function event(...$args)
+{
+    return app('events')->dispatch(...$args);
+}
+
+/**
  * @param null $message
  * @param array $context
  * @return Container|mixed
