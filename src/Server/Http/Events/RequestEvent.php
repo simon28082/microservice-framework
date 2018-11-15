@@ -4,7 +4,6 @@ namespace CrCms\Microservice\Server\Http\Events;
 
 use Carbon\Carbon;
 use CrCms\Microservice\Server\Contracts\RequestContract;
-use CrCms\Microservice\Server\Http\Service;
 use CrCms\Microservice\Server\Kernel;
 use CrCms\Server\Server\AbstractServer;
 use CrCms\Server\Server\Contracts\EventContract;
@@ -76,12 +75,12 @@ class RequestEvent extends AbstractEvent implements EventContract
     protected function setResponse(Kernel $kernel)
     {
         $request = $this->createRequest();
-        $service = new Service($this->getServer()->getApplication(), $request);
-        $response = $kernel->handle($service);
+
+        $response = $kernel->handle($request);
 
         $this->response->end($response->getContent());
 
-        $kernel->terminate($service);
+        $kernel->terminate($request, $response);
 
         //$this->requestLog();
     }
@@ -109,7 +108,7 @@ class RequestEvent extends AbstractEvent implements EventContract
      */
     protected function createRequest(): RequestContract
     {
-        $request = new \CrCms\Microservice\Server\Http\Request(
+        $request = new Request(
             $this->request->get ?? [],
             $this->mergePostData(),
             [],
@@ -126,7 +125,7 @@ class RequestEvent extends AbstractEvent implements EventContract
             $request->request = new ParameterBag($data);
         }
 
-        return $request;
+        return new \CrCms\Microservice\Server\Http\Request($this->getServer()->getApplication(), $request);
     }
 
     /**
