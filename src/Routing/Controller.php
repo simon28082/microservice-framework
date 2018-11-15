@@ -7,6 +7,12 @@ use CrCms\Foundation\Helpers\InstanceConcern;
 use CrCms\Microservice\Server\ResponseResource;
 use InvalidArgumentException;
 
+/**
+ * @property-read ResponseResource $response
+ *
+ * Class Controller
+ * @package CrCms\Microservice\Routing
+ */
 abstract class Controller
 {
     use InstanceConcern {
