@@ -87,4 +87,14 @@ class Request implements RequestContract
     {
         return $this->request->method();
     }
+
+    /**
+     * @param null $key
+     * @param null $default
+     * @return array|null|string
+     */
+    public function input($key = null, $default = null)
+    {
+        return $this->request->input($key, $default);
+    }
 }
