@@ -440,11 +440,11 @@ class Router
      */
     public function prepareResponse(RequestContract $request, $response)
     {
-        dd($response);
-//        return $service::toResponse(
-//            $service->getRequest(),
-//            $service->createResponse($response)->getResponse()
-//        );
+        // @todo 这里先这样，后面要做一个bind()方便注入修改
+        $class = get_class($request);
+        $responseClass = str_replace(strrchr(get_class($request), '\\'), '\\Response', $class);
+
+        return $responseClass::createResponse($response);
     }
 
     /**
