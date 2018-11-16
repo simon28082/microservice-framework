@@ -55,7 +55,7 @@ class Kernel implements KernelContract
     protected $middleware = [
         \CrCms\Microservice\Server\Middleware\CheckForMaintenanceModeMiddleware::class,
         \CrCms\Microservice\Server\Middleware\BindingDataProviderMiddleware::class,
-        \CrCms\Microservice\Server\Middleware\DecryptData::class,
+        \CrCms\Microservice\Server\Middleware\DataEncryptDecrypt::class,
     ];
 
     /**
@@ -87,7 +87,7 @@ class Kernel implements KernelContract
     protected $middlewarePriority = [
         \CrCms\Microservice\Server\Middleware\CheckForMaintenanceModeMiddleware::class,
         \CrCms\Microservice\Server\Middleware\BindingDataProviderMiddleware::class,
-        \CrCms\Microservice\Server\Middleware\DecryptData::class,
+        \CrCms\Microservice\Server\Middleware\DataEncryptDecrypt::class,
     ];
 
     /**
