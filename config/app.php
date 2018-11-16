@@ -126,10 +126,28 @@ return [
 
     /*
     |--------------------------------------------------------------------------
-    | Service Data interaction key
+    | Whether to enable microservice data encryption and decryption
     |--------------------------------------------------------------------------
     |
     */
 
-    'service_secret' => env('SERVICE_SECRET'),
+    'secret_status' => env('SECRET_STATUS',true),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Microservice data encryption and decryption key
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'secret' => env('SECRET','#1#2@!##'),
+
+    /*
+    |--------------------------------------------------------------------------
+    | Microservice data encryption and decryption method
+    |--------------------------------------------------------------------------
+    |
+    */
+
+    'secret_method' => env('SECRET_METHOD','AES-256-CFB'),
 ];

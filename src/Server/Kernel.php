@@ -55,6 +55,7 @@ class Kernel implements KernelContract
     protected $middleware = [
         \CrCms\Microservice\Server\Middleware\CheckForMaintenanceModeMiddleware::class,
         \CrCms\Microservice\Server\Middleware\BindingDataProviderMiddleware::class,
+        \CrCms\Microservice\Server\Middleware\DecryptData::class,
     ];
 
     /**
@@ -86,6 +87,7 @@ class Kernel implements KernelContract
     protected $middlewarePriority = [
         \CrCms\Microservice\Server\Middleware\CheckForMaintenanceModeMiddleware::class,
         \CrCms\Microservice\Server\Middleware\BindingDataProviderMiddleware::class,
+        \CrCms\Microservice\Server\Middleware\DecryptData::class,
     ];
 
     /**
@@ -143,7 +145,7 @@ class Kernel implements KernelContract
     {
         $this->app->instance('request', $request);
 
-        Facade::clearResolvedInstance('service');
+        Facade::clearResolvedInstance('request');
 
         $this->bootstrap();
 

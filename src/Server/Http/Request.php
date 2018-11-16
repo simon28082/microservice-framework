@@ -29,6 +29,11 @@ class Request implements RequestContract
     protected $app;
 
     /**
+     * @var array
+     */
+    protected $data = [];
+
+    /**
      * Request constructor.
      * @param BaseRequest $request
      */
@@ -77,7 +82,7 @@ class Request implements RequestContract
      */
     public function all(): array
     {
-        return $this->request->input('data', []);
+        return $this->data ?? [];
     }
 
     /**
@@ -95,6 +100,16 @@ class Request implements RequestContract
      */
     public function input($key = null, $default = null)
     {
-        return $this->request->input($key, $default);
+        return data_get($this->data ?? [], $key, $default);
+    }
+
+    /**
+     * @param array $data
+     * @return RequestContract
+     */
+    public function setData(array $data): RequestContract
+    {
+        $this->data = $data;
+        return $this;
     }
 }

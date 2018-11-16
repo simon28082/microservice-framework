@@ -39,5 +39,11 @@ interface RequestContract
     /**
      * @return array
      */
-    public function all(): array ;
+    public function all(): array;
+
+    /**
+     * @param array $data
+     * @return RequestContract
+     */
+    public function setData(array $data): RequestContract;
 }
