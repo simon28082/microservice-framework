@@ -149,5 +149,5 @@ return [
     |
     */
 
-    'secret_method' => env('SECRET_METHOD','AES-256-CFB'),
+    'secret_cipher' => env('SECRET_CIPHER','AES-256-CFB'),
 ];

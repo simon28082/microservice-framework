@@ -50,8 +50,8 @@ class DecryptData
         $array = unserialize(
             openssl_decrypt(
                 $parsedData['data'],
-                config('app.service_secret_method'),
-                config('app.service_secret'),
+                config('app.secret_cipher'),
+                config('app.secret'),
                 OPENSSL_ZERO_PADDING,
                 base64_decode($parsedData['iv'])
             )
