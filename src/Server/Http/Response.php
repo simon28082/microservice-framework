@@ -43,6 +43,28 @@ class Response extends JsonResponse implements ResponseContract
             $response->setNotModified();
         }
 
-        return $response;
+        return $response->forceHeaders();
+    }
+
+    /**
+     * @return Response
+     */
+    public function forceHeaders(): self
+    {
+        $headers = $this->headers;
+
+        if ($this->isInformational() || $this->isEmpty()) {
+            $this->setContent(null);
+            $headers->remove('Content-Type');
+            $headers->remove('Content-Length');
+        } else {
+            $headers->set('Content-Type', 'application/json; charset=UTF-8');
+        }
+        //$headers->set('Connection','keep-alive');
+
+        // Fix protocol
+        $this->setProtocolVersion('1.1');
+
+        return $this;
     }
 }
