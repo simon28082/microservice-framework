@@ -109,7 +109,7 @@ class HandleExceptions
      */
     protected function renderApplication(Exception $e)
     {
-        $this->getExceptionHandler()->render($this->app['service'], $e)->send();
+        $this->getExceptionHandler()->render($this->app['request'], $e)->send();
     }
 
     /**
