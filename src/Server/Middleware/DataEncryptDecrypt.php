@@ -23,14 +23,16 @@ class DataEncryptDecrypt
         if (config('app.secret_status') === false) {
             return $next($request);
         }
-
+        /* 前置执行 */
         $rawData = $request->rawData();
-        if (!is_null($rawData)) {
+        if (!empty($rawData)) {
             $request->setData($this->decrypt($rawData));
         }
 
+        /* @var ResponseContract $response */
         $response = $next($request);
 
+        /* 后置执行 */
         $data = $response->getData(true);
         if (!empty($data)) {
             $data = $this->encrypt($data);
@@ -70,6 +72,9 @@ class DataEncryptDecrypt
         $parsedData = json_decode($rawData, true);
         if (json_last_error() !== 0) {
             throw new UnexpectedValueException("The raw data error");
+        }
+        if (!isset($parsedData['data'])) {
+            return [];
         }
 
         $array = unserialize(
