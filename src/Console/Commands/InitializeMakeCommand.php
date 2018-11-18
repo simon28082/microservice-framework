@@ -34,7 +34,7 @@ class InitializeMakeCommand extends Command
     /**
      * @var array
      */
-    protected $modules = ['resource', 'storage', 'config', 'database', 'modules', 'extensions', 'routes'];
+    protected $modules = ['resource', 'storage', 'config', 'database', 'modules', 'routes'];
 
     /**
      * AutoCreateStorageCommand constructor.
