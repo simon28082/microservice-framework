@@ -18,6 +18,7 @@ use CrCms\Microservice\Console\Kernel;
 use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
 use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
 use CrCms\Microservice\Server\Kernel as ServerKernel;
+use CrCms\Microservice\Server\Exceptions\ExceptionHandler;
 
 /**
  * Class Start
@@ -31,30 +32,15 @@ class Start
     protected $app;
 
     /**
-     * @var array
-     */
-    protected $servers = [
-        'http' => [
-            'exception' => \CrCms\Microservice\Server\Http\Exception\ExceptionHandler::class
-        ]
-    ];
-
-    /**
-     * @var string
-     */
-    protected $mode;
-
-    /**
      * @param array $params
      * @param null|string $basePath
-     * @param null|string $mode
      * @return void
      */
-    public static function run(array $params = [], ?string $basePath = null, ?string $mode = null): void
+    public static function run(array $params = [], ?string $basePath = null): void
     {
-        $instance = new static;
+        $instance = static::instance();
 
-        $instance->bootstrap($basePath, $mode);
+        $instance->bootstrap($basePath);
 
         $instance->getApplication()->runningInConsole() ?
             $instance->runConsole($params) : $instance->runApplication($params);
@@ -73,9 +59,8 @@ class Start
      * @param null|string $mode
      * @return Start
      */
-    public function bootstrap(?string $basePath = null, ?string $mode = null): self
+    public function bootstrap(?string $basePath = null): self
     {
-        $this->mode($mode);
         $this->createApplication($basePath);
         $this->baseKernelBinding();
 
@@ -100,27 +85,6 @@ class Start
     public function getApplication(): Application
     {
         return $this->app;
-    }
-
-    /**
-     * @param null|string $mode
-     * @return Start
-     */
-    protected function mode(?string $mode = null): self
-    {
-        $envMode = getenv('CRCMS_MODE');
-        if ($envMode !== false) {
-            $mode = $envMode;
-        }
-        $mode = strtolower($mode);
-        if (!array_key_exists($mode, $this->servers)) {
-            $mode = 'http';
-        }
-
-        putenv("CRCMS_MODE={$mode}");
-        $this->mode = $mode;
-
-        return $this;
     }
 
     /**
@@ -158,7 +122,7 @@ class Start
 
         $this->app->singleton(
             ServerExceptionHandlerContract::class,
-            $this->servers[$this->mode]['exception']
+            ExceptionHandler::class
         );
     }
 

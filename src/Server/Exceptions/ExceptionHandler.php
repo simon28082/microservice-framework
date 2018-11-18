@@ -7,10 +7,9 @@
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
-namespace CrCms\Microservice\Server\Http\Exception;
+namespace CrCms\Microservice\Server\Exceptions;
 
 use CrCms\Microservice\Server\Contracts\RequestContract;
-use CrCms\Microservice\Server\Exceptions\ServiceException;
 use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Contracts\Container\Container;
 use Exception;
