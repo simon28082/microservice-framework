@@ -74,10 +74,12 @@ class Request implements RequestContract
      */
     public function rawData()
     {
-        // @todo 这里先这样，在Swoole环境下无法使用php://input，所以还得把已解析好的再解析上，
-        // 太low了，需要解决掉
-        return json_encode($this->request->request->all());
-        //return file_get_contents('php://input');
+        //running in swoole
+        if ($this->app->has('server')) {
+            return $this->app->make('server')->request->getRequest()->rawContent();
+        } else {
+            return file_get_contents('php://input');
+        }
     }
 
     /**

@@ -70,6 +70,14 @@ class RequestEvent extends AbstractEvent implements EventContract
     }
 
     /**
+     * @return SwooleRequest
+     */
+    public function getRequest(): SwooleRequest
+    {
+        return $this->request;
+    }
+
+    /**
      * @return void
      */
     protected function setResponse(Kernel $kernel)

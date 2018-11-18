@@ -33,7 +33,8 @@ class Server extends AbstractServer implements ServerContract
      */
     public function bootstrap(): void
     {
-        $this->app->make(Kernel::class)->bootstrap();
+        //$this->app->make(Kernel::class)->bootstrap();
+        $this->app->instance('server', $this);
     }
 
     /**
