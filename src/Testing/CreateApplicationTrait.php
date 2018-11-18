@@ -11,6 +11,7 @@ namespace CrCms\Microservice\Testing;
 
 use CrCms\Microservice\Bootstrap\Start;
 use CrCms\Microservice\Foundation\Application;
+use CrCms\Microservice\Server\Contracts\KernelContract;
 
 /**
  * Trait CreateApplicationTrait
@@ -23,6 +24,8 @@ trait CreateApplicationTrait
      */
     public function createApplication(): Application
     {
-        return Start::instance()->bootstrap()->getApplication();
+        return tap(Start::instance()->bootstrap()->getApplication(),function(Application $app){
+            $app->make(KernelContract::class)->bootstrap();
+        });
     }
 }
