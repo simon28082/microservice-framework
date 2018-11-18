@@ -51,6 +51,7 @@ class SwooleServerCommand extends AbstractServerCommand
                 return Server::class;
                 break;
             case 'tcp':
+                return \CrCms\Microservice\Server\Tcp\Server::class;
                 break;
         }
     }
