@@ -176,7 +176,8 @@ class ExceptionHandler implements ExceptionHandlerContract
     protected function prepareJsonResponse(Exception $e)
     {
         return new Response(
-            $this->convertExceptionToArray($e),
+        //$this->convertExceptionToArray($e),
+            ['data' => $this->container->make('server.packer')->pack($this->convertExceptionToArray($e), config('app.secret_status'))],
             $e->getCode() <= 0 ? 500 : $e->getCode()
         );
     }
