@@ -177,7 +177,8 @@ class ExceptionHandler implements ExceptionHandlerContract
     {
         return new Response(
         //$this->convertExceptionToArray($e),
-            ['data' => $this->container->make('server.packer')->pack($this->convertExceptionToArray($e), config('app.secret_status'))],
+        //['data' => $this->container->make('server.packer')->pack($this->convertExceptionToArray($e), config('app.secret_status'))],
+            $this->convertExceptionToArray($e),
             $e->getCode() <= 0 ? 500 : $e->getCode()
         );
     }
@@ -196,5 +197,15 @@ class ExceptionHandler implements ExceptionHandlerContract
             'message' => $e->getMessage(),
             'errors' => $e->errors(),
         ], $e->status);
+    }
+
+    /**
+     * @param array $messages
+     * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    protected function pack(array $messages): array
+    {
+        return ['data' => $this->container->make('server.packer')->pack($messages, config('app.secret_status'))];
     }
 }
