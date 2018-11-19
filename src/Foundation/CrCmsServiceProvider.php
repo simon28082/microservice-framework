@@ -24,6 +24,6 @@ class CrCmsServiceProvider extends AggregateServiceProvider
      */
     protected $providers = [
         DataServiceProvider::class,
-        //ServerServiceProvider::class,
+        ServerServiceProvider::class,
     ];
 }

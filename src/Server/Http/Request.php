@@ -34,6 +34,11 @@ class Request implements RequestContract
     protected $data = [];
 
     /**
+     * @var string
+     */
+    protected $call;
+
+    /**
      * Request constructor.
      * @param BaseRequest $request
      */
@@ -48,7 +53,17 @@ class Request implements RequestContract
      */
     public function currentCall(): string
     {
-        return $this->request->input('call');
+        return $this->call;
+    }
+
+    /**
+     * @param string $call
+     * @return RequestContract
+     */
+    public function setCurrentCall(string $call): RequestContract
+    {
+        $this->call = $call;
+        return $this;
     }
 
     /**

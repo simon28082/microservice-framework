@@ -21,6 +21,12 @@ interface RequestContract
     public function currentCall(): string;
 
     /**
+     * @param string $call
+     * @return RequestContract
+     */
+    public function setCurrentCall(string $call): RequestContract;
+
+    /**
      * @param Route $route
      * @return RequestContract
      */
