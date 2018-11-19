@@ -13,7 +13,7 @@ use Traversable;
 
 /**
  * Class ResponseResource
- * @package CrCms\Microservice\Server
+ * @package CrCms\Microservice\Routing
  */
 class ResponseResource
 {

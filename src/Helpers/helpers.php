@@ -7,7 +7,7 @@
  */
 
 use Illuminate\Container\Container;
-use CrCms\Microservice\Server\ResponseResource;
+use CrCms\Microservice\Routing\ResponseResource;
 
 /**
  * @param null $abstract
