@@ -86,6 +86,10 @@ class RequestEvent extends AbstractEvent implements EventContract
 
         $response = $kernel->handle($request);
 
+        foreach ($response->headers as $key => $header) {
+            $this->response->header($key, is_array($header) ? implode(';',$header) : $header);
+        }
+        $this->response->status($response->getStatusCode());
         $this->response->end($response->getContent());
 
         $kernel->terminate($request, $response);
