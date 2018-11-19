@@ -4,7 +4,6 @@ namespace CrCms\Microservice\Routing;
 
 use BadMethodCallException;
 use CrCms\Foundation\Helpers\InstanceConcern;
-use CrCms\Microservice\Server\ResponseResource;
 use InvalidArgumentException;
 
 /**

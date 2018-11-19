@@ -1,6 +1,6 @@
 <?php
 
-namespace CrCms\Microservice\Server;
+namespace CrCms\Microservice\Routing;
 
 use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Http\JsonResponse;
