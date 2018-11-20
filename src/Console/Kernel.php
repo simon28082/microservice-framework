@@ -179,7 +179,9 @@ class Kernel implements KernelContract
      */
     protected function commands()
     {
-        //
+        Artisan::starting(function ($artisan) {
+            $artisan->resolveCommands(config('mount.commands'));
+        });
     }
 
     /**
@@ -189,7 +191,7 @@ class Kernel implements KernelContract
      * @param  \Closure $callback
      * @return \CrCms\Microservice\Console\ClosureCommand
      */
-    public function command($signature, Closure $callback)
+    /*public function command($signature, Closure $callback)
     {
         $command = new ClosureCommand($signature, $callback);
 
@@ -198,7 +200,7 @@ class Kernel implements KernelContract
         });
 
         return $command;
-    }
+    }*/
 
     /**
      * Register all of the commands in the given directory.
@@ -206,7 +208,7 @@ class Kernel implements KernelContract
      * @param  array|string $paths
      * @return void
      */
-    protected function load($paths)
+    /*protected function load($paths)
     {
         $paths = array_unique(Arr::wrap($paths));
 
@@ -234,7 +236,7 @@ class Kernel implements KernelContract
                 });
             }
         }
-    }
+    }*/
 
     /**
      * Register the given command with the console application.
