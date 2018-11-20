@@ -2,6 +2,7 @@
 
 namespace CrCms\Microservice\Bootstrap;
 
+use CrCms\Microservice\Server\Contracts\ResponseContract;
 use Exception;
 use ErrorException;
 use Illuminate\Contracts\Foundation\Application;
@@ -109,7 +110,11 @@ class HandleExceptions
      */
     protected function renderApplication(Exception $e)
     {
-        $this->getExceptionHandler()->render($this->app['request'], $e)->send();
+        $response = $this->getExceptionHandler()->render($this->app['request'], $e);
+        if ($response instanceof ResponseContract) {
+            $response->setData($this->pack($response->getData(true)));
+        }
+        $response->send();
     }
 
     /**
@@ -157,5 +162,15 @@ class HandleExceptions
     protected function getExceptionHandler()
     {
         return $this->app->make(ExceptionHandler::class);
+    }
+
+    /**
+     * @param array $messages
+     * @return array
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     */
+    protected function pack(array $messages): array
+    {
+        return ['data' => $this->app->make('server.packer')->pack($messages, config('app.secret_status'))];
     }
 }
