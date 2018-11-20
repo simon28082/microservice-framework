@@ -227,8 +227,12 @@ class Kernel implements KernelContract
      */
     protected function gatherRouteMiddleware(RequestContract $request)
     {
-        if ($route = $request->getRoute()) {
-            return $this->router->gatherRouteMiddleware($route);
+        try {
+            if ($route = $request->getRoute()) {
+                return $this->router->gatherRouteMiddleware($route);
+            }
+        } catch (Throwable $e) {
+            return [];
         }
 
         return [];
