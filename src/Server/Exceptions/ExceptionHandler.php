@@ -198,14 +198,4 @@ class ExceptionHandler implements ExceptionHandlerContract
             'errors' => $e->errors(),
         ], $e->status);
     }
-
-    /**
-     * @param array $messages
-     * @return array
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     */
-    protected function pack(array $messages): array
-    {
-        return ['data' => $this->container->make('server.packer')->pack($messages, config('app.secret_status'))];
-    }
 }
