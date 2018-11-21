@@ -179,9 +179,12 @@ class Kernel implements KernelContract
      */
     protected function commands()
     {
-        Artisan::starting(function ($artisan) {
-            $artisan->resolveCommands(config('mount.commands'));
-        });
+        $commands = config('mount.commands', []);
+        if ($commands) {
+            Artisan::starting(function ($artisan) use ($commands) {
+                $artisan->resolveCommands($commands);
+            });
+        }
     }
 
     /**
