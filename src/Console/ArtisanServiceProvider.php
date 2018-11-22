@@ -97,7 +97,7 @@ class ArtisanServiceProvider extends ServiceProvider
      * @var array
      */
     protected $devCommands = [
-//        'CacheTable' => 'command.cache.table',
+        'CacheTable' => 'command.cache.table',
 //        'ConsoleMake' => 'command.console.make',
 //        'EventGenerate' => 'command.event.generate',
 //        'EventMake' => 'command.event.make',
@@ -115,8 +115,8 @@ class ArtisanServiceProvider extends ServiceProvider
 //        'ObserverMake' => 'command.observer.make',
 //        'PolicyMake' => 'command.policy.make',
 //        'ProviderMake' => 'command.provider.make',
-//        'QueueFailedTable' => 'command.queue.failed-table',
-//        'QueueTable' => 'command.queue.table',
+        'QueueFailedTable' => 'command.queue.failed-table',
+        'QueueTable' => 'command.queue.table',
 //        'RequestMake' => 'command.request.make',
 //        'ResourceMake' => 'command.resource.make',
 //        'RuleMake' => 'command.rule.make',
