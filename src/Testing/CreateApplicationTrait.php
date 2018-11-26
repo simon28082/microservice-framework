@@ -11,7 +11,7 @@ namespace CrCms\Microservice\Testing;
 
 use CrCms\Microservice\Bootstrap\Start;
 use CrCms\Microservice\Foundation\Application;
-use CrCms\Microservice\Server\Contracts\KernelContract;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
 
 /**
  * Trait CreateApplicationTrait
