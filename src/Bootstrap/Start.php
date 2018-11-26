@@ -73,7 +73,7 @@ class Start
      */
     public function createApplication(?string $basePath = null): self
     {
-        $basePath ?: $basePath = realpath(__DIR__ . '/../../../../');
+        $basePath ?: $basePath = realpath(__DIR__ . '/../../../../../');
 
         $this->app = new Application($basePath);
         return $this;
