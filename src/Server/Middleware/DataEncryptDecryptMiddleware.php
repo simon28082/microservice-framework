@@ -2,7 +2,6 @@
 
 namespace CrCms\Microservice\Server\Middleware;
 
-use CrCms\Foundation\Helpers\InstanceConcern;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use Closure;

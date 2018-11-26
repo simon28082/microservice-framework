@@ -2,16 +2,10 @@
 
 namespace CrCms\Microservice\Console;
 
-use Closure;
 use CrCms\Microservice\Bus\PendingDispatch;
 use CrCms\Microservice\Console\Commands\QueuedCommand;
 use Exception;
 use Throwable;
-use ReflectionClass;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Console\Command;
-use Symfony\Component\Finder\Finder;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Contracts\Events\Dispatcher;
 use CrCms\Microservice\Console\Application as Artisan;
@@ -67,7 +61,6 @@ class Kernel implements KernelContract
         \CrCms\Microservice\Bootstrap\LoadConfiguration::class,
         \CrCms\Microservice\Bootstrap\HandleExceptions::class,
         \CrCms\Microservice\Bootstrap\RegisterFacades::class,
-//        \CrCms\Microservice\Bootstrap\SetRequestForConsole::class,
         \CrCms\Microservice\Bootstrap\RegisterProviders::class,
         \CrCms\Microservice\Bootstrap\BootProviders::class,
     ];
