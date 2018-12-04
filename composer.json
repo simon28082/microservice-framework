@@ -29,6 +29,7 @@
     "crcms/swoole-server": "dev-master",
     "nesbot/carbon": "^1.26.3",
     "league/flysystem": "^1.0.8",
+    "dragonmantank/cron-expression": "^2.0",
     "illuminate/contracts": "5.7.*",
     "illuminate/container": "5.7.*",
     "illuminate/support": "5.7.*",
