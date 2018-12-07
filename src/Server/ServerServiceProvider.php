@@ -41,6 +41,9 @@ class ServerServiceProvider extends ServiceProvider
                 return $this->allServices();
             }
         });
+
+        //merge server config to swoole config
+        $this->mergeServerConfigToSwoole();
     }
 
     /**
@@ -89,6 +92,16 @@ class ServerServiceProvider extends ServiceProvider
         })->toArray();
 
         return new Response(['methods' => $methods], 200);
+    }
+
+    /**
+     * @return void
+     */
+    protected function mergeServerConfigToSwoole(): void
+    {
+        $server = $this->app['config']->get('server');
+        $swoole = $this->app['config']->get('swoole');
+        $this->app['config']->set(['swoole' => array_merge($swoole, $server)]);
     }
 
     /**

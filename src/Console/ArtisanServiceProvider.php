@@ -88,7 +88,6 @@ class ArtisanServiceProvider extends ServiceProvider
         'ScheduleFinish' => ScheduleFinishCommand::class,
         'ScheduleRun' => ScheduleRunCommand::class,
         'Up' => 'command.up',
-        'SwooleServer' => 'command.swoole.server'
     ];
 
     /**
