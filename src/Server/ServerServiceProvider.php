@@ -99,8 +99,8 @@ class ServerServiceProvider extends ServiceProvider
      */
     protected function mergeServerConfigToSwoole(): void
     {
-        $server = $this->app['config']->get('server');
-        $swoole = $this->app['config']->get('swoole');
+        $server = $this->app['config']->get('server', []);
+        $swoole = $this->app['config']->get('swoole', []);
         $this->app['config']->set(['swoole' => array_merge($swoole, $server)]);
     }
 
