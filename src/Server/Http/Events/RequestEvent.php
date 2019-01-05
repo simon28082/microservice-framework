@@ -9,6 +9,7 @@ use CrCms\Server\Http\Events\RequestEvent as BaseRequestEvent;
 use CrCms\Server\Http\Request as ServerRequest;
 use CrCms\Server\Http\Response as ServerResponse;
 use CrCms\Microservice\Server\Http\Request as MicroserviceRequest;
+use Swoole\Http\Request;
 
 /**
  * Class RequestEvent
@@ -38,5 +39,13 @@ class RequestEvent extends BaseRequestEvent implements EventContract
         ServerResponse::make($this->swooleResponse, $microserviceResponse)->toResponse();
 
         $kernel->terminate($microserviceRequest, $microserviceResponse);
+    }
+
+    /**
+     * @return Request
+     */
+    public function getSwooleRequest(): Request
+    {
+        return $this->swooleRequest;
     }
 }
