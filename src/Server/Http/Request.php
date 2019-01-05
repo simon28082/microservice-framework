@@ -91,7 +91,7 @@ class Request implements RequestContract
     {
         //running in swoole
         if ($this->app->has('server')) {
-            return $this->app->make('server')->request->getRequest()->rawContent();
+            return $this->app->make('server')->request->getSwooleRequest()->rawContent();
         } else {
             return file_get_contents('php://input');
         }
