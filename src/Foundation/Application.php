@@ -30,7 +30,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * @var string
      */
-    const VERSION = '0.0.1-dev3';
+    const VERSION = '0.0.1-dev5';
 
     /**
      * @var string
