@@ -14,8 +14,8 @@ return [
     'servers' => [
         'http' => [
             'driver' => CrCms\Microservice\Server\Http\Server::class,
-            'host' => '0.0.0.0',
-            'port' => 28083,
+            'host' => env('SERVER_HTTP_HOST', '0.0.0.0'),
+            'port' => env('SERVER_HTTP_PORT', 28080),
             'mode' => defined('SWOOLE_PROCESS') ? SWOOLE_PROCESS : 3,
             'type' => defined('SWOOLE_SOCK_TCP') ? SWOOLE_SOCK_TCP : 1,
             'settings' => [
