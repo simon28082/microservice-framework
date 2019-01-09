@@ -176,9 +176,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     protected function prepareJsonResponse(Exception $e)
     {
         return new Response(
-        //$this->convertExceptionToArray($e),
-        //['data' => $this->container->make('server.packer')->pack($this->convertExceptionToArray($e), config('app.secret_status'))],
-            $this->convertExceptionToArray($e),
+            $this->packResponseError($this->convertExceptionToArray($e)),
             $e->getCode() <= 0 ? 500 : $e->getCode()
         );
     }
@@ -193,9 +191,18 @@ class ExceptionHandler implements ExceptionHandlerContract
             return $e->response;
         }
 
-        return new Response([
+        return new Response($this->packResponseError([
             'message' => $e->getMessage(),
             'errors' => $e->errors(),
-        ], $e->status);
+        ]), $e->status);
+    }
+
+    /**
+     * @param array $data
+     */
+    protected function packResponseError(array $data)
+    {
+        return $data;
+        //return $this->container->make('server.packer')->pack($data);
     }
 }

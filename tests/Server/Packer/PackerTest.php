@@ -22,8 +22,10 @@ class PackerTest extends TestCase
         parent::setUp();
 
         config([
-            'app.secret' => '#1#2@!##',
-            'app.secret_cipher' => 'AES-256-CFB',
+//            'app.secret' => '#1#2@!##',
+//            'app.secret_cipher' => 'AES-256-CFB',
+            'app.encryption' => true,
+            'app.key'=>'base64:TdhCcU88SAr4/omVl4ckItqqKUx+whSwQ4gVEtlm+xk='
         ]);
 
         $this->packer = $this->app->make(Packer::class);
@@ -31,8 +33,8 @@ class PackerTest extends TestCase
 
     public function testEmptyValuePack()
     {
-        $data = ['call' => 'test'];
-        $result = $this->packer->pack($data, true);
+        $data = ['call' => 'test','data'=>['x'=>1]];
+        $result = $this->packer->pack($data);
 
         $this->assertNotEmpty($result);
         return $result;
@@ -43,9 +45,10 @@ class PackerTest extends TestCase
      */
     public function testEmptyValueUnpack(string $data)
     {
-        $data = $this->packer->unpack($data, true);
+        $data = $this->packer->unpack($data);
         $this->assertArrayHasKey('call', $data);
         $this->assertEquals('test', $data['call']);
+        $this->assertEquals(['x'=>1], $data['data']);
     }
 
     public function testNotEmptyPack()

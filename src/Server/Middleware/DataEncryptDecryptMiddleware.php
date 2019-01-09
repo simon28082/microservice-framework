@@ -35,12 +35,8 @@ class DataEncryptDecryptMiddleware
      */
     public function handle(RequestContract $request, Closure $next)
     {
-        $secretStatus = config('app.secret_status');
-
         /* 前置执行 */
-        $data = $this->packer->unpack(
-            $this->parseContent($request->rawData())['data'],
-            $secretStatus);
+        $data = $this->packer->unpack($request->rawData());
 
         $request->setCurrentCall($data['call']);
         $request->setData($data['data'] ?? []);
@@ -49,7 +45,10 @@ class DataEncryptDecryptMiddleware
         $response = $next($request);
 
         /* 后置执行 */
-        $response->setData(['data' => $this->packer->pack($response->getData(true), $secretStatus)]);
+        $responseData = $response->getData(true);
+        if (!empty($responseData)) {
+            $response->setData($this->packer->pack($responseData));
+        }
 
         return $response;
     }

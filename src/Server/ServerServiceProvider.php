@@ -14,9 +14,7 @@ use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Server\Events\RequestHandling;
 use CrCms\Microservice\Server\Http\Request;
 use CrCms\Microservice\Server\Http\Response;
-use CrCms\Microservice\Server\Packer\Contracts\SecretContract;
 use CrCms\Microservice\Server\Packer\Packer;
-use CrCms\Microservice\Server\Packer\Secret;
 use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
@@ -61,7 +59,6 @@ class ServerServiceProvider extends ServiceProvider
      */
     protected function registerAlias(): void
     {
-        $this->app->alias('server.secret', SecretContract::class);
         $this->app->alias('server.packer', Packer::class);
     }
 
@@ -70,13 +67,8 @@ class ServerServiceProvider extends ServiceProvider
      */
     protected function registerServices(): void
     {
-        $this->app->singleton('server.secret', function ($app) {
-            $config = $app->make('config')->get('app');
-            return new Secret($config['secret'], $config['secret_cipher']);
-        });
-
         $this->app->singleton('server.packer', function ($app) {
-            return new Packer($app['server.secret']);
+            return new Packer($app['encrypter'], $app['config']->get('app.encryption'));
         });
     }
 
@@ -99,8 +91,8 @@ class ServerServiceProvider extends ServiceProvider
      */
     protected function mergeServerConfigToSwoole(): void
     {
-        $server = $this->app['config']->get('server');
-        $swoole = $this->app['config']->get('swoole');
+        $server = $this->app['config']->get('server', []);
+        $swoole = $this->app['config']->get('swoole', []);
         $this->app['config']->set(['swoole' => array_merge($swoole, $server)]);
     }
 
