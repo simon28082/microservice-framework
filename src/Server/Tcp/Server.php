@@ -11,11 +11,11 @@
 
 namespace CrCms\Microservice\Server\Tcp;
 
+use Swoole\Server as SwooleServer;
 use CrCms\Microservice\Server\Kernel;
-use CrCms\Microservice\Server\Tcp\Events\ReceiveEvent;
 use CrCms\Server\Server\AbstractServer;
 use CrCms\Server\Server\Contracts\ServerContract;
-use Swoole\Server as SwooleServer;
+use CrCms\Microservice\Server\Tcp\Events\ReceiveEvent;
 
 /**
  * Class Server.

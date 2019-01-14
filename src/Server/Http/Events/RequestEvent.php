@@ -2,14 +2,14 @@
 
 namespace CrCms\Microservice\Server\Http\Events;
 
-use CrCms\Microservice\Server\Http\Request as MicroserviceRequest;
-use CrCms\Microservice\Server\Kernel;
-use CrCms\Server\Http\Events\RequestEvent as BaseRequestEvent;
-use CrCms\Server\Http\Request as ServerRequest;
-use CrCms\Server\Http\Response as ServerResponse;
-use CrCms\Server\Server\AbstractServer;
-use CrCms\Server\Server\Contracts\EventContract;
 use Swoole\Http\Request;
+use CrCms\Microservice\Server\Kernel;
+use CrCms\Server\Server\AbstractServer;
+use CrCms\Server\Http\Request as ServerRequest;
+use CrCms\Server\Server\Contracts\EventContract;
+use CrCms\Server\Http\Response as ServerResponse;
+use CrCms\Server\Http\Events\RequestEvent as BaseRequestEvent;
+use CrCms\Microservice\Server\Http\Request as MicroserviceRequest;
 
 /**
  * Class RequestEvent.

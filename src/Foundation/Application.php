@@ -11,17 +11,17 @@
 
 namespace CrCms\Microservice\Foundation;
 
-use CrCms\Microservice\Routing\RoutingServiceProvider;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
-use Illuminate\Contracts\Container\Container as ContainerContract;
-use Illuminate\Contracts\Foundation\Application as ApplicationContainerContract;
-use Illuminate\Events\EventServiceProvider;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Log\LogServiceProvider;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
-use Illuminate\Support\Str;
+use Illuminate\Events\EventServiceProvider;
+use CrCms\Microservice\Routing\RoutingServiceProvider;
+use Illuminate\Contracts\Container\Container as ContainerContract;
+use Illuminate\Contracts\Foundation\Application as ApplicationContainerContract;
 
 /**
  * Class Application.
@@ -185,7 +185,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
     {
         if (is_null($this->configPath)) {
             $this->configPath = $this->basePath.DIRECTORY_SEPARATOR.'config';
-            if (!is_dir($this->configPath)) {
+            if (! is_dir($this->configPath)) {
                 $this->configPath = realpath(__DIR__.'/../../config');
             }
         }
@@ -461,7 +461,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function register($provider, $force = false)
     {
-        if (($registered = $this->getProvider($provider)) && !$force) {
+        if (($registered = $this->getProvider($provider)) && ! $force) {
             return $registered;
         }
 
@@ -605,7 +605,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function loadDeferredProvider($service)
     {
-        if (!isset($this->deferredServices[$service])) {
+        if (! isset($this->deferredServices[$service])) {
             return;
         }
 
@@ -614,7 +614,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
         // If the service provider has not already been loaded and registered we can
         // register it with the application and remove the service from this list
         // of deferred services, since it will already be loaded on subsequent.
-        if (!isset($this->loadedProviders[$provider])) {
+        if (! isset($this->loadedProviders[$provider])) {
             $this->registerDeferredProvider($provider, $service);
         }
     }
@@ -633,7 +633,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
     {
         $abstract = $this->getAlias($abstract);
 
-        if (isset($this->deferredServices[$abstract]) && !isset($this->instances[$abstract])) {
+        if (isset($this->deferredServices[$abstract]) && ! isset($this->instances[$abstract])) {
             $this->loadDeferredProvider($abstract);
         }
 
@@ -681,7 +681,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
         $this->register($instance = new $provider($this));
 
-        if (!$this->booted) {
+        if (! $this->booted) {
             $this->booting(function () use ($instance) {
                 $this->bootProvider($instance);
             });

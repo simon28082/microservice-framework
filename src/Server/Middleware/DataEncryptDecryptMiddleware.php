@@ -3,10 +3,10 @@
 namespace CrCms\Microservice\Server\Middleware;
 
 use Closure;
+use UnexpectedValueException;
+use CrCms\Microservice\Server\Packer\Packer;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use CrCms\Microservice\Server\Packer\Packer;
-use UnexpectedValueException;
 
 /**
  * Class DataEncryptDecryptMiddleware.
@@ -47,7 +47,7 @@ class DataEncryptDecryptMiddleware
 
         /* 后置执行 */
         $responseData = $response->getData(true);
-        if (!empty($responseData)) {
+        if (! empty($responseData)) {
             $response->setData($this->packer->pack($responseData));
         }
 

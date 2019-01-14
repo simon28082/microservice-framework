@@ -7,8 +7,8 @@
  *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
-use CrCms\Microservice\Routing\ResponseResource;
 use Illuminate\Container\Container;
+use CrCms\Microservice\Routing\ResponseResource;
 
 /**
  * @param null  $abstract
@@ -172,13 +172,13 @@ function cache()
         return app('cache')->get(...$arguments);
     }
 
-    if (!is_array($arguments[0])) {
+    if (! is_array($arguments[0])) {
         throw new Exception(
             'When setting a value in the cache, you must pass an array of key / value pairs.'
         );
     }
 
-    if (!isset($arguments[1])) {
+    if (! isset($arguments[1])) {
         throw new Exception(
             'You must specify an expiration time when setting a value in the cache.'
         );

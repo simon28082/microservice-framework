@@ -5,8 +5,8 @@ namespace CrCms\Microservice\Bootstrap;
 use Dotenv\Dotenv;
 use Dotenv\Exception\InvalidFileException;
 use Dotenv\Exception\InvalidPathException;
-use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;
+use Illuminate\Contracts\Foundation\Application;
 
 class LoadEnvironmentVariables
 {
@@ -52,7 +52,7 @@ class LoadEnvironmentVariables
             }
         }
 
-        if (!env('APP_ENV')) {
+        if (! env('APP_ENV')) {
             return;
         }
 

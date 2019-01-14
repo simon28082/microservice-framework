@@ -11,11 +11,11 @@
 
 namespace CrCms\Microservice\Server\Http;
 
-use CrCms\Microservice\Server\Http\Events\RequestEvent;
 use CrCms\Microservice\Server\Kernel;
+use Swoole\Http\Server as HttpServer;
 use CrCms\Server\Server\AbstractServer;
 use CrCms\Server\Server\Contracts\ServerContract;
-use Swoole\Http\Server as HttpServer;
+use CrCms\Microservice\Server\Http\Events\RequestEvent;
 
 /**
  * Class Server.

@@ -2,10 +2,10 @@
 
 namespace CrCms\Microservice\Routing;
 
-use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
+use Illuminate\Support\ServiceProvider;
 //use Psr\Http\Message\ResponseInterface;
 //use Psr\Http\Message\ServerRequestInterface;
-use Illuminate\Support\ServiceProvider;
+use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 
 class RoutingServiceProvider extends ServiceProvider
 {

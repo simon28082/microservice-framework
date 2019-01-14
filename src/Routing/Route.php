@@ -2,12 +2,12 @@
 
 namespace CrCms\Microservice\Routing;
 
-use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
-use Illuminate\Container\Container;
-use Illuminate\Http\Exceptions\HttpResponseException;
+use ReflectionFunction;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
-use ReflectionFunction;
+use Illuminate\Container\Container;
+use Illuminate\Http\Exceptions\HttpResponseException;
+use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 
 class Route
 {
@@ -162,7 +162,7 @@ class Route
      */
     public function getController()
     {
-        if (!$this->controller) {
+        if (! $this->controller) {
             $class = $this->parseControllerCallback()[0];
 
             $this->controller = $this->container->make(ltrim($class, '\\'));
@@ -291,7 +291,7 @@ class Route
      */
     public function gatherMiddleware()
     {
-        if (!is_null($this->computedMiddleware)) {
+        if (! is_null($this->computedMiddleware)) {
             return $this->computedMiddleware;
         }
 
@@ -333,7 +333,7 @@ class Route
      */
     public function controllerMiddleware()
     {
-        if (!$this->isControllerAction()) {
+        if (! $this->isControllerAction()) {
             return [];
         }
 

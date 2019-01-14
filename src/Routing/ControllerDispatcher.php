@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Routing;
 
-use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 use Illuminate\Container\Container;
+use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 
 class ControllerDispatcher implements ControllerDispatcherContract
 {
@@ -56,7 +56,7 @@ class ControllerDispatcher implements ControllerDispatcherContract
      */
     public function getMiddleware($controller, $method)
     {
-        if (!method_exists($controller, 'getMiddleware')) {
+        if (! method_exists($controller, 'getMiddleware')) {
             return [];
         }
 
@@ -75,7 +75,7 @@ class ControllerDispatcher implements ControllerDispatcherContract
      */
     protected static function methodExcludedByOptions($method, array $options)
     {
-        return (isset($options['only']) && !in_array($method, (array) $options['only'])) ||
-            (!empty($options['except']) && in_array($method, (array) $options['except']));
+        return (isset($options['only']) && ! in_array($method, (array) $options['only'])) ||
+            (! empty($options['except']) && in_array($method, (array) $options['except']));
     }
 }

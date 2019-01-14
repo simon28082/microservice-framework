@@ -2,12 +2,12 @@
 
 namespace CrCms\Microservice\Bootstrap;
 
-use CrCms\Microservice\Server\Contracts\ResponseContract;
-use ErrorException;
 use Exception;
+use ErrorException;
 use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use CrCms\Microservice\Server\Contracts\ResponseContract;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 
@@ -39,7 +39,7 @@ class HandleExceptions
 
         register_shutdown_function([$this, 'handleShutdown']);
 
-        if (!$app->environment('testing')) {
+        if (! $app->environment('testing')) {
             ini_set('display_errors', 'Off');
         }
     }
@@ -77,7 +77,7 @@ class HandleExceptions
      */
     public function handleException($e)
     {
-        if (!$e instanceof Exception) {
+        if (! $e instanceof Exception) {
             $e = new FatalThrowableError($e);
         }
 
@@ -129,7 +129,7 @@ class HandleExceptions
      */
     public function handleShutdown()
     {
-        if (!is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
+        if (! is_null($error = error_get_last()) && $this->isFatal($error['type'])) {
             $this->handleException($this->fatalExceptionFromError($error, 0));
         }
     }

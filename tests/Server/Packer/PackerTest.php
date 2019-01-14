@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Tests\Server\Packer;
 
-use CrCms\Microservice\Server\Packer\Packer;
 use CrCms\Microservice\Testing\TestCase;
+use CrCms\Microservice\Server\Packer\Packer;
 
 /**
  * Class PackerTest.

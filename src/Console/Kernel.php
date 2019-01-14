@@ -2,17 +2,17 @@
 
 namespace CrCms\Microservice\Console;
 
-use CrCms\Microservice\Bus\PendingDispatch;
-use CrCms\Microservice\Console\Application as Artisan;
-use CrCms\Microservice\Console\Commands\QueuedCommand;
 use Exception;
+use Throwable;
+use CrCms\Microservice\Bus\PendingDispatch;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Console\Kernel as KernelContract;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Foundation\Application;
+use CrCms\Microservice\Console\Application as Artisan;
+use CrCms\Microservice\Console\Commands\QueuedCommand;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Throwable;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 class Kernel implements KernelContract
 {
@@ -75,7 +75,7 @@ class Kernel implements KernelContract
      */
     public function __construct(Application $app, Dispatcher $events)
     {
-        if (!defined('ARTISAN_BINARY')) {
+        if (! defined('ARTISAN_BINARY')) {
             define('ARTISAN_BINARY', 'artisan');
         }
 
@@ -312,13 +312,13 @@ class Kernel implements KernelContract
      */
     public function bootstrap()
     {
-        if (!$this->app->hasBeenBootstrapped()) {
+        if (! $this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers());
         }
 
         $this->app->loadDeferredProviders();
 
-        if (!$this->commandsLoaded) {
+        if (! $this->commandsLoaded) {
             $this->commands();
 
             $this->commandsLoaded = true;

@@ -2,12 +2,12 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
-use CrCms\Microservice\Bootstrap\Start;
-use Illuminate\Console\Command;
-use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
-use Illuminate\Filesystem\Filesystem;
-use LogicException;
 use Throwable;
+use LogicException;
+use Illuminate\Console\Command;
+use Illuminate\Filesystem\Filesystem;
+use CrCms\Microservice\Bootstrap\Start;
+use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
 
 class ConfigCacheCommand extends Command
 {

@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 class ModelMakeCommand extends GeneratorCommand
@@ -36,7 +36,7 @@ class ModelMakeCommand extends GeneratorCommand
      */
     public function handle()
     {
-        if (parent::handle() === false && !$this->option('force')) {
+        if (parent::handle() === false && ! $this->option('force')) {
             return;
         }
 

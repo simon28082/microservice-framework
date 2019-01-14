@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
-use CrCms\Microservice\Foundation\PackageManifest;
 use Illuminate\Console\Command;
+use CrCms\Microservice\Foundation\PackageManifest;
 
 class PackageDiscoverCommand extends Command
 {

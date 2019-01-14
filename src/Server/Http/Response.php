@@ -3,13 +3,13 @@
 namespace CrCms\Microservice\Server\Http;
 
 use ArrayObject;
-use CrCms\Microservice\Server\Contracts\ResponseContract;
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Database\Eloquent\Model;
-//use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
-use Illuminate\Http\JsonResponse;
 use JsonSerializable;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Jsonable;
+//use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
+use Illuminate\Contracts\Support\Arrayable;
+use CrCms\Microservice\Server\Contracts\ResponseContract;
 use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
@@ -28,7 +28,7 @@ class Response extends JsonResponse implements ResponseContract
             $response = new static($response, 201);
         } elseif ($response instanceof JsonResponse) {
             $response = new static($response->getData(), $response->getStatusCode(), $response->headers->all(), $response->getEncodingOptions());
-        } elseif (!$response instanceof SymfonyResponse &&
+        } elseif (! $response instanceof SymfonyResponse &&
             ($response instanceof Arrayable ||
                 $response instanceof Jsonable ||
                 $response instanceof ArrayObject ||

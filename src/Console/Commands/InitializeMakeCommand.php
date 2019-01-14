@@ -63,11 +63,11 @@ class InitializeMakeCommand extends Command
      */
     protected function createResource()
     {
-        if (!$this->files->exists(resource_path())) {
+        if (! $this->files->exists(resource_path())) {
             $this->autoCreateDirs([resource_path()]);
         }
 
-        if (!$this->files->exists(app()->langPath())) {
+        if (! $this->files->exists(app()->langPath())) {
             $langPath = app()->langPath();
             $localPath = $langPath.'/'.config('app.locale');
             $this->autoCreateDirs([
@@ -85,7 +85,7 @@ class InitializeMakeCommand extends Command
      */
     protected function createDatabase(): void
     {
-        if (!$this->files->exists(database_path())) {
+        if (! $this->files->exists(database_path())) {
             $this->autoCreateDirs([
                 database_path('factories'),
                 database_path('migrations'),
@@ -103,7 +103,7 @@ class InitializeMakeCommand extends Command
      */
     protected function createConfig(): void
     {
-        if (!$this->files->exists(base_path('config'))) {
+        if (! $this->files->exists(base_path('config'))) {
             $this->autoCreateDirs([base_path('config')]);
             $this->files->copyDirectory(__DIR__.'/../../../config', base_path('config'));
         }
@@ -123,7 +123,7 @@ class InitializeMakeCommand extends Command
         ]);
 
         $gitignore = storage_path('.gitignore');
-        if (!$this->files->exists($gitignore)) {
+        if (! $this->files->exists($gitignore)) {
             $this->files->put(storage_path('.gitignore'), '*');
         }
     }
@@ -136,12 +136,12 @@ class InitializeMakeCommand extends Command
     protected function createRoutes(): void
     {
         $routePath = base_path('routes');
-        if (!$this->files->exists($routePath)) {
+        if (! $this->files->exists($routePath)) {
             $this->files->makeDirectory($routePath, 0755, true);
         }
 
         $webFile = base_path('routes/service.php');
-        if (!$this->files->exists($webFile)) {
+        if (! $this->files->exists($webFile)) {
             $this->files->put($webFile, $this->files->get(__DIR__.'/stubs/service-route.stub'));
         }
     }
@@ -154,7 +154,7 @@ class InitializeMakeCommand extends Command
     protected function autoCreateDirs(array $dirs): void
     {
         foreach ($dirs as $dir) {
-            if (!$this->files->exists($dir) && !empty($dir)) {
+            if (! $this->files->exists($dir) && ! empty($dir)) {
                 $this->files->makeDirectory($dir, 0755, true);
             }
         }

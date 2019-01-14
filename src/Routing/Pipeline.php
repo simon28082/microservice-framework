@@ -3,12 +3,12 @@
 namespace CrCms\Microservice\Routing;
 
 use Closure;
-use CrCms\Microservice\Server\Contracts\RequestContract;
 use Exception;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Illuminate\Pipeline\Pipeline as BasePipeline;
-use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
+use Illuminate\Pipeline\Pipeline as BasePipeline;
+use CrCms\Microservice\Server\Contracts\RequestContract;
+use Symfony\Component\Debug\Exception\FatalThrowableError;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 /**
  * This extended pipeline catches any exceptions that occur during each slice.
@@ -73,8 +73,8 @@ class Pipeline extends BasePipeline
      */
     protected function handleException($passable, Exception $e)
     {
-        if (!$this->container->bound(ExceptionHandlerContract::class) ||
-            !$passable instanceof RequestContract) {
+        if (! $this->container->bound(ExceptionHandlerContract::class) ||
+            ! $passable instanceof RequestContract) {
             throw $e;
         }
 

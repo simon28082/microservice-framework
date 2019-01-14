@@ -3,8 +3,8 @@
 namespace CrCms\Microservice\Foundation;
 
 use Exception;
-use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Filesystem\Filesystem;
+use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 
 class ProviderRepository
 {
@@ -193,7 +193,7 @@ class ProviderRepository
      */
     public function writeManifest($manifest)
     {
-        if (!is_writable(dirname($this->manifestPath))) {
+        if (! is_writable(dirname($this->manifestPath))) {
             throw new Exception('The bootstrap/cache directory must be present and writable.');
         }
 

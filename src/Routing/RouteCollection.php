@@ -2,12 +2,12 @@
 
 namespace CrCms\Microservice\Routing;
 
-use ArrayIterator;
 use Countable;
-use CrCms\Microservice\Server\Contracts\RequestContract;
-use Illuminate\Support\Arr;
+use ArrayIterator;
 use IteratorAggregate;
+use Illuminate\Support\Arr;
 use UnexpectedValueException;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 
 /**
  * Class RouteCollection.
@@ -183,7 +183,7 @@ class RouteCollection implements Countable, IteratorAggregate
      */
     public function hasNamedRoute($name)
     {
-        return !is_null($this->getByName($name));
+        return ! is_null($this->getByName($name));
     }
 
     /**

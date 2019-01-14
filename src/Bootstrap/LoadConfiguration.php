@@ -3,11 +3,11 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use Exception;
-use Illuminate\Config\Repository;
-use Illuminate\Contracts\Config\Repository as RepositoryContract;
-use Illuminate\Contracts\Foundation\Application;
 use SplFileInfo;
+use Illuminate\Config\Repository;
 use Symfony\Component\Finder\Finder;
+use Illuminate\Contracts\Foundation\Application;
+use Illuminate\Contracts\Config\Repository as RepositoryContract;
 
 class LoadConfiguration
 {
@@ -36,7 +36,7 @@ class LoadConfiguration
         // options available to the developer for use in various parts of this app.
         $app->instance('config', $config = new Repository($items));
 
-        if (!isset($loadedFromCache)) {
+        if (! isset($loadedFromCache)) {
             $this->loadConfigurationFiles($app, $config);
         }
 
@@ -66,7 +66,7 @@ class LoadConfiguration
     {
         $files = $this->getConfigurationFiles($app);
 
-        if (!isset($files['app'])) {
+        if (! isset($files['app'])) {
             throw new Exception('Unable to load the "app" configuration file.');
         }
 

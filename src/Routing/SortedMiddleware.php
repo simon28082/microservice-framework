@@ -37,7 +37,7 @@ class SortedMiddleware extends Collection
     {
         $lastIndex = 0;
         foreach ($middlewares as $index => $middleware) {
-            if (!is_string($middleware)) {
+            if (! is_string($middleware)) {
                 continue;
             }
             $stripped = head(explode(':', $middleware));

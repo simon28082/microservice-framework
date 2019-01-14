@@ -2,10 +2,10 @@
 
 namespace CrCms\Microservice\Server\Exceptions;
 
+use Throwable;
+use RuntimeException;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use RuntimeException;
-use Throwable;
 
 /**
  * Class ServiceException.
