@@ -2,6 +2,7 @@
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
+use CrCms\Microservice\Log\MongoDBLogger;
 
 return [
 
@@ -87,6 +88,15 @@ return [
         'errorlog' => [
             'driver' => 'errorlog',
             'level'  => 'debug',
+        ],
+
+        'mongo' => [
+            'driver' => 'custom',
+            'via' => MongoDBLogger::class,
+            'database' => [
+                'driver' => 'mongodb',
+                'collection' => 'logger'
+            ],
         ],
     ],
 
