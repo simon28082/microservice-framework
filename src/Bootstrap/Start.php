@@ -12,15 +12,15 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use CrCms\Microservice\Console\Kernel;
-use CrCms\Microservice\Foundation\Application;
-use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
-use CrCms\Microservice\Server\Exceptions\ExceptionHandler;
 use CrCms\Microservice\Server\Http\Request;
-use CrCms\Microservice\Server\Kernel as ServerKernel;
-use Illuminate\Contracts\Console\Kernel as KernelContract;
-use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
+use CrCms\Microservice\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
+use CrCms\Microservice\Server\Kernel as ServerKernel;
+use CrCms\Microservice\Server\Exceptions\ExceptionHandler;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
+use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
+use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
 
 /**
  * Class Start.

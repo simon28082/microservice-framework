@@ -3,8 +3,8 @@
 namespace CrCms\Microservice\Routing;
 
 use BadMethodCallException;
-use CrCms\Foundation\Helpers\InstanceConcern;
 use InvalidArgumentException;
+use CrCms\Foundation\Helpers\InstanceConcern;
 
 /**
  * @property-read ResponseResource $response

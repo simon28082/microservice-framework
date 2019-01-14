@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Routing;
 
-use BadMethodCallException;
 use Closure;
+use BadMethodCallException;
 use InvalidArgumentException;
 
 /**
@@ -71,7 +71,7 @@ class RouteRegistrar
      */
     public function attribute($key, $value)
     {
-        if (!in_array($key, $this->allowedAttributes)) {
+        if (! in_array($key, $this->allowedAttributes)) {
             throw new InvalidArgumentException("Attribute [{$key}] does not exist.");
         }
 
@@ -104,7 +104,7 @@ class RouteRegistrar
      */
     protected function registerRoute($method, $name, $action = null, array $options = [])
     {
-        if (!is_array($action)) {
+        if (! is_array($action)) {
             $action = array_merge($this->attributes, $action ? ['uses' => $action] : []);
         }
 

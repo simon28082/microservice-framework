@@ -3,8 +3,8 @@
 namespace CrCms\Microservice\Console\Commands;
 
 use Illuminate\Console\GeneratorCommand;
-use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use Symfony\Component\Console\Input\InputArgument;
 
 class ConsoleMakeCommand extends GeneratorCommand
 {

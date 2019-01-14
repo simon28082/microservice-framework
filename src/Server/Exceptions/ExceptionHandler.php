@@ -11,15 +11,15 @@
 
 namespace CrCms\Microservice\Server\Exceptions;
 
-use CrCms\Microservice\Server\Contracts\RequestContract;
-use CrCms\Microservice\Server\Http\Response;
 use Exception;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Illuminate\Support\Arr;
-use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
+use CrCms\Microservice\Server\Http\Response;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Validation\ValidationException;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 use Symfony\Component\Console\Application as ConsoleApplication;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 /**
  * Class ExceptionHandler.
@@ -103,7 +103,7 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function shouldReport(Exception $e)
     {
-        return !$this->shouldntReport($e);
+        return ! $this->shouldntReport($e);
     }
 
     /**
@@ -117,7 +117,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     {
         $dontReport = array_merge($this->dontReport, $this->internalDontReport);
 
-        return !is_null(Arr::first($dontReport, function ($type) use ($e) {
+        return ! is_null(Arr::first($dontReport, function ($type) use ($e) {
             return $e instanceof $type;
         }));
     }

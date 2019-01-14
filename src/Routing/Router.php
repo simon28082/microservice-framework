@@ -3,13 +3,13 @@
 namespace CrCms\Microservice\Routing;
 
 use Closure;
-use CrCms\Microservice\Server\Contracts\RequestContract;
-use Illuminate\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Illuminate\Support\Collection;
+use Illuminate\Container\Container;
 use Illuminate\Support\Traits\Macroable;
+use Illuminate\Contracts\Events\Dispatcher;
+use CrCms\Microservice\Server\Contracts\RequestContract;
 
 /**
  * Class Router.
@@ -179,7 +179,7 @@ class Router
      */
     protected function updateGroupStack(array $attributes)
     {
-        if (!empty($this->groupStack)) {
+        if (! empty($this->groupStack)) {
             $attributes = $this->mergeWithLastGroup($attributes);
         }
 
@@ -281,7 +281,7 @@ class Router
      */
     protected function actionReferencesController($action)
     {
-        if (!$action instanceof Closure) {
+        if (! $action instanceof Closure) {
             return is_string($action) || (isset($action['uses']) && is_string($action['uses']));
         }
 
@@ -304,7 +304,7 @@ class Router
         // Here we'll merge any group "uses" statement if necessary so that the action
         // has the proper clause for this property. Then we can simply set the name
         // of the controller on the action and return the action array for usage.
-        if (!empty($this->groupStack)) {
+        if (! empty($this->groupStack)) {
             $action['uses'] = $this->prependGroupNamespace($action['uses']);
         }
 
@@ -554,7 +554,7 @@ class Router
      */
     public function prependMiddlewareToGroup($group, $middleware)
     {
-        if (isset($this->middlewareGroups[$group]) && !in_array($middleware, $this->middlewareGroups[$group])) {
+        if (isset($this->middlewareGroups[$group]) && ! in_array($middleware, $this->middlewareGroups[$group])) {
             array_unshift($this->middlewareGroups[$group], $middleware);
         }
 
@@ -573,11 +573,11 @@ class Router
      */
     public function pushMiddlewareToGroup($group, $middleware)
     {
-        if (!array_key_exists($group, $this->middlewareGroups)) {
+        if (! array_key_exists($group, $this->middlewareGroups)) {
             $this->middlewareGroups[$group] = [];
         }
 
-        if (!in_array($middleware, $this->middlewareGroups[$group])) {
+        if (! in_array($middleware, $this->middlewareGroups[$group])) {
             $this->middlewareGroups[$group][] = $middleware;
         }
 
@@ -591,7 +591,7 @@ class Router
      */
     public function hasGroupStack()
     {
-        return !empty($this->groupStack);
+        return ! empty($this->groupStack);
     }
 
     /**
@@ -640,7 +640,7 @@ class Router
         $names = is_array($name) ? $name : func_get_args();
 
         foreach ($names as $value) {
-            if (!$this->routes->hasNamedRoute($value)) {
+            if (! $this->routes->hasNamedRoute($value)) {
                 return false;
             }
         }

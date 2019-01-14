@@ -11,9 +11,9 @@
 
 namespace CrCms\Microservice\Foundation;
 
-use CrCms\Foundation\Transporters\DataServiceProvider;
-use CrCms\Microservice\Server\ServerServiceProvider;
 use Illuminate\Support\AggregateServiceProvider;
+use CrCms\Microservice\Server\ServerServiceProvider;
+use CrCms\Foundation\Transporters\DataServiceProvider;
 
 /**
  * Class CrCmsServiceProvider.

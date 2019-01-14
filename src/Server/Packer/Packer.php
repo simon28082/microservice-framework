@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Server\Packer;
 
-use Illuminate\Contracts\Encryption\Encrypter;
 use UnexpectedValueException;
+use Illuminate\Contracts\Encryption\Encrypter;
 
 /**
  * Class Packer.

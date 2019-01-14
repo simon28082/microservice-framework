@@ -11,14 +11,14 @@
 
 namespace CrCms\Microservice\Server;
 
+use Illuminate\Support\Collection;
 use CrCms\Microservice\Routing\Route;
-use CrCms\Microservice\Server\Contracts\ResponseContract;
-use CrCms\Microservice\Server\Events\RequestHandling;
+use Illuminate\Support\ServiceProvider;
 use CrCms\Microservice\Server\Http\Request;
 use CrCms\Microservice\Server\Http\Response;
 use CrCms\Microservice\Server\Packer\Packer;
-use Illuminate\Support\Collection;
-use Illuminate\Support\ServiceProvider;
+use CrCms\Microservice\Server\Events\RequestHandling;
+use CrCms\Microservice\Server\Contracts\ResponseContract;
 
 /**
  * Class ServerServiceProvider.

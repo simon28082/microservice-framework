@@ -12,8 +12,8 @@
 namespace CrCms\Microservice\Server\Tcp\Events;
 
 use CrCms\Microservice\Server\Kernel;
-use CrCms\Microservice\Server\Tcp\Request;
 use CrCms\Server\Server\AbstractServer;
+use CrCms\Microservice\Server\Tcp\Request;
 use CrCms\Server\Server\Events\AbstractEvent;
 
 /**

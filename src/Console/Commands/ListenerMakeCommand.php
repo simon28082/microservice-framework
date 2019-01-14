@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 class ListenerMakeCommand extends GeneratorCommand
@@ -40,7 +40,7 @@ class ListenerMakeCommand extends GeneratorCommand
     {
         $event = $this->option('event');
 
-        if (!Str::startsWith($event, [
+        if (! Str::startsWith($event, [
             $this->laravel->getNamespace(),
             'Illuminate',
             '\\',

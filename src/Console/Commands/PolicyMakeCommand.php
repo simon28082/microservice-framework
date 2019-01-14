@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
-use Illuminate\Console\GeneratorCommand;
 use Illuminate\Support\Str;
+use Illuminate\Console\GeneratorCommand;
 use Symfony\Component\Console\Input\InputOption;
 
 class PolicyMakeCommand extends GeneratorCommand
@@ -58,7 +58,7 @@ class PolicyMakeCommand extends GeneratorCommand
     {
         $model = $this->userProviderModel();
 
-        if (!$model) {
+        if (! $model) {
             return $stub;
         }
 

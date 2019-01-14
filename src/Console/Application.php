@@ -11,10 +11,10 @@
 
 namespace CrCms\Microservice\Console;
 
+use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Console\Application as BaseApplication;
 use Illuminate\Contracts\Console\Application as ApplicationContract;
-use Illuminate\Contracts\Container\Container;
-use Illuminate\Contracts\Events\Dispatcher;
 
 /**
  * Class Application.

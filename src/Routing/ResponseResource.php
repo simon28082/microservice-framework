@@ -2,14 +2,14 @@
 
 namespace CrCms\Microservice\Routing;
 
+use Traversable;
+use JsonSerializable;
+use InvalidArgumentException;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Collection;
 use CrCms\Foundation\Resources\Resource;
 use CrCms\Microservice\Server\Http\Response;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
-use Illuminate\Support\Collection;
-use InvalidArgumentException;
-use JsonSerializable;
-use Traversable;
 
 /**
  * Class ResponseResource.
@@ -62,7 +62,7 @@ class ResponseResource
      */
     public function collection($collection, string $collect = '', array $fields = [], array $includes = []): JsonResponse
     {
-        if (!$collection instanceof ResourceCollection && class_exists($collect)) {
+        if (! $collection instanceof ResourceCollection && class_exists($collect)) {
             if (substr($collect, -8) === 'Resource') {
                 $collection = call_user_func([$collect, 'collection'], $collection);
             } elseif (substr($collect, -10) === 'Collection') {
@@ -72,7 +72,7 @@ class ResponseResource
             }
         }
 
-        if (!$collection instanceof ResourceCollection) {
+        if (! $collection instanceof ResourceCollection) {
             throw new InvalidArgumentException('Non-existent resource converter');
         }
 
@@ -89,11 +89,11 @@ class ResponseResource
      */
     public function resource($resource, string $collect = '', array $fields = [], array $includes = []): JsonResponse
     {
-        if (!$resource instanceof Resource && class_exists($collect)) {
+        if (! $resource instanceof Resource && class_exists($collect)) {
             $resource = (new $collect($resource));
         }
 
-        if (!$resource instanceof Resource) {
+        if (! $resource instanceof Resource) {
             throw new InvalidArgumentException('Non-existent resource converter');
         }
 

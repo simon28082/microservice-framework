@@ -2,20 +2,20 @@
 
 namespace CrCms\Microservice\Server;
 
-use CrCms\Microservice\Foundation\Application;
-use CrCms\Microservice\Routing\Pipeline;
+use Exception;
+use Throwable;
 use CrCms\Microservice\Routing\Router;
+use Illuminate\Support\Facades\Facade;
+use CrCms\Microservice\Routing\Pipeline;
+use CrCms\Microservice\Foundation\Application;
+use CrCms\Microservice\Server\Events\RequestHandled;
+use CrCms\Microservice\Server\Events\RequestHandling;
 use CrCms\Microservice\Server\Contracts\KernelContract;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use CrCms\Microservice\Server\Events\RequestHandled;
-use CrCms\Microservice\Server\Events\RequestHandling;
-use Exception;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Illuminate\Contracts\Foundation\Application as ApplicationContract;
-use Illuminate\Support\Facades\Facade;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Throwable;
+use Illuminate\Contracts\Foundation\Application as ApplicationContract;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 
 /**
  * Class Kernel.
@@ -164,7 +164,7 @@ class Kernel implements KernelContract
 
     public function bootstrap(): void
     {
-        if (!$this->app->hasBeenBootstrapped()) {
+        if (! $this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers());
         }
     }
@@ -208,7 +208,7 @@ class Kernel implements KernelContract
         );
 
         foreach ($middlewares as $middleware) {
-            if (!is_string($middleware)) {
+            if (! is_string($middleware)) {
                 continue;
             }
 
