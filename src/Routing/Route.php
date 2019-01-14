@@ -2,12 +2,12 @@
 
 namespace CrCms\Microservice\Routing;
 
-use ReflectionFunction;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
+use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
 use Illuminate\Container\Container;
 use Illuminate\Http\Exceptions\HttpResponseException;
-use CrCms\Microservice\Routing\Contracts\ControllerDispatcher as ControllerDispatcherContract;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Str;
+use ReflectionFunction;
 
 class Route
 {
@@ -63,9 +63,10 @@ class Route
     /**
      * Create a new Route instance.
      *
-     * @param  array|string  $methods
-     * @param  string  $uri
-     * @param  \Closure|array  $action
+     * @param array|string   $methods
+     * @param string         $uri
+     * @param \Closure|array $action
+     *
      * @return void
      */
     public function __construct($mark, $action)
@@ -85,10 +86,11 @@ class Route
     /**
      * Parse the route action into a standard array.
      *
-     * @param  callable|array|null  $action
-     * @return array
+     * @param callable|array|null $action
      *
      * @throws \UnexpectedValueException
+     *
+     * @return array
      */
     protected function parseAction($action)
     {
@@ -102,10 +104,9 @@ class Route
      */
     public function run()
     {
-        $this->container = $this->container ?: new Container;
+        $this->container = $this->container ?: new Container();
 
         try {
-
             if ($this->isControllerAction()) {
                 return $this->runController();
             }
@@ -143,9 +144,9 @@ class Route
     /**
      * Run the route action and return the response.
      *
-     * @return mixed
-     *
      * @throws \Symfony\Component\HttpKernel\Exception\NotFoundHttpException
+     *
+     * @return mixed
      */
     protected function runController()
     {
@@ -161,7 +162,7 @@ class Route
      */
     public function getController()
     {
-        if (! $this->controller) {
+        if (!$this->controller) {
             $class = $this->parseControllerCallback()[0];
 
             $this->controller = $this->container->make(ltrim($class, '\\'));
@@ -205,7 +206,8 @@ class Route
     /**
      * Set the handler for the route.
      *
-     * @param  \Closure|string  $action
+     * @param \Closure|string $action
+     *
      * @return $this
      */
     public function uses($action)
@@ -213,7 +215,7 @@ class Route
         $action = is_string($action) ? $this->addGroupNamespaceToStringUses($action) : $action;
 
         return $this->setAction(array_merge($this->action, $this->parseAction([
-            'uses' => $action,
+            'uses'       => $action,
             'controller' => $action,
         ])));
     }
@@ -221,7 +223,8 @@ class Route
     /**
      * Parse a string based action for the "uses" fluent method.
      *
-     * @param  string  $action
+     * @param string $action
+     *
      * @return string
      */
     protected function addGroupNamespaceToStringUses($action)
@@ -258,7 +261,8 @@ class Route
     /**
      * Get the action array or one of its properties for the route.
      *
-     * @param  string|null  $key
+     * @param string|null $key
+     *
      * @return mixed
      */
     public function getAction($key = null)
@@ -269,7 +273,8 @@ class Route
     /**
      * Set the action array for the route.
      *
-     * @param  array  $action
+     * @param array $action
+     *
      * @return $this
      */
     public function setAction(array $action)
@@ -286,7 +291,7 @@ class Route
      */
     public function gatherMiddleware()
     {
-        if (! is_null($this->computedMiddleware)) {
+        if (!is_null($this->computedMiddleware)) {
             return $this->computedMiddleware;
         }
 
@@ -300,7 +305,8 @@ class Route
     /**
      * Get or set the middlewares attached to the route.
      *
-     * @param  array|string|null $middleware
+     * @param array|string|null $middleware
+     *
      * @return $this|array
      */
     public function middleware($middleware = null)
@@ -327,7 +333,7 @@ class Route
      */
     public function controllerMiddleware()
     {
-        if (! $this->isControllerAction()) {
+        if (!$this->isControllerAction()) {
             return [];
         }
 
@@ -353,7 +359,8 @@ class Route
     /**
      * Set the router instance on the route.
      *
-     * @param  \CrCms\Microservice\Routing\Router  $router
+     * @param \CrCms\Microservice\Routing\Router $router
+     *
      * @return $this
      */
     public function setRouter(Router $router)
@@ -366,7 +373,8 @@ class Route
     /**
      * Set the container instance on the route.
      *
-     * @param  \Illuminate\Container\Container  $container
+     * @param \Illuminate\Container\Container $container
+     *
      * @return $this
      */
     public function setContainer(Container $container)

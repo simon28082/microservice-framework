@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Routing;
 
-use Closure;
 use BadMethodCallException;
+use Closure;
 use InvalidArgumentException;
 
 /**
@@ -50,7 +50,8 @@ class RouteRegistrar
     /**
      * Create a new route registrar instance.
      *
-     * @param  \CrCms\Microservice\Routing\Router $router
+     * @param \CrCms\Microservice\Routing\Router $router
+     *
      * @return void
      */
     public function __construct(Router $router)
@@ -61,11 +62,12 @@ class RouteRegistrar
     /**
      * Set the value for a given attribute.
      *
-     * @param  string $key
-     * @param  mixed $value
-     * @return $this
+     * @param string $key
+     * @param mixed  $value
      *
      * @throws \InvalidArgumentException
+     *
+     * @return $this
      */
     public function attribute($key, $value)
     {
@@ -81,7 +83,8 @@ class RouteRegistrar
     /**
      * Create a route group with shared attributes.
      *
-     * @param  \Closure|string $callback
+     * @param \Closure|string $callback
+     *
      * @return void
      */
     public function group($callback)
@@ -94,8 +97,9 @@ class RouteRegistrar
      *
      * @param string $method
      * @param string $name
-     * @param null $action
-     * @param array $options
+     * @param null   $action
+     * @param array  $options
+     *
      * @return mixed
      */
     protected function registerRoute($method, $name, $action = null, array $options = [])
@@ -110,7 +114,8 @@ class RouteRegistrar
     /**
      * Compile the action into an array including the attributes.
      *
-     * @param  \Closure|array|string|null $action
+     * @param \Closure|array|string|null $action
+     *
      * @return array
      */
     protected function compileAction($action)
@@ -129,11 +134,12 @@ class RouteRegistrar
     /**
      * Dynamically handle calls into the route registrar.
      *
-     * @param  string $method
-     * @param  array $parameters
-     * @return \CrCms\Microservice\Routing\Route|$this
+     * @param string $method
+     * @param array  $parameters
      *
      * @throws \BadMethodCallException
+     *
+     * @return \CrCms\Microservice\Routing\Route|$this
      */
     public function __call($method, $parameters)
     {

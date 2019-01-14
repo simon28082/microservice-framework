@@ -51,24 +51,24 @@ return [
     */
 
     'aliases' => [
-        'App' => Illuminate\Support\Facades\App::class,
-        'Artisan' => Illuminate\Support\Facades\Artisan::class,
-        'Bus' => Illuminate\Support\Facades\Bus::class,
-        'Cache' => Illuminate\Support\Facades\Cache::class,
-        'Config' => Illuminate\Support\Facades\Config::class,
-        'Crypt' => Illuminate\Support\Facades\Crypt::class,
-        'DB' => Illuminate\Support\Facades\DB::class,
-        'Eloquent' => Illuminate\Database\Eloquent\Model::class,
-        'Event' => Illuminate\Support\Facades\Event::class,
-        'File' => Illuminate\Support\Facades\File::class,
-        'Gate' => Illuminate\Support\Facades\Gate::class,
-        'Hash' => Illuminate\Support\Facades\Hash::class,
-        'Lang' => Illuminate\Support\Facades\Lang::class,
-        'Log' => Illuminate\Support\Facades\Log::class,
-        'Queue' => Illuminate\Support\Facades\Queue::class,
-        'Redis' => Illuminate\Support\Facades\Redis::class,
-        'Route' => Illuminate\Support\Facades\Route::class,
-        'Storage' => Illuminate\Support\Facades\Storage::class,
+        'App'       => Illuminate\Support\Facades\App::class,
+        'Artisan'   => Illuminate\Support\Facades\Artisan::class,
+        'Bus'       => Illuminate\Support\Facades\Bus::class,
+        'Cache'     => Illuminate\Support\Facades\Cache::class,
+        'Config'    => Illuminate\Support\Facades\Config::class,
+        'Crypt'     => Illuminate\Support\Facades\Crypt::class,
+        'DB'        => Illuminate\Support\Facades\DB::class,
+        'Eloquent'  => Illuminate\Database\Eloquent\Model::class,
+        'Event'     => Illuminate\Support\Facades\Event::class,
+        'File'      => Illuminate\Support\Facades\File::class,
+        'Gate'      => Illuminate\Support\Facades\Gate::class,
+        'Hash'      => Illuminate\Support\Facades\Hash::class,
+        'Lang'      => Illuminate\Support\Facades\Lang::class,
+        'Log'       => Illuminate\Support\Facades\Log::class,
+        'Queue'     => Illuminate\Support\Facades\Queue::class,
+        'Redis'     => Illuminate\Support\Facades\Redis::class,
+        'Route'     => Illuminate\Support\Facades\Route::class,
+        'Storage'   => Illuminate\Support\Facades\Storage::class,
         'Validator' => Illuminate\Support\Facades\Validator::class,
     ],
 
@@ -80,7 +80,7 @@ return [
     */
 
     'commands' => [
-        
+
     ],
 
     /*

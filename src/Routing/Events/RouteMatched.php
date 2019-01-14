@@ -6,8 +6,7 @@ use CrCms\Microservice\Routing\Route;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 
 /**
- * Class RouteMatched
- * @package CrCms\Microservice\Routing\Events
+ * Class RouteMatched.
  */
 class RouteMatched
 {
@@ -25,7 +24,8 @@ class RouteMatched
 
     /**
      * RouteMatched constructor.
-     * @param Route $route
+     *
+     * @param Route           $route
      * @param RequestContract $request
      */
     public function __construct(Route $route, RequestContract $request)

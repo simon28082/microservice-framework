@@ -3,7 +3,9 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-18 15:16
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
@@ -14,8 +16,7 @@ use CrCms\Microservice\Foundation\Application;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 
 /**
- * Trait CreateApplicationTrait
- * @package CrCms\Microservice\Testing
+ * Trait CreateApplicationTrait.
  */
 trait CreateApplicationTrait
 {
@@ -24,7 +25,7 @@ trait CreateApplicationTrait
      */
     public function createApplication(): Application
     {
-        return tap(Start::instance()->bootstrap()->getApplication(),function(Application $app){
+        return tap(Start::instance()->bootstrap()->getApplication(), function (Application $app) {
             $app->make(KernelContract::class)->bootstrap();
         });
     }

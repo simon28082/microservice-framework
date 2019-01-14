@@ -3,11 +3,11 @@
 namespace CrCms\Microservice\Console\Commands;
 
 use CrCms\Microservice\Bootstrap\Start;
-use Throwable;
-use LogicException;
 use Illuminate\Console\Command;
-use Illuminate\Filesystem\Filesystem;
 use Illuminate\Contracts\Console\Kernel as ConsoleKernelContract;
+use Illuminate\Filesystem\Filesystem;
+use LogicException;
+use Throwable;
 
 class ConfigCacheCommand extends Command
 {
@@ -35,7 +35,8 @@ class ConfigCacheCommand extends Command
     /**
      * Create a new config cache command instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
+     * @param \Illuminate\Filesystem\Filesystem $files
+     *
      * @return void
      */
     public function __construct(Filesystem $files)
@@ -82,6 +83,7 @@ class ConfigCacheCommand extends Command
         $app = tap(Start::instance()->bootstrap()->getApplication(), function ($app) {
             $app->make(ConsoleKernelContract::class)->bootstrap();
         });
+
         return $app['config']->all();
     }
 }

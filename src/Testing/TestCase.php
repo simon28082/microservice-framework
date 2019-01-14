@@ -3,7 +3,9 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-18 11:35
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
@@ -13,8 +15,7 @@ use CrCms\Microservice\Foundation\Application;
 use PHPUnit\Framework\TestCase as BaseTestCase;
 
 /**
- * Class TestCase
- * @package CrCms\Microservice\Testing
+ * Class TestCase.
  */
 abstract class TestCase extends BaseTestCase
 {

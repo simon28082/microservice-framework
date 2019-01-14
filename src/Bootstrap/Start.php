@@ -3,26 +3,27 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-10 19:21
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
 namespace CrCms\Microservice\Bootstrap;
 
+use CrCms\Microservice\Console\Kernel;
 use CrCms\Microservice\Foundation\Application;
+use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
+use CrCms\Microservice\Server\Exceptions\ExceptionHandler;
 use CrCms\Microservice\Server\Http\Request;
+use CrCms\Microservice\Server\Kernel as ServerKernel;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
+use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use Illuminate\Contracts\Console\Kernel as KernelContract;
-use CrCms\Microservice\Console\Kernel;
-use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
-use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
-use CrCms\Microservice\Server\Kernel as ServerKernel;
-use CrCms\Microservice\Server\Exceptions\ExceptionHandler;
 
 /**
- * Class Start
- * @package CrCms\Microservice\Foundation
+ * Class Start.
  */
 class Start
 {
@@ -32,8 +33,9 @@ class Start
     protected $app;
 
     /**
-     * @param array $params
+     * @param array       $params
      * @param null|string $basePath
+     *
      * @return void
      */
     public static function run(array $params = [], ?string $basePath = null): void
@@ -49,14 +51,15 @@ class Start
     /**
      * @return Start
      */
-    public static function instance(): Start
+    public static function instance(): self
     {
-        return new static;
+        return new static();
     }
 
     /**
      * @param null|string $basePath
      * @param null|string $mode
+     *
      * @return Start
      */
     public function bootstrap(?string $basePath = null): self
@@ -69,13 +72,15 @@ class Start
 
     /**
      * @param null|string $basePath
+     *
      * @return Start
      */
     public function createApplication(?string $basePath = null): self
     {
-        $basePath ?: $basePath = realpath(__DIR__ . '/../../../../../');
+        $basePath ?: $basePath = realpath(__DIR__.'/../../../../../');
 
         $this->app = new Application($basePath);
+
         return $this;
     }
 
@@ -89,6 +94,7 @@ class Start
 
     /**
      * @param array $params
+     *
      * @return void
      */
     protected function runConsole(array $params): void
@@ -97,7 +103,7 @@ class Start
 
         $status = $kernel->handle(
             $input = new ArgvInput(array_values($params)),
-            new ConsoleOutput
+            new ConsoleOutput()
         );
 
         $kernel->terminate($input, $status);
@@ -128,6 +134,7 @@ class Start
 
     /**
      * @param array $params
+     *
      * @return void
      */
     protected function runApplication(array $params): void

@@ -4,11 +4,9 @@ namespace CrCms\Microservice\Console\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Filesystem\Filesystem;
-use Symfony\Component\Console\Input\InputArgument;
 
 /**
- * Class InitializeMakeCommand
- * @package CrCms\Microservice\Console\Commands
+ * Class InitializeMakeCommand.
  */
 class InitializeMakeCommand extends Command
 {
@@ -38,6 +36,7 @@ class InitializeMakeCommand extends Command
 
     /**
      * AutoCreateStorageCommand constructor.
+     *
      * @param Filesystem $filesystem
      */
     public function __construct(Filesystem $filesystem)
@@ -52,10 +51,10 @@ class InitializeMakeCommand extends Command
     public function handle(): void
     {
         foreach ($this->modules as $module) {
-            call_user_func([$this, 'create' . ucfirst($module)]);
+            call_user_func([$this, 'create'.ucfirst($module)]);
         }
 
-        $this->info("Initialize completed");
+        $this->info('Initialize completed');
     }
 
     /**
@@ -76,8 +75,8 @@ class InitializeMakeCommand extends Command
                 $localPath,
             ]);
 
-            $this->files->put($localPath.'/pagination.php', $this->files->get(__DIR__ . '/stubs/lang/'.config('app.locale').'/pagination.stub'));
-            $this->files->put($localPath.'/validation.php', $this->files->get(__DIR__ . '/stubs/lang/'.config('app.locale').'/validation.stub'));
+            $this->files->put($localPath.'/pagination.php', $this->files->get(__DIR__.'/stubs/lang/'.config('app.locale').'/pagination.stub'));
+            $this->files->put($localPath.'/validation.php', $this->files->get(__DIR__.'/stubs/lang/'.config('app.locale').'/validation.stub'));
         }
     }
 
@@ -93,9 +92,9 @@ class InitializeMakeCommand extends Command
                 database_path('seeds'),
             ]);
 
-            $this->files->put(database_path('factories/UserFactory.php'), $this->files->get(__DIR__ . '/stubs/factory.stub'));
-            $this->files->put(database_path('migrations/2014_10_12_000000_create_users_table.php'), $this->files->get(__DIR__ . '/stubs/migration.stub'));
-            $this->files->put(database_path('seeds/DatabaseSeeder.php'), $this->files->get(__DIR__ . '/stubs/seed.stub'));
+            $this->files->put(database_path('factories/UserFactory.php'), $this->files->get(__DIR__.'/stubs/factory.stub'));
+            $this->files->put(database_path('migrations/2014_10_12_000000_create_users_table.php'), $this->files->get(__DIR__.'/stubs/migration.stub'));
+            $this->files->put(database_path('seeds/DatabaseSeeder.php'), $this->files->get(__DIR__.'/stubs/seed.stub'));
         }
     }
 
@@ -106,7 +105,7 @@ class InitializeMakeCommand extends Command
     {
         if (!$this->files->exists(base_path('config'))) {
             $this->autoCreateDirs([base_path('config')]);
-            $this->files->copyDirectory(__DIR__ . '/../../../config', base_path('config'));
+            $this->files->copyDirectory(__DIR__.'/../../../config', base_path('config'));
         }
     }
 
@@ -116,11 +115,11 @@ class InitializeMakeCommand extends Command
     protected function createStorage(): void
     {
         $this->autoCreateDirs([
-            'runCachePath' => storage_path('run-cache'),
-            'cachePath' => config('cache.stores.file.path'),
-            'logPath' => storage_path('logs'),
+            'runCachePath'  => storage_path('run-cache'),
+            'cachePath'     => config('cache.stores.file.path'),
+            'logPath'       => storage_path('logs'),
             'appPublicPath' => storage_path('app/public'),
-            'testingPath' => storage_path('framework/testing'),
+            'testingPath'   => storage_path('framework/testing'),
         ]);
 
         $gitignore = storage_path('.gitignore');
@@ -131,6 +130,7 @@ class InitializeMakeCommand extends Command
 
     /**
      * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     *
      * @return void
      */
     protected function createRoutes(): void
@@ -142,12 +142,13 @@ class InitializeMakeCommand extends Command
 
         $webFile = base_path('routes/service.php');
         if (!$this->files->exists($webFile)) {
-            $this->files->put($webFile, $this->files->get(__DIR__ . '/stubs/service-route.stub'));
+            $this->files->put($webFile, $this->files->get(__DIR__.'/stubs/service-route.stub'));
         }
     }
 
     /**
      * @param array $dirs
+     *
      * @return void
      */
     protected function autoCreateDirs(array $dirs): void

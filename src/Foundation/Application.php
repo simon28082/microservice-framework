@@ -3,7 +3,9 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-10 19:18
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
@@ -22,8 +24,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 
 /**
- * Class Application
- * @package CrCms\Microservice\Foundation
+ * Class Application.
  */
 class Application extends Container implements ContainerContract, ApplicationContainerContract
 {
@@ -123,9 +124,9 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     protected $deferredServices = [];
 
-
     /**
      * Application constructor.
+     *
      * @param null|string $basePath
      */
     public function __construct(?string $basePath = null)
@@ -144,7 +145,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Set the base path for the application.
      *
-     * @param  string $basePath
+     * @param string $basePath
+     *
      * @return $this
      */
     public function setBasePath($basePath)
@@ -175,21 +177,21 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Get the path to the application configuration files.
      *
-     * @param  string $path Optionally, a path to append to the config path
+     * @param string $path Optionally, a path to append to the config path
+     *
      * @return string
      */
     public function configPath($path = '')
     {
         if (is_null($this->configPath)) {
-            $this->configPath = $this->basePath . DIRECTORY_SEPARATOR . 'config';
+            $this->configPath = $this->basePath.DIRECTORY_SEPARATOR.'config';
             if (!is_dir($this->configPath)) {
-                $this->configPath = realpath(__DIR__ . '/../../config');
+                $this->configPath = realpath(__DIR__.'/../../config');
             }
         }
 
-        return $path ? $this->configPath . DIRECTORY_SEPARATOR . $path : $this->configPath;
+        return $path ? $this->configPath.DIRECTORY_SEPARATOR.$path : $this->configPath;
     }
-
 
     /**
      * Get the service providers that have been loaded.
@@ -214,7 +216,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Set the application's deferred services.
      *
-     * @param  array $services
+     * @param array $services
+     *
      * @return void
      */
     public function setDeferredServices(array $services)
@@ -225,7 +228,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Add an array of services to the application's deferred services.
      *
-     * @param  array $services
+     * @param array $services
+     *
      * @return void
      */
     public function addDeferredServices(array $services)
@@ -236,7 +240,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Determine if the given service is a deferred service.
      *
-     * @param  string $service
+     * @param string $service
+     *
      * @return bool
      */
     public function isDeferredService($service)
@@ -247,16 +252,17 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Get the path to the database directory.
      *
-     * @param  string $path Optionally, a path to append to the database path
+     * @param string $path Optionally, a path to append to the database path
+     *
      * @return string
      */
     public function databasePath($path = '')
     {
         if (is_null($this->databasePath)) {
-            $this->databasePath = $this->basePath . DIRECTORY_SEPARATOR . 'database';
+            $this->databasePath = $this->basePath.DIRECTORY_SEPARATOR.'database';
         }
 
-        return $path ? $this->databasePath . DIRECTORY_SEPARATOR . $path : $this->databasePath;
+        return $path ? $this->databasePath.DIRECTORY_SEPARATOR.$path : $this->databasePath;
     }
 
     /**
@@ -266,14 +272,14 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function langPath()
     {
-        return $this->resourcePath() . DIRECTORY_SEPARATOR . 'lang';
+        return $this->resourcePath().DIRECTORY_SEPARATOR.'lang';
     }
-
 
     /**
      * Register a terminating callback with the application.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
+     *
      * @return $this
      */
     public function terminating(\Closure $callback)
@@ -302,7 +308,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function publicPath($path = '')
     {
-        return $this->basePath . DIRECTORY_SEPARATOR . 'public';
+        return $this->basePath.DIRECTORY_SEPARATOR.'public';
     }
 
     /**
@@ -313,40 +319,41 @@ class Application extends Container implements ContainerContract, ApplicationCon
     public function storagePath($path = '')
     {
         if (is_null($this->storagePath)) {
-            $this->storagePath = $this->basePath . DIRECTORY_SEPARATOR . 'storage';
+            $this->storagePath = $this->basePath.DIRECTORY_SEPARATOR.'storage';
         }
 
-        return $path ? $this->storagePath . DIRECTORY_SEPARATOR . $path : $this->storagePath;
+        return $path ? $this->storagePath.DIRECTORY_SEPARATOR.$path : $this->storagePath;
     }
 
     /**
      * Get the path to the resources directory.
      *
-     * @param  string $path
+     * @param string $path
+     *
      * @return string
      */
     public function resourcePath($path = '')
     {
         if (is_null($this->resourcePath)) {
-            $this->resourcePath = $this->basePath . DIRECTORY_SEPARATOR . 'resources';
+            $this->resourcePath = $this->basePath.DIRECTORY_SEPARATOR.'resources';
         }
 
-        return $path ? $this->resourcePath . DIRECTORY_SEPARATOR . $path : $this->resourcePath;
+        return $path ? $this->resourcePath.DIRECTORY_SEPARATOR.$path : $this->resourcePath;
     }
 
     /**
      * Detect the application's current environment.
      *
-     * @param  \Closure $callback
+     * @param \Closure $callback
+     *
      * @return string
      */
     public function detectEnvironment(\Closure $callback)
     {
         $args = $_SERVER['argv'] ?? null;
 
-        return $this['env'] = (new EnvironmentDetector)->detect($callback, $args);
+        return $this['env'] = (new EnvironmentDetector())->detect($callback, $args);
     }
-
 
     /**
      * Get the path to the environment file directory.
@@ -361,7 +368,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Set the environment file to be loaded during bootstrapping.
      *
-     * @param  string $file
+     * @param string $file
+     *
      * @return $this
      */
     public function loadEnvironmentFrom($file)
@@ -388,7 +396,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function environmentFilePath()
     {
-        return $this->environmentPath() . DIRECTORY_SEPARATOR . $this->environmentFile();
+        return $this->environmentPath().DIRECTORY_SEPARATOR.$this->environmentFile();
     }
 
     /**
@@ -404,7 +412,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
         return $this['env'];
     }
-
 
     /**
      * @return bool
@@ -442,13 +449,14 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
         $providers->splice(1, 0, [$this->make(PackageManifest::class)->providers()]);
 
-        (new ProviderRepository($this, new Filesystem, $this->getCachedServicesPath()))
+        (new ProviderRepository($this, new Filesystem(), $this->getCachedServicesPath()))
             ->load($providers->collapse()->toArray());
     }
 
     /**
      * @param ServiceProvider|string $provider
-     * @param bool $force
+     * @param bool                   $force
+     *
      * @return ServiceProvider|null|string
      */
     public function register($provider, $force = false)
@@ -518,7 +526,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Mark the given provider as registered.
      *
-     * @param  \Illuminate\Support\ServiceProvider $provider
+     * @param \Illuminate\Support\ServiceProvider $provider
+     *
      * @return void
      */
     protected function markAsRegistered($provider)
@@ -531,7 +540,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Boot the given service provider.
      *
-     * @param  \Illuminate\Support\ServiceProvider $provider
+     * @param \Illuminate\Support\ServiceProvider $provider
+     *
      * @return mixed
      */
     protected function bootProvider(ServiceProvider $provider)
@@ -544,7 +554,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Get the registered service provider instance if it exists.
      *
-     * @param  \Illuminate\Support\ServiceProvider|string $provider
+     * @param \Illuminate\Support\ServiceProvider|string $provider
+     *
      * @return \Illuminate\Support\ServiceProvider|null
      */
     public function getProvider($provider)
@@ -555,7 +566,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Get the registered service provider instances if any exist.
      *
-     * @param  \Illuminate\Support\ServiceProvider|string $provider
+     * @param \Illuminate\Support\ServiceProvider|string $provider
+     *
      * @return array
      */
     public function getProviders($provider)
@@ -566,7 +578,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
             return $value instanceof $name;
         });
     }
-
 
     /**
      * Load and boot all of the remaining deferred providers.
@@ -588,7 +599,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Load the provider for a deferred service.
      *
-     * @param  string $service
+     * @param string $service
+     *
      * @return void
      */
     public function loadDeferredProvider($service)
@@ -607,14 +619,14 @@ class Application extends Container implements ContainerContract, ApplicationCon
         }
     }
 
-
     /**
      * Resolve the given type from the container.
      *
      * (Overriding Container::make)
      *
-     * @param  string $abstract
-     * @param  array $parameters
+     * @param string $abstract
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function make($abstract, array $parameters = [])
@@ -633,7 +645,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
      *
      * (Overriding Container::bound)
      *
-     * @param  string $abstract
+     * @param string $abstract
+     *
      * @return bool
      */
     public function bound($abstract)
@@ -644,7 +657,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Resolve a service provider instance from the class name.
      *
-     * @param  string $provider
+     * @param string $provider
+     *
      * @return \Illuminate\Support\ServiceProvider
      */
     public function resolveProvider($provider)
@@ -654,7 +668,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
     /**
      * @param string $provider
-     * @param null $service
+     * @param null   $service
      */
     public function registerDeferredProvider($provider, $service = null)
     {
@@ -677,7 +691,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Run the given array of bootstrap classes.
      *
-     * @param  array $bootstrappers
+     * @param array $bootstrappers
+     *
      * @return void
      */
     public function bootstrapWith(array $bootstrappers)
@@ -685,17 +700,14 @@ class Application extends Container implements ContainerContract, ApplicationCon
         $this->hasBeenBootstrapped = true;
 
         foreach ($bootstrappers as $bootstrapper) {
-            $this['events']->dispatch('bootstrapping: ' . $bootstrapper, [$this]);
+            $this['events']->dispatch('bootstrapping: '.$bootstrapper, [$this]);
 
             $this->make($bootstrapper)->bootstrap($this);
 
-            $this['events']->dispatch('bootstrapped: ' . $bootstrapper, [$this]);
+            $this['events']->dispatch('bootstrapped: '.$bootstrapper, [$this]);
         }
     }
 
-    /**
-     *
-     */
     public function boot()
     {
         if ($this->booted) {
@@ -719,7 +731,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Register a new boot listener.
      *
-     * @param  mixed $callback
+     * @param mixed $callback
+     *
      * @return void
      */
     public function booting($callback)
@@ -730,7 +743,8 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * Register a new "booted" listener.
      *
-     * @param  mixed $callback
+     * @param mixed $callback
+     *
      * @return void
      */
     public function booted($callback)
@@ -776,7 +790,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
         return $this->storagePath('run-cache/config.php');
     }
 
-
     /**
      * Flush the container of all bindings and resolved instances.
      *
@@ -812,7 +825,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
         $this->instance(Container::class, $this);
 
         $this->instance(PackageManifest::class, new PackageManifest(
-            new Filesystem, $this->basePath(), $this->getCachedPackagesPath()
+            new Filesystem(), $this->basePath(), $this->getCachedPackagesPath()
         ));
     }
 
@@ -846,7 +859,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
         $this->register(new RoutingServiceProvider($this));
     }
 
-
     /**
      * Determine if middleware has been disabled for the application.
      *
@@ -858,11 +870,11 @@ class Application extends Container implements ContainerContract, ApplicationCon
             $this->make('middleware.disable') === true;
     }
 
-
     /**
      * Call the booting callbacks for the application.
      *
-     * @param  array $callbacks
+     * @param array $callbacks
+     *
      * @return void
      */
     protected function fireAppCallbacks(array $callbacks)
@@ -900,7 +912,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'queue.connection' => [\Illuminate\Contracts\Queue\Queue::class],
                      'queue.failer' => [\Illuminate\Queue\Failed\FailedJobProviderInterface::class],
                      'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],
-                     'router' => [\CrCms\Microservice\Routing\Router::class,],
+                     'router' => [\CrCms\Microservice\Routing\Router::class],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
                      'request' => [\CrCms\Microservice\Server\Contracts\RequestContract::class],
                  ] as $key => $aliases) {

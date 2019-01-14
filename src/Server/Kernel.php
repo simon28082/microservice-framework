@@ -3,23 +3,22 @@
 namespace CrCms\Microservice\Server;
 
 use CrCms\Microservice\Foundation\Application;
+use CrCms\Microservice\Routing\Pipeline;
+use CrCms\Microservice\Routing\Router;
+use CrCms\Microservice\Server\Contracts\KernelContract;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Server\Events\RequestHandled;
 use CrCms\Microservice\Server\Events\RequestHandling;
 use Exception;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Illuminate\Contracts\Foundation\Application as ApplicationContract;
+use Illuminate\Support\Facades\Facade;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Throwable;
-use CrCms\Microservice\Routing\Pipeline;
-use Illuminate\Support\Facades\Facade;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use CrCms\Microservice\Server\Contracts\KernelContract;
-use Illuminate\Contracts\Foundation\Application as ApplicationContract;
-use CrCms\Microservice\Routing\Router;
 
 /**
- * Class Kernel
- * @package CrCms\Microservice\Server
+ * Class Kernel.
  */
 class Kernel implements KernelContract
 {
@@ -77,7 +76,7 @@ class Kernel implements KernelContract
 
     /**
      * The priority-sorted list of middleware.
-     * 优先加载的中间件，必须是$middleware和$middlewareGroups中定义
+     * 优先加载的中间件，必须是$middleware和$middlewareGroups中定义.
      *
      * Forces the listed middleware to always be in the given order.
      *
@@ -91,8 +90,9 @@ class Kernel implements KernelContract
     /**
      * Create a new HTTP kernel instance.
      *
-     * @param  ApplicationContract $app
-     * @param  Router $router
+     * @param ApplicationContract $app
+     * @param Router              $router
+     *
      * @return void
      */
     public function __construct(ApplicationContract $app, Router $router)
@@ -113,8 +113,10 @@ class Kernel implements KernelContract
 
     /**
      * @param RequestContract $request
-     * @return ResponseContract
+     *
      * @throws \ReflectionException
+     *
+     * @return ResponseContract
      */
     public function handle(RequestContract $request): ResponseContract
     {
@@ -137,6 +139,7 @@ class Kernel implements KernelContract
 
     /**
      * @param RequestContract $request
+     *
      * @return mixed
      */
     protected function sendRequestThroughRouter(RequestContract $request)
@@ -147,7 +150,7 @@ class Kernel implements KernelContract
 
         $this->bootstrap();
 
-        if ((bool)$response = $this->app['events']->until(
+        if ((bool) $response = $this->app['events']->until(
             new RequestHandling($request)
         )) {
             return $response;
@@ -159,9 +162,6 @@ class Kernel implements KernelContract
             ->then($this->dispatchToRouter());
     }
 
-    /**
-     *
-     */
     public function bootstrap(): void
     {
         if (!$this->app->hasBeenBootstrapped()) {
@@ -184,8 +184,9 @@ class Kernel implements KernelContract
     }
 
     /**
-     * @param RequestContract $request
+     * @param RequestContract  $request
      * @param ResponseContract $response
+     *
      * @return mixed|void
      */
     public function terminate(RequestContract $request, ResponseContract $response)
@@ -196,7 +197,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * @param RequestContract $request
+     * @param RequestContract  $request
      * @param ResponseContract $response
      */
     protected function terminateMiddleware(RequestContract $request, ResponseContract $response)
@@ -223,6 +224,7 @@ class Kernel implements KernelContract
 
     /**
      * @param RequestContract $request
+     *
      * @return array
      */
     protected function gatherRouteMiddleware(RequestContract $request)
@@ -240,6 +242,7 @@ class Kernel implements KernelContract
 
     /**
      * @param $middleware
+     *
      * @return array
      */
     protected function parseMiddleware($middleware)
@@ -256,7 +259,8 @@ class Kernel implements KernelContract
     /**
      * Determine if the kernel has a given middleware.
      *
-     * @param  string $middleware
+     * @param string $middleware
+     *
      * @return bool
      */
     public function hasMiddleware($middleware)
@@ -267,7 +271,8 @@ class Kernel implements KernelContract
     /**
      * Add a new middleware to beginning of the stack if it does not already exist.
      *
-     * @param  string $middleware
+     * @param string $middleware
+     *
      * @return $this
      */
     public function prependMiddleware($middleware)
@@ -282,7 +287,8 @@ class Kernel implements KernelContract
     /**
      * Add a new middleware to end of the stack if it does not already exist.
      *
-     * @param  string $middleware
+     * @param string $middleware
+     *
      * @return $this
      */
     public function pushMiddleware($middleware)
@@ -312,7 +318,8 @@ class Kernel implements KernelContract
 
     /**
      * @param RequestContract $request
-     * @param Exception $e
+     * @param Exception       $e
+     *
      * @return mixed
      */
     protected function renderException(RequestContract $request, Exception $e)

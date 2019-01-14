@@ -3,13 +3,13 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use Exception;
 use ErrorException;
+use Exception;
+use Illuminate\Contracts\Debug\ExceptionHandler;
 use Illuminate\Contracts\Foundation\Application;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use Symfony\Component\Debug\Exception\FatalErrorException;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Illuminate\Contracts\Debug\ExceptionHandler;
 
 class HandleExceptions
 {
@@ -23,7 +23,8 @@ class HandleExceptions
     /**
      * Bootstrap the given application.
      *
-     * @param  \Illuminate\Contracts\Foundation\Application $app
+     * @param \Illuminate\Contracts\Foundation\Application $app
+     *
      * @return void
      */
     public function bootstrap(Application $app)
@@ -46,14 +47,15 @@ class HandleExceptions
     /**
      * Convert PHP errors to ErrorException instances.
      *
-     * @param  int $level
-     * @param  string $message
-     * @param  string $file
-     * @param  int $line
-     * @param  array $context
-     * @return void
+     * @param int    $level
+     * @param string $message
+     * @param string $file
+     * @param int    $line
+     * @param array  $context
      *
      * @throws \ErrorException
+     *
+     * @return void
      */
     public function handleError($level, $message, $file = '', $line = 0, $context = [])
     {
@@ -69,7 +71,8 @@ class HandleExceptions
      * the HTTP and Console kernels. But, fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param  \Throwable $e
+     * @param \Throwable $e
+     *
      * @return void
      */
     public function handleException($e)
@@ -94,18 +97,20 @@ class HandleExceptions
     /**
      * Render an exception to the console.
      *
-     * @param  \Exception  $e
+     * @param \Exception $e
+     *
      * @return void
      */
     protected function renderForConsole(Exception $e)
     {
-        $this->getExceptionHandler()->renderForConsole(new ConsoleOutput, $e);
+        $this->getExceptionHandler()->renderForConsole(new ConsoleOutput(), $e);
     }
 
     /**
      * Render an exception as an HTTP response and send it.
      *
-     * @param  \Exception  $e
+     * @param \Exception $e
+     *
      * @return void
      */
     protected function renderApplication(Exception $e)
@@ -132,8 +137,9 @@ class HandleExceptions
     /**
      * Create a new fatal exception instance from an error array.
      *
-     * @param  array $error
-     * @param  int|null $traceOffset
+     * @param array    $error
+     * @param int|null $traceOffset
+     *
      * @return \Symfony\Component\Debug\Exception\FatalErrorException
      */
     protected function fatalExceptionFromError(array $error, $traceOffset = null)
@@ -146,7 +152,8 @@ class HandleExceptions
     /**
      * Determine if the error type is fatal.
      *
-     * @param  int $type
+     * @param int $type
+     *
      * @return bool
      */
     protected function isFatal($type)
@@ -166,8 +173,10 @@ class HandleExceptions
 
     /**
      * @param array $messages
-     * @return array
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return array
      */
     protected function pack(array $messages): array
     {

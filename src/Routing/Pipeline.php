@@ -5,10 +5,10 @@ namespace CrCms\Microservice\Routing;
 use Closure;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use Exception;
-use Throwable;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Illuminate\Pipeline\Pipeline as BasePipeline;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Throwable;
 
 /**
  * This extended pipeline catches any exceptions that occur during each slice.
@@ -20,7 +20,8 @@ class Pipeline extends BasePipeline
     /**
      * Get the final piece of the Closure onion.
      *
-     * @param  \Closure $destination
+     * @param \Closure $destination
+     *
      * @return \Closure
      */
     protected function prepareDestination(Closure $destination)
@@ -63,11 +64,12 @@ class Pipeline extends BasePipeline
     /**
      * Handle the given exception.
      *
-     * @param  mixed $passable
-     * @param  \Exception $e
-     * @return mixed
+     * @param mixed      $passable
+     * @param \Exception $e
      *
      * @throws \Exception
+     *
+     * @return mixed
      */
     protected function handleException($passable, Exception $e)
     {

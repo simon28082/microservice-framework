@@ -10,7 +10,6 @@ use InvalidArgumentException;
  * @property-read ResponseResource $response
  *
  * Class Controller
- * @package CrCms\Microservice\Routing
  */
 abstract class Controller
 {
@@ -28,16 +27,17 @@ abstract class Controller
     /**
      * Register middleware on the controller.
      *
-     * @param  array|string|\Closure $middleware
-     * @param  array $options
+     * @param array|string|\Closure $middleware
+     * @param array                 $options
+     *
      * @return void
      */
     public function middleware($middleware, array $options = []): void
     {
-        foreach ((array)$middleware as $m) {
+        foreach ((array) $middleware as $m) {
             $this->middleware[] = [
                 'middleware' => $m,
-                'options' => $options,
+                'options'    => $options,
             ];
         }
     }
@@ -62,6 +62,7 @@ abstract class Controller
 
     /**
      * @param string $name
+     *
      * @return mixed
      */
     public function __get(string $name)
@@ -70,7 +71,7 @@ abstract class Controller
             return $this->response();
         }
 
-        if ((bool)$instance = $this->__instanceGet($name)) {
+        if ((bool) $instance = $this->__instanceGet($name)) {
             return $instance;
         }
 
@@ -80,11 +81,12 @@ abstract class Controller
     /**
      * Handle calls to missing methods on the controller.
      *
-     * @param  string $method
-     * @param  array $parameters
-     * @return mixed
+     * @param string $method
+     * @param array  $parameters
      *
      * @throws \BadMethodCallException
+     *
+     * @return mixed
      */
     public function __call($method, $parameters)
     {

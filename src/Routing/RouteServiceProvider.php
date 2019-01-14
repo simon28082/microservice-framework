@@ -6,8 +6,7 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Traits\ForwardsCalls;
 
 /**
- * Class RouteServiceProvider
- * @package CrCms\Microservice\Routing
+ * Class RouteServiceProvider.
  */
 class RouteServiceProvider extends ServiceProvider
 {
@@ -24,16 +23,14 @@ class RouteServiceProvider extends ServiceProvider
         }
     }
 
-    /**
-     *
-     */
     public function register(): void
     {
     }
 
     /**
      * @param string $method
-     * @param array $parameters
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)

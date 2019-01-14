@@ -28,7 +28,6 @@ return [
 
     'env' => env('APP_ENV', 'production'),
 
-
     /*
     |--------------------------------------------------------------------------
     | Application Debug Mode
@@ -116,5 +115,5 @@ return [
     |
     */
 
-    'encryption' => env('APP_ENCRYPTION',true),
+    'encryption' => env('APP_ENCRYPTION', true),
 ];

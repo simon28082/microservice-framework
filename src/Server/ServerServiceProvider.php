@@ -3,7 +3,9 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-14 23:17
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
@@ -19,8 +21,7 @@ use Illuminate\Support\Collection;
 use Illuminate\Support\ServiceProvider;
 
 /**
- * Class ServerServiceProvider
- * @package CrCms\Microservice\Server
+ * Class ServerServiceProvider.
  */
 class ServerServiceProvider extends ServiceProvider
 {
@@ -80,6 +81,7 @@ class ServerServiceProvider extends ServiceProvider
         $methods = (new Collection($this->app->make('router')->getRoutes()->get()))->mapWithKeys(function (Route $route) {
             $uses = $route->getAction('uses');
             $uses = $uses instanceof \Closure ? 'Closure' : $uses;
+
             return [$route->mark() => $uses];
         })->toArray();
 

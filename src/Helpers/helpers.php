@@ -2,18 +2,21 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-10 20:02
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
-
-use Illuminate\Container\Container;
 use CrCms\Microservice\Routing\ResponseResource;
+use Illuminate\Container\Container;
 
 /**
- * @param null $abstract
+ * @param null  $abstract
  * @param array $parameters
- * @return Container|mixed
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return Container|mixed
  */
 function app($abstract = null, array $parameters = [])
 {
@@ -26,8 +29,10 @@ function app($abstract = null, array $parameters = [])
 
 /**
  * @param null|string $path
- * @return string
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return string
  */
 function storage_path(?string $path = null): string
 {
@@ -36,19 +41,24 @@ function storage_path(?string $path = null): string
 
 /**
  * @param null|string $path
- * @return string
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return string
  */
 function base_path(?string $path = null): string
 {
     $basePath = app()->basePath();
-    return $path ? $basePath . DIRECTORY_SEPARATOR . $path : $basePath;
+
+    return $path ? $basePath.DIRECTORY_SEPARATOR.$path : $basePath;
 }
 
 /**
  * @param null|string $path
- * @return string
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return string
  */
 function database_path(?string $path = null): string
 {
@@ -57,19 +67,24 @@ function database_path(?string $path = null): string
 
 /**
  * @param null|string $path
- * @return string
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return string
  */
 function app_path(?string $path = null): string
 {
     $appPath = base_path('app');
-    return $path ? $appPath . DIRECTORY_SEPARATOR . $path : $appPath;
+
+    return $path ? $appPath.DIRECTORY_SEPARATOR.$path : $appPath;
 }
 
 /**
  * @param null|string $path
- * @return string
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return string
  */
 function config_path(?string $path = null): string
 {
@@ -78,8 +93,10 @@ function config_path(?string $path = null): string
 
 /**
  * @param null|string $path
- * @return string
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return string
  */
 function resource_path(?string $path = null): string
 {
@@ -89,9 +106,10 @@ function resource_path(?string $path = null): string
 /**
  * Translate the given message.
  *
- * @param  string|null $id
- * @param  array $replace
- * @param  string|null $locale
+ * @param string|null $id
+ * @param array       $replace
+ * @param string|null $locale
+ *
  * @return \Illuminate\Contracts\Translation\Translator|string|array|null
  */
 function trans($id = null, $replace = [], $locale = null)
@@ -106,8 +124,10 @@ function trans($id = null, $replace = [], $locale = null)
 /**
  * @param null $key
  * @param null $default
- * @return Container|mixed
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return Container|mixed
  */
 function config($key = null, $default = null)
 {
@@ -125,8 +145,10 @@ function config($key = null, $default = null)
 /**
  * @param $value
  * @param array $options
- * @return mixed
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return mixed
  */
 function bcrypt($value, $options = [])
 {
@@ -134,8 +156,9 @@ function bcrypt($value, $options = [])
 }
 
 /**
- * @return Container|mixed
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return Container|mixed
  */
 function cache()
 {
@@ -167,8 +190,10 @@ function cache()
 /**
  * @param $value
  * @param bool $serialize
- * @return mixed
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return mixed
  */
 function encrypt($value, $serialize = true)
 {
@@ -178,8 +203,10 @@ function encrypt($value, $serialize = true)
 /**
  * @param $value
  * @param bool $unserialize
- * @return mixed
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return mixed
  */
 function decrypt($value, $unserialize = true)
 {
@@ -188,6 +215,7 @@ function decrypt($value, $unserialize = true)
 
 /**
  * @param $job
+ *
  * @return PendingDispatch
  */
 function dispatch($job)
@@ -201,8 +229,10 @@ function dispatch($job)
 
 /**
  * @param mixed ...$args
- * @return mixed
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return mixed
  */
 function event(...$args)
 {
@@ -210,10 +240,12 @@ function event(...$args)
 }
 
 /**
- * @param null $message
+ * @param null  $message
  * @param array $context
- * @return Container|mixed
+ *
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return Container|mixed
  */
 function logger($message = null, array $context = [])
 {
@@ -225,8 +257,9 @@ function logger($message = null, array $context = [])
 }
 
 /**
- * @return ResponseResource
  * @throws \Illuminate\Contracts\Container\BindingResolutionException
+ *
+ * @return ResponseResource
  */
 function response(): ResponseResource
 {

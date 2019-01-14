@@ -8,8 +8,7 @@ use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request as BaseRequest;
 
 /**
- * Class Request
- * @package CrCms\Foundation\MicroService\Http
+ * Class Request.
  */
 class Request implements RequestContract
 {
@@ -40,6 +39,7 @@ class Request implements RequestContract
 
     /**
      * Request constructor.
+     *
      * @param BaseRequest $request
      */
     public function __construct(Container $app, BaseRequest $request)
@@ -58,21 +58,25 @@ class Request implements RequestContract
 
     /**
      * @param string $call
+     *
      * @return RequestContract
      */
     public function setCurrentCall(string $call): RequestContract
     {
         $this->call = $call;
+
         return $this;
     }
 
     /**
      * @param Route $route
+     *
      * @return RequestContract
      */
     public function setRoute(Route $route): RequestContract
     {
         $this->route = $route;
+
         return $this;
     }
 
@@ -116,6 +120,7 @@ class Request implements RequestContract
     /**
      * @param null $key
      * @param null $default
+     *
      * @return array|null|string
      */
     public function input($key = null, $default = null)
@@ -125,11 +130,13 @@ class Request implements RequestContract
 
     /**
      * @param array $data
+     *
      * @return RequestContract
      */
     public function setData(array $data): RequestContract
     {
         $this->data = $data;
+
         return $this;
     }
 }

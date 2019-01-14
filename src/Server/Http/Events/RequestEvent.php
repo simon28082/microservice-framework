@@ -2,23 +2,23 @@
 
 namespace CrCms\Microservice\Server\Http\Events;
 
+use CrCms\Microservice\Server\Http\Request as MicroserviceRequest;
 use CrCms\Microservice\Server\Kernel;
-use CrCms\Server\Server\AbstractServer;
-use CrCms\Server\Server\Contracts\EventContract;
 use CrCms\Server\Http\Events\RequestEvent as BaseRequestEvent;
 use CrCms\Server\Http\Request as ServerRequest;
 use CrCms\Server\Http\Response as ServerResponse;
-use CrCms\Microservice\Server\Http\Request as MicroserviceRequest;
+use CrCms\Server\Server\AbstractServer;
+use CrCms\Server\Server\Contracts\EventContract;
 use Swoole\Http\Request;
 
 /**
- * Class RequestEvent
- * @package CrCms\Microservice\Server\Http\Events
+ * Class RequestEvent.
  */
 class RequestEvent extends BaseRequestEvent implements EventContract
 {
     /**
      * @param AbstractServer $server
+     *
      * @return void
      */
     public function handle(AbstractServer $server): void
