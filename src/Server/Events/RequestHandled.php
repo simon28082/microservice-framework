@@ -6,8 +6,7 @@ use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 
 /**
- * Class RequestHandled
- * @package CrCms\Microservice\Server\Events
+ * Class RequestHandled.
  */
 class RequestHandled
 {
@@ -23,7 +22,8 @@ class RequestHandled
 
     /**
      * RequestHandled constructor.
-     * @param RequestContract $request
+     *
+     * @param RequestContract  $request
      * @param ResponseContract $response
      */
     public function __construct(RequestContract $request, ResponseContract $response)

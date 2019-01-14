@@ -6,8 +6,7 @@ use ReflectionClass;
 use ReflectionMethod;
 
 /**
- * Class ReflectionAction
- * @package CrCms\Microservice\Routing
+ * Class ReflectionAction.
  */
 class ReflectionAction
 {
@@ -18,6 +17,7 @@ class ReflectionAction
 
     /**
      * ReflectionAction constructor.
+     *
      * @param Router $router
      */
     public function __construct(Router $router)
@@ -27,13 +27,16 @@ class ReflectionAction
 
     /**
      * @param string $controller
-     * @return array
+     *
      * @throws \ReflectionException
+     *
+     * @return array
      */
     public function getMethods(string $controller): array
     {
         $class = new ReflectionClass($controller);
         $methods = $class->getMethods(ReflectionMethod::IS_PUBLIC);
+
         return array_filter(array_map(function (ReflectionMethod $method) {
             return $method->getName();
         }, $methods), function ($value) {

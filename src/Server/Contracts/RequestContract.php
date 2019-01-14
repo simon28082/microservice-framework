@@ -5,8 +5,7 @@ namespace CrCms\Microservice\Server\Contracts;
 use CrCms\Microservice\Routing\Route;
 
 /**
- * Interface RequestContract
- * @package CrCms\Foundation\MicroService\Contracts
+ * Interface RequestContract.
  */
 interface RequestContract
 {
@@ -22,15 +21,17 @@ interface RequestContract
 
     /**
      * @param string $call
+     *
      * @return RequestContract
      */
-    public function setCurrentCall(string $call): RequestContract;
+    public function setCurrentCall(string $call): self;
 
     /**
      * @param Route $route
+     *
      * @return RequestContract
      */
-    public function setRoute(Route $route): RequestContract;
+    public function setRoute(Route $route): self;
 
     /**
      * @return Route
@@ -49,7 +50,8 @@ interface RequestContract
 
     /**
      * @param array $data
+     *
      * @return RequestContract
      */
-    public function setData(array $data): RequestContract;
+    public function setData(array $data): self;
 }

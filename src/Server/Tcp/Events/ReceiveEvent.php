@@ -3,7 +3,9 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-18 17:22
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
@@ -15,8 +17,7 @@ use CrCms\Server\Server\AbstractServer;
 use CrCms\Server\Server\Events\AbstractEvent;
 
 /**
- * Class ReceiveEvent
- * @package CrCms\Microservice\Server\Tcp\Events
+ * Class ReceiveEvent.
  */
 class ReceiveEvent extends AbstractEvent
 {
@@ -37,8 +38,9 @@ class ReceiveEvent extends AbstractEvent
 
     /**
      * ReceiveEvent constructor.
-     * @param int $fd
-     * @param int $fromId
+     *
+     * @param int    $fd
+     * @param int    $fromId
      * @param string $data
      */
     public function __construct(int $fd, int $fromId, string $data)
@@ -57,7 +59,7 @@ class ReceiveEvent extends AbstractEvent
     {
         parent::handle($server);
 
-        $data = explode('\\r\\n',$this->data);
+        $data = explode('\\r\\n', $this->data);
         foreach ($data as $value) {
         }
 

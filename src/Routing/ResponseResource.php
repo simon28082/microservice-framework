@@ -2,23 +2,23 @@
 
 namespace CrCms\Microservice\Routing;
 
+use CrCms\Foundation\Resources\Resource;
 use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Resources\Json\ResourceCollection;
 use Illuminate\Support\Collection;
 use InvalidArgumentException;
-use CrCms\Foundation\Resources\Resource;
 use JsonSerializable;
 use Traversable;
 
 /**
- * Class ResponseResource
- * @package CrCms\Microservice\Routing
+ * Class ResponseResource.
  */
 class ResponseResource
 {
     /**
      * @param null $content
+     *
      * @return Response
      */
     public function created($content = null): Response
@@ -31,6 +31,7 @@ class ResponseResource
 
     /**
      * @param null $content
+     *
      * @return Response
      */
     public function accepted($content = null): Response
@@ -54,15 +55,15 @@ class ResponseResource
     /**
      * @param $collection
      * @param string $collect
-     * @param array $fields
-     * @param array $includes
+     * @param array  $fields
+     * @param array  $includes
+     *
      * @return JsonResponse
      */
     public function collection($collection, string $collect = '', array $fields = [], array $includes = []): JsonResponse
     {
         if (!$collection instanceof ResourceCollection && class_exists($collect)) {
             if (substr($collect, -8) === 'Resource') {
-
                 $collection = call_user_func([$collect, 'collection'], $collection);
             } elseif (substr($collect, -10) === 'Collection') {
                 $collection = (new $collect($collection));
@@ -81,8 +82,9 @@ class ResponseResource
     /**
      * @param $resource
      * @param string $collect
-     * @param array $fields
-     * @param array $includes
+     * @param array  $fields
+     * @param array  $includes
+     *
      * @return JsonResponse
      */
     public function resource($resource, string $collect = '', array $fields = [], array $includes = []): JsonResponse
@@ -99,9 +101,10 @@ class ResponseResource
     }
 
     /**
-     * @param ResourceCollection|Resource $resource
-     * @param array $fields
-     * @param array $includes
+     * @param ResourceCollection|resource $resource
+     * @param array                       $fields
+     * @param array                       $includes
+     *
      * @return JsonResponse
      */
     public function resourceToResponse($resource, array $fields, array $includes = []): JsonResponse
@@ -126,8 +129,9 @@ class ResponseResource
     /**
      * @param $paginator
      * @param string $collect
-     * @param array $fields
-     * @param array $includes
+     * @param array  $fields
+     * @param array  $includes
+     *
      * @return JsonResponse
      */
     public function paginator($paginator, string $collect = '', array $fields = [], array $includes = []): JsonResponse
@@ -137,6 +141,7 @@ class ResponseResource
 
     /**
      * @param array $array
+     *
      * @return Response
      */
     public function array(array $array): JsonResponse
@@ -146,6 +151,7 @@ class ResponseResource
 
     /**
      * @param $data
+     *
      * @return JsonResponse
      */
     public function json($data): JsonResponse
@@ -155,13 +161,13 @@ class ResponseResource
 
     /**
      * @param array|Collection|\JsonSerializable|\Traversable $data
-     * @param string $key
+     * @param string                                          $key
+     *
      * @return JsonResponse
      */
     public function data($data, string $key = 'data'): JsonResponse
     {
         if (is_array($data)) {
-
         } elseif ($data instanceof Collection) {
             $data = $data->all();
         } elseif ($data instanceof JsonSerializable) {

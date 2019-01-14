@@ -45,9 +45,10 @@ class PackageManifest
     /**
      * Create a new package manifest instance.
      *
-     * @param  \Illuminate\Filesystem\Filesystem  $files
-     * @param  string  $basePath
-     * @param  string  $manifestPath
+     * @param \Illuminate\Filesystem\Filesystem $files
+     * @param string                            $basePath
+     * @param string                            $manifestPath
+     *
      * @return void
      */
     public function __construct(Filesystem $files, $basePath, $manifestPath)
@@ -89,11 +90,11 @@ class PackageManifest
      */
     protected function getManifest()
     {
-        if (! is_null($this->manifest)) {
+        if (!is_null($this->manifest)) {
             return $this->manifest;
         }
 
-        if (! file_exists($this->manifestPath)) {
+        if (!file_exists($this->manifestPath)) {
             $this->build();
         }
 
@@ -130,7 +131,8 @@ class PackageManifest
     /**
      * Format the given package name.
      *
-     * @param  string  $package
+     * @param string $package
+     *
      * @return string
      */
     protected function format($package)
@@ -145,7 +147,7 @@ class PackageManifest
      */
     protected function packagesToIgnore()
     {
-        if (! file_exists($this->basePath.'/composer.json')) {
+        if (!file_exists($this->basePath.'/composer.json')) {
             return [];
         }
 
@@ -157,19 +159,21 @@ class PackageManifest
     /**
      * Write the given manifest array to disk.
      *
-     * @param  array  $manifest
-     * @return void
+     * @param array $manifest
+     *
      * @throws \Exception
+     *
+     * @return void
      */
     protected function write(array $manifest)
     {
         $manifestPathDir = dirname($this->manifestPath);
 
         if (!is_dir($manifestPathDir)) {
-            $this->files->makeDirectory($manifestPathDir,0755,true);
+            $this->files->makeDirectory($manifestPathDir, 0755, true);
         }
 
-        if (! is_writable($manifestPathDir)) {
+        if (!is_writable($manifestPathDir)) {
             throw new Exception('The '.dirname($this->manifestPath).' directory must be present and writable.');
         }
 

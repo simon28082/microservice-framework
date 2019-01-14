@@ -2,16 +2,15 @@
 
 namespace CrCms\Microservice\Routing;
 
-use Countable;
 use ArrayIterator;
+use Countable;
 use CrCms\Microservice\Server\Contracts\RequestContract;
-use IteratorAggregate;
 use Illuminate\Support\Arr;
+use IteratorAggregate;
 use UnexpectedValueException;
 
 /**
- * Class RouteCollection
- * @package CrCms\Microservice\Routing
+ * Class RouteCollection.
  */
 class RouteCollection implements Countable, IteratorAggregate
 {
@@ -46,7 +45,8 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Add a Route instance to the collection.
      *
-     * @param  \CrCms\Microservice\Routing\Route $route
+     * @param \CrCms\Microservice\Routing\Route $route
+     *
      * @return \CrCms\Microservice\Routing\Route
      */
     public function add(Route $route)
@@ -61,7 +61,8 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Add the given route to the arrays of routes.
      *
-     * @param  \CrCms\Microservice\Routing\Route $route
+     * @param \CrCms\Microservice\Routing\Route $route
+     *
      * @return void
      */
     protected function addToCollections($route)
@@ -73,7 +74,8 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Add the route to any look-up tables if necessary.
      *
-     * @param  \CrCms\Microservice\Routing\Route $route
+     * @param \CrCms\Microservice\Routing\Route $route
+     *
      * @return void
      */
     protected function addLookups($route)
@@ -98,8 +100,9 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Add a route to the controller action dictionary.
      *
-     * @param  array $action
-     * @param  \CrCms\Microservice\Routing\Route $route
+     * @param array                             $action
+     * @param \CrCms\Microservice\Routing\Route $route
+     *
      * @return void
      */
     protected function addToActionList($action, $route)
@@ -145,6 +148,7 @@ class RouteCollection implements Countable, IteratorAggregate
 
     /**
      * @param RequestContract $request
+     *
      * @return array
      */
     public function match(RequestContract $request)
@@ -161,7 +165,8 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Get routes from the collection by method.
      *
-     * @param  string|null $method
+     * @param string|null $method
+     *
      * @return array
      */
     public function get($method = null)
@@ -172,7 +177,8 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Determine if the route collection contains a given named route.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return bool
      */
     public function hasNamedRoute($name)
@@ -183,7 +189,8 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Get a route instance by its name.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return \CrCms\Microservice\Routing\Route|null
      */
     public function getByName($name)
@@ -194,7 +201,8 @@ class RouteCollection implements Countable, IteratorAggregate
     /**
      * Get a route instance by its controller action.
      *
-     * @param  string $action
+     * @param string $action
+     *
      * @return \CrCms\Microservice\Routing\Route|null
      */
     public function getByAction($action)

@@ -4,17 +4,15 @@ namespace CrCms\Microservice\Routing;
 
 use Closure;
 use CrCms\Microservice\Server\Contracts\RequestContract;
-use CrCms\Microservice\Server\Contracts\ResponseContract;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Str;
-use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
-use Illuminate\Support\Traits\Macroable;
 use Illuminate\Contracts\Events\Dispatcher;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
+use Illuminate\Support\Traits\Macroable;
 
 /**
- * Class Router
- * @package CrCms\Microservice\Routing
+ * Class Router.
  */
 class Router
 {
@@ -88,20 +86,22 @@ class Router
     /**
      * Create a new Router instance.
      *
-     * @param  \Illuminate\Contracts\Events\Dispatcher $events
-     * @param  \Illuminate\Container\Container $container
+     * @param \Illuminate\Contracts\Events\Dispatcher $events
+     * @param \Illuminate\Container\Container         $container
+     *
      * @return void
      */
     public function __construct(Dispatcher $events, Container $container = null)
     {
         $this->events = $events;
-        $this->routes = new RouteCollection;
-        $this->container = $container ?: new Container;
+        $this->routes = new RouteCollection();
+        $this->container = $container ?: new Container();
     }
 
     /**
      * @param $name
      * @param $action
+     *
      * @return \CrCms\Microservice\Routing\Route
      */
     public function register($name, $action, array $options = [])
@@ -119,6 +119,7 @@ class Router
     /**
      * @param $name
      * @param $action
+     *
      * @return \CrCms\Microservice\Routing\Route
      */
     public function single($name, $action)
@@ -129,8 +130,10 @@ class Router
     /**
      * @param $name
      * @param $action
-     * @return \CrCms\Microservice\Routing\Route
+     *
      * @throws \ReflectionException
+     *
+     * @return \CrCms\Microservice\Routing\Route
      */
     public function multiple($name, $action, array $options = [])
     {
@@ -150,8 +153,9 @@ class Router
     /**
      * Create a route group with shared attributes.
      *
-     * @param  array $attributes
-     * @param  \Closure|string $routes
+     * @param array           $attributes
+     * @param \Closure|string $routes
+     *
      * @return void
      */
     public function group(array $attributes, $routes)
@@ -169,7 +173,8 @@ class Router
     /**
      * Update the group stack with the given attributes.
      *
-     * @param  array $attributes
+     * @param array $attributes
+     *
      * @return void
      */
     protected function updateGroupStack(array $attributes)
@@ -184,7 +189,8 @@ class Router
     /**
      * Merge the given array with the last group stack.
      *
-     * @param  array $new
+     * @param array $new
+     *
      * @return array
      */
     public function mergeWithLastGroup($new)
@@ -193,7 +199,7 @@ class Router
 
         if (isset($new['namespace'])) {
             $namespace = isset($old['namespace']) && strpos($new['namespace'], '\\') !== 0
-                ? trim($old['namespace'], '\\') . '\\' . trim($new['namespace'], '\\')
+                ? trim($old['namespace'], '\\').'\\'.trim($new['namespace'], '\\')
                 : trim($new['namespace'], '\\');
         } else {
             $namespace = $old['namespace'] ?? null;
@@ -204,14 +210,15 @@ class Router
         ]);
 
         return array_merge_recursive(Arr::except(
-            $old, ['namespace',]
+            $old, ['namespace']
         ), $new);
     }
 
     /**
      * Load the provided routes.
      *
-     * @param  \Closure|string $routes
+     * @param \Closure|string $routes
+     *
      * @return void
      */
     protected function loadRoutes($routes)
@@ -228,6 +235,7 @@ class Router
     /**
      * @param $name
      * @param $action
+     *
      * @return \CrCms\Microservice\Routing\Route
      */
     public function addRoute($name, $action)
@@ -238,6 +246,7 @@ class Router
     /**
      * @param $name
      * @param $action
+     *
      * @return \CrCms\Microservice\Routing\Route
      */
     protected function createRoute($name, $action)
@@ -266,7 +275,8 @@ class Router
     /**
      * Determine if the action is routing to a controller.
      *
-     * @param  array $action
+     * @param array $action
+     *
      * @return bool
      */
     protected function actionReferencesController($action)
@@ -281,7 +291,8 @@ class Router
     /**
      * Add a controller based route action to the action array.
      *
-     * @param  array|string $action
+     * @param array|string $action
+     *
      * @return array
      */
     protected function convertToControllerAction($action)
@@ -308,7 +319,8 @@ class Router
     /**
      * Prepend the last group namespace onto the use clause.
      *
-     * @param  string $class
+     * @param string $class
+     *
      * @return string
      */
     protected function prependGroupNamespace($class)
@@ -316,12 +328,13 @@ class Router
         $group = end($this->groupStack);
 
         return isset($group['namespace']) && strpos($class, '\\') !== 0
-            ? $group['namespace'] . '\\' . $class : $class;
+            ? $group['namespace'].'\\'.$class : $class;
     }
 
     /**
      * @param $name
      * @param $action
+     *
      * @return \CrCms\Microservice\Routing\Route
      */
     protected function newRoute($name, $action)
@@ -341,6 +354,7 @@ class Router
 
     /**
      * @param RequestContract $request
+     *
      * @return mixed
      */
     public function dispatch(RequestContract $request)
@@ -352,6 +366,7 @@ class Router
 
     /**
      * @param RequestContract $request
+     *
      * @return mixed
      */
     public function dispatchToRoute(RequestContract $request)
@@ -361,6 +376,7 @@ class Router
 
     /**
      * @param RequestContract $request
+     *
      * @return array
      */
     protected function findRoute(RequestContract $request)
@@ -374,7 +390,8 @@ class Router
 
     /**
      * @param RequestContract $request
-     * @param Route $route
+     * @param Route           $route
+     *
      * @return mixed
      */
     protected function runRoute(RequestContract $request, Route $route)
@@ -390,10 +407,12 @@ class Router
     }
 
     /**
-     * @param Route $route
+     * @param Route           $route
      * @param RequestContract $request
-     * @return mixed
+     *
      * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     *
+     * @return mixed
      */
     protected function runRouteWithinStack(Route $route, RequestContract $request)
     {
@@ -414,12 +433,13 @@ class Router
 
     /**
      * @param \CrCms\Microservice\Routing\Route $route
+     *
      * @return array
      */
     public function gatherRouteMiddleware(Route $route)
     {
         $middleware = collect($route->gatherMiddleware())->map(function ($name) {
-            return (array)MiddlewareNameResolver::resolve($name, $this->middleware, $this->middlewareGroups);
+            return (array) MiddlewareNameResolver::resolve($name, $this->middleware, $this->middlewareGroups);
         })->flatten();
 
         return $this->sortMiddleware($middleware);
@@ -427,6 +447,7 @@ class Router
 
     /**
      * @param Collection $middlewares
+     *
      * @return array
      */
     protected function sortMiddleware(Collection $middlewares)
@@ -450,7 +471,8 @@ class Router
     /**
      * Register a route matched event listener.
      *
-     * @param  string|callable $callback
+     * @param string|callable $callback
+     *
      * @return void
      */
     public function matched($callback)
@@ -471,8 +493,9 @@ class Router
     /**
      * Register a short-hand name for a middleware.
      *
-     * @param  string $name
-     * @param  string $class
+     * @param string $name
+     * @param string $class
+     *
      * @return $this
      */
     public function aliasMiddleware($name, $class)
@@ -485,7 +508,8 @@ class Router
     /**
      * Check if a middlewareGroup with the given name exists.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return bool
      */
     public function hasMiddlewareGroup($name)
@@ -506,8 +530,9 @@ class Router
     /**
      * Register a group of middleware.
      *
-     * @param  string $name
-     * @param  array $middleware
+     * @param string $name
+     * @param array  $middleware
+     *
      * @return $this
      */
     public function middlewareGroup($name, array $middleware)
@@ -522,8 +547,9 @@ class Router
      *
      * If the middleware is already in the group, it will not be added again.
      *
-     * @param  string $group
-     * @param  string $middleware
+     * @param string $group
+     * @param string $middleware
+     *
      * @return $this
      */
     public function prependMiddlewareToGroup($group, $middleware)
@@ -540,8 +566,9 @@ class Router
      *
      * If the middleware is already in the group, it will not be added again.
      *
-     * @param  string $group
-     * @param  string $middleware
+     * @param string $group
+     * @param string $middleware
+     *
      * @return $this
      */
     public function pushMiddlewareToGroup($group, $middleware)
@@ -604,7 +631,8 @@ class Router
     /**
      * Check if a route with the given name exists.
      *
-     * @param  string $name
+     * @param string $name
+     *
      * @return bool
      */
     public function has($name)
@@ -633,7 +661,8 @@ class Router
     /**
      * Alias for the "currentRouteNamed" method.
      *
-     * @param  mixed ...$patterns
+     * @param mixed ...$patterns
+     *
      * @return bool
      */
     public function is(...$patterns)
@@ -644,7 +673,8 @@ class Router
     /**
      * Determine if the current route matches a pattern.
      *
-     * @param  mixed ...$patterns
+     * @param mixed ...$patterns
+     *
      * @return bool
      */
     public function currentRouteNamed(...$patterns)
@@ -667,7 +697,8 @@ class Router
     /**
      * Alias for the "currentRouteUses" method.
      *
-     * @param  array ...$patterns
+     * @param array ...$patterns
+     *
      * @return bool
      */
     public function uses(...$patterns)
@@ -684,7 +715,8 @@ class Router
     /**
      * Determine if the current route action matches a given action.
      *
-     * @param  string $action
+     * @param string $action
+     *
      * @return bool
      */
     public function currentRouteUses($action)
@@ -705,7 +737,8 @@ class Router
     /**
      * Set the route collection instance.
      *
-     * @param  \CrCms\Microservice\Routing\RouteCollection $routes
+     * @param \CrCms\Microservice\Routing\RouteCollection $routes
+     *
      * @return void
      */
     public function setRoutes(RouteCollection $routes)
@@ -722,8 +755,9 @@ class Router
     /**
      * Dynamically handle calls into the router instance.
      *
-     * @param  string $method
-     * @param  array $parameters
+     * @param string $method
+     * @param array  $parameters
+     *
      * @return mixed
      */
     public function __call($method, $parameters)

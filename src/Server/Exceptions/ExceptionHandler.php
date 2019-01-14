@@ -3,7 +3,9 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-09 20:04
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
@@ -11,17 +13,16 @@ namespace CrCms\Microservice\Server\Exceptions;
 
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Http\Response;
-use Illuminate\Contracts\Container\Container;
 use Exception;
+use Illuminate\Contracts\Container\Container;
+use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Illuminate\Support\Arr;
 use Illuminate\Validation\ValidationException;
 use Psr\Log\LoggerInterface;
-use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 use Symfony\Component\Console\Application as ConsoleApplication;
 
 /**
- * Class ExceptionHandler
- * @package CrCms\Foundation\MicroService
+ * Class ExceptionHandler.
  */
 class ExceptionHandler implements ExceptionHandlerContract
 {
@@ -59,6 +60,7 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * ExceptionHandler constructor.
+     *
      * @param Container $container
      */
     public function __construct(Container $container)
@@ -68,8 +70,10 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param Exception $e
-     * @return mixed|void
+     *
      * @throws Exception
+     *
+     * @return mixed|void
      */
     public function report(Exception $e)
     {
@@ -94,6 +98,7 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param Exception $e
+     *
      * @return bool
      */
     public function shouldReport(Exception $e)
@@ -104,7 +109,8 @@ class ExceptionHandler implements ExceptionHandlerContract
     /**
      * Determine if the exception is in the "do not report" list.
      *
-     * @param  \Exception $e
+     * @param \Exception $e
+     *
      * @return bool
      */
     protected function shouldntReport(Exception $e)
@@ -118,7 +124,8 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param RequestContract $request
-     * @param Exception $e
+     * @param Exception       $e
+     *
      * @return Response|null|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $e)
@@ -134,15 +141,16 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param Exception $e
+     * @param Exception                                         $e
      */
     public function renderForConsole($output, Exception $e)
     {
-        (new ConsoleApplication)->renderException($e, $output);
+        (new ConsoleApplication())->renderException($e, $output);
     }
 
     /**
      * @param Exception $e
+     *
      * @return bool
      */
     protected function isServiceException(Exception $e): bool
@@ -152,16 +160,17 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param Exception $e
+     *
      * @return array
      */
     protected function convertExceptionToArray(Exception $e)
     {
         return config('app.debug') ? [
-            'message' => $e->getMessage(),
+            'message'   => $e->getMessage(),
             'exception' => get_class($e),
-            'file' => $e->getFile(),
-            'line' => $e->getLine(),
-            'trace' => collect($e->getTrace())->map(function ($trace) {
+            'file'      => $e->getFile(),
+            'line'      => $e->getLine(),
+            'trace'     => collect($e->getTrace())->map(function ($trace) {
                 return Arr::except($trace, ['args']);
             })->all(),
         ] : [
@@ -171,6 +180,7 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param Exception $e
+     *
      * @return Response
      */
     protected function prepareJsonResponse(Exception $e)
@@ -183,6 +193,7 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param ValidationException $e
+     *
      * @return Response|null|\Symfony\Component\HttpFoundation\Response
      */
     protected function convertValidationExceptionToResponse(ValidationException $e)
@@ -193,7 +204,7 @@ class ExceptionHandler implements ExceptionHandlerContract
 
         return new Response($this->packResponseError([
             'message' => $e->getMessage(),
-            'errors' => $e->errors(),
+            'errors'  => $e->errors(),
         ]), $e->status);
     }
 

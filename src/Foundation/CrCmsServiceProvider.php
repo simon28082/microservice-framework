@@ -3,7 +3,9 @@
 /**
  * @author simon <simon@crcms.cn>
  * @datetime 2018-11-12 20:06
+ *
  * @link http://crcms.cn/
+ *
  * @copyright Copyright &copy; 2018 Rights Reserved CRCMS
  */
 
@@ -14,8 +16,7 @@ use CrCms\Microservice\Server\ServerServiceProvider;
 use Illuminate\Support\AggregateServiceProvider;
 
 /**
- * Class CrCmsServiceProvider
- * @package CrCms\Microservice\src\Foundation
+ * Class CrCmsServiceProvider.
  */
 class CrCmsServiceProvider extends AggregateServiceProvider
 {

@@ -3,12 +3,10 @@
 namespace CrCms\Microservice\Tests\Server\Packer;
 
 use CrCms\Microservice\Server\Packer\Packer;
-use CrCms\Microservice\Testing\CreateApplicationTrait;
 use CrCms\Microservice\Testing\TestCase;
 
 /**
- * Class PackerTest
- * @package CrCms\Microservice\Tests\Server\Packer
+ * Class PackerTest.
  */
 class PackerTest extends TestCase
 {
@@ -25,7 +23,7 @@ class PackerTest extends TestCase
 //            'app.secret' => '#1#2@!##',
 //            'app.secret_cipher' => 'AES-256-CFB',
             'app.encryption' => true,
-            'app.key'=>'base64:TdhCcU88SAr4/omVl4ckItqqKUx+whSwQ4gVEtlm+xk='
+            'app.key'        => 'base64:TdhCcU88SAr4/omVl4ckItqqKUx+whSwQ4gVEtlm+xk=',
         ]);
 
         $this->packer = $this->app->make(Packer::class);
@@ -33,10 +31,11 @@ class PackerTest extends TestCase
 
     public function testEmptyValuePack()
     {
-        $data = ['call' => 'test','data'=>['x'=>1]];
+        $data = ['call' => 'test', 'data'=>['x'=>1]];
         $result = $this->packer->pack($data);
 
         $this->assertNotEmpty($result);
+
         return $result;
     }
 
@@ -56,6 +55,7 @@ class PackerTest extends TestCase
         $data = ['call' => 'test', 'data' => ['key' => 'value']];
         $value = $this->packer->pack($data, true);
         $this->assertNotEmpty($value);
+
         return $value;
     }
 
@@ -76,11 +76,13 @@ class PackerTest extends TestCase
         $data = ['call' => 'test', 'data' => ['key' => 'value']];
         $value = $this->packer->pack($data, false);
         $this->assertNotEmpty($value);
+
         return $value;
     }
 
     /**
      * @depends testNotEncryptPack
+     *
      * @param string $value
      */
     public function testNotEncryptUnpack(string $value)
@@ -97,11 +99,13 @@ class PackerTest extends TestCase
         $data = ['call' => 'test'];
         $value = $this->packer->pack($data, false);
         $this->assertNotEmpty($value);
+
         return $value;
     }
 
     /**
      * @depends testEmptyNotEncryptPack
+     *
      * @param $value
      */
     public function testEmptyNotEncryptUnpack($value)

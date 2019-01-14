@@ -2,24 +2,24 @@
 
 namespace CrCms\Microservice\Server\Http;
 
+use ArrayObject;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use Illuminate\Contracts\Support\Jsonable;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Support\Arrayable;
+use Illuminate\Contracts\Support\Jsonable;
 use Illuminate\Database\Eloquent\Model;
 //use Psr\Http\Message\ResponseInterface as PsrResponseInterface;
-use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
-use ArrayObject;
+use Illuminate\Http\JsonResponse;
 use JsonSerializable;
+use Symfony\Component\HttpFoundation\Response as SymfonyResponse;
 
 /**
- * Class Response
- * @package CrCms\Foundation\MicroService\Http
+ * Class Response.
  */
 class Response extends JsonResponse implements ResponseContract
 {
     /**
      * @param $response
+     *
      * @return ResponseContract
      */
     public static function createResponse($response): ResponseContract
@@ -39,7 +39,7 @@ class Response extends JsonResponse implements ResponseContract
             $response = new static($response);
         }
 
-        if ($response->getStatusCode() === Response::HTTP_NOT_MODIFIED) {
+        if ($response->getStatusCode() === self::HTTP_NOT_MODIFIED) {
             $response->setNotModified();
         }
 

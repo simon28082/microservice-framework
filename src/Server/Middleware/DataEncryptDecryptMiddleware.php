@@ -2,15 +2,14 @@
 
 namespace CrCms\Microservice\Server\Middleware;
 
+use Closure;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
-use Closure;
 use CrCms\Microservice\Server\Packer\Packer;
 use UnexpectedValueException;
 
 /**
- * Class DataEncryptDecryptMiddleware
- * @package CrCms\Microservice\Server\Middleware
+ * Class DataEncryptDecryptMiddleware.
  */
 class DataEncryptDecryptMiddleware
 {
@@ -21,6 +20,7 @@ class DataEncryptDecryptMiddleware
 
     /**
      * DataEncryptDecrypt constructor.
+     *
      * @param Packer $packer
      */
     public function __construct(Packer $packer)
@@ -30,7 +30,8 @@ class DataEncryptDecryptMiddleware
 
     /**
      * @param RequestContract $request
-     * @param Closure $next
+     * @param Closure         $next
+     *
      * @return mixed
      */
     public function handle(RequestContract $request, Closure $next)
@@ -55,13 +56,14 @@ class DataEncryptDecryptMiddleware
 
     /**
      * @param $content
+     *
      * @return array
      */
     protected function parseContent($content): array
     {
         $data = json_decode($content, true);
         if (json_last_error() !== 0) {
-            throw new UnexpectedValueException("Parse data error: " . json_last_error_msg());
+            throw new UnexpectedValueException('Parse data error: '.json_last_error_msg());
         }
 
         return $data;

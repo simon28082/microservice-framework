@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
-use Illuminate\Console\Command;
 use CrCms\Microservice\Foundation\PackageManifest;
+use Illuminate\Console\Command;
 
 class PackageDiscoverCommand extends Command
 {
@@ -24,7 +24,8 @@ class PackageDiscoverCommand extends Command
     /**
      * Execute the console command.
      *
-     * @param  PackageManifest  $manifest
+     * @param PackageManifest $manifest
+     *
      * @return void
      */
     public function handle(PackageManifest $manifest)

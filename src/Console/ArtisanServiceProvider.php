@@ -2,50 +2,50 @@
 
 namespace CrCms\Microservice\Console;
 
-use CrCms\Microservice\Console\Commands\SwooleServerCommand;
-use Illuminate\Support\ServiceProvider;
-use Illuminate\Queue\Console\TableCommand;
-use CrCms\Microservice\Console\Commands\UpCommand;
-use CrCms\Microservice\Console\Commands\DownCommand;
-use Illuminate\Cache\Console\CacheTableCommand;
-use Illuminate\Queue\Console\FailedTableCommand;
-use CrCms\Microservice\Console\Commands\JobMakeCommand;
-use Illuminate\Database\Console\Seeds\SeedCommand;
-use CrCms\Microservice\Console\Commands\EventMakeCommand;
-use CrCms\Microservice\Console\Commands\ModelMakeCommand;
-use Illuminate\Console\Scheduling\ScheduleRunCommand;
 use CrCms\Microservice\Console\Commands\ConfigCacheCommand;
 use CrCms\Microservice\Console\Commands\ConfigClearCommand;
 use CrCms\Microservice\Console\Commands\ConsoleMakeCommand;
+use CrCms\Microservice\Console\Commands\DownCommand;
 use CrCms\Microservice\Console\Commands\EnvironmentCommand;
+use CrCms\Microservice\Console\Commands\EventGenerateCommand;
+use CrCms\Microservice\Console\Commands\EventMakeCommand;
+use CrCms\Microservice\Console\Commands\InitializeMakeCommand;
+use CrCms\Microservice\Console\Commands\JobMakeCommand;
 use CrCms\Microservice\Console\Commands\KeyGenerateCommand;
 use CrCms\Microservice\Console\Commands\ListenerMakeCommand;
+use CrCms\Microservice\Console\Commands\ModelMakeCommand;
 use CrCms\Microservice\Console\Commands\ObserverMakeCommand;
-use CrCms\Microservice\Console\Commands\ProviderMakeCommand;
-use CrCms\Microservice\Console\Commands\EventGenerateCommand;
-use CrCms\Microservice\Console\Commands\VendorPublishCommand;
-use Illuminate\Console\Scheduling\ScheduleFinishCommand;
-use Illuminate\Database\Console\Seeds\SeederMakeCommand;
 use CrCms\Microservice\Console\Commands\PackageDiscoverCommand;
-use Illuminate\Database\Console\Migrations\MigrateCommand;
-use Illuminate\Database\Console\Factories\FactoryMakeCommand;
-use Illuminate\Queue\Console\WorkCommand as QueueWorkCommand;
-use Illuminate\Database\Console\Migrations\MigrateMakeCommand;
+use CrCms\Microservice\Console\Commands\ProviderMakeCommand;
+use CrCms\Microservice\Console\Commands\SwooleServerCommand;
+use CrCms\Microservice\Console\Commands\UpCommand;
+use CrCms\Microservice\Console\Commands\VendorPublishCommand;
+use Illuminate\Cache\Console\CacheTableCommand;
 use Illuminate\Cache\Console\ClearCommand as CacheClearCommand;
-use Illuminate\Queue\Console\RetryCommand as QueueRetryCommand;
 use Illuminate\Cache\Console\ForgetCommand as CacheForgetCommand;
-use Illuminate\Queue\Console\ListenCommand as QueueListenCommand;
-use Illuminate\Queue\Console\RestartCommand as QueueRestartCommand;
-use Illuminate\Queue\Console\ListFailedCommand as ListFailedQueueCommand;
+use Illuminate\Console\Scheduling\ScheduleFinishCommand;
+use Illuminate\Console\Scheduling\ScheduleRunCommand;
+use Illuminate\Database\Console\Factories\FactoryMakeCommand;
+use Illuminate\Database\Console\Migrations\FreshCommand as MigrateFreshCommand;
+use Illuminate\Database\Console\Migrations\InstallCommand as MigrateInstallCommand;
+use Illuminate\Database\Console\Migrations\MigrateCommand;
+use Illuminate\Database\Console\Migrations\MigrateMakeCommand;
+use Illuminate\Database\Console\Migrations\RefreshCommand as MigrateRefreshCommand;
+use Illuminate\Database\Console\Migrations\ResetCommand as MigrateResetCommand;
+use Illuminate\Database\Console\Migrations\RollbackCommand as MigrateRollbackCommand;
+use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand;
+use Illuminate\Database\Console\Seeds\SeedCommand;
+use Illuminate\Database\Console\Seeds\SeederMakeCommand;
+use Illuminate\Queue\Console\FailedTableCommand;
 use Illuminate\Queue\Console\FlushFailedCommand as FlushFailedQueueCommand;
 use Illuminate\Queue\Console\ForgetFailedCommand as ForgetFailedQueueCommand;
-use Illuminate\Database\Console\Migrations\FreshCommand as MigrateFreshCommand;
-use Illuminate\Database\Console\Migrations\ResetCommand as MigrateResetCommand;
-use Illuminate\Database\Console\Migrations\StatusCommand as MigrateStatusCommand;
-use Illuminate\Database\Console\Migrations\InstallCommand as MigrateInstallCommand;
-use Illuminate\Database\Console\Migrations\RefreshCommand as MigrateRefreshCommand;
-use Illuminate\Database\Console\Migrations\RollbackCommand as MigrateRollbackCommand;
-use CrCms\Microservice\Console\Commands\InitializeMakeCommand;
+use Illuminate\Queue\Console\ListenCommand as QueueListenCommand;
+use Illuminate\Queue\Console\ListFailedCommand as ListFailedQueueCommand;
+use Illuminate\Queue\Console\RestartCommand as QueueRestartCommand;
+use Illuminate\Queue\Console\RetryCommand as QueueRetryCommand;
+use Illuminate\Queue\Console\TableCommand;
+use Illuminate\Queue\Console\WorkCommand as QueueWorkCommand;
+use Illuminate\Support\ServiceProvider;
 
 class ArtisanServiceProvider extends ServiceProvider
 {
@@ -62,32 +62,32 @@ class ArtisanServiceProvider extends ServiceProvider
      * @var array
      */
     protected $commands = [
-        'CacheClear' => 'command.cache.clear',
-        'CacheForget' => 'command.cache.forget',
-        'ConfigCache' => 'command.config.cache',
-        'ConfigClear' => 'command.config.clear',
-        'Down' => 'command.down',
-        'Environment' => 'command.environment',
-        'KeyGenerate' => 'command.key.generate',
-        'Migrate' => 'command.migrate',
-        'MigrateFresh' => 'command.migrate.fresh',
-        'MigrateInstall' => 'command.migrate.install',
-        'MigrateRefresh' => 'command.migrate.refresh',
-        'MigrateReset' => 'command.migrate.reset',
+        'CacheClear'      => 'command.cache.clear',
+        'CacheForget'     => 'command.cache.forget',
+        'ConfigCache'     => 'command.config.cache',
+        'ConfigClear'     => 'command.config.clear',
+        'Down'            => 'command.down',
+        'Environment'     => 'command.environment',
+        'KeyGenerate'     => 'command.key.generate',
+        'Migrate'         => 'command.migrate',
+        'MigrateFresh'    => 'command.migrate.fresh',
+        'MigrateInstall'  => 'command.migrate.install',
+        'MigrateRefresh'  => 'command.migrate.refresh',
+        'MigrateReset'    => 'command.migrate.reset',
         'MigrateRollback' => 'command.migrate.rollback',
-        'MigrateStatus' => 'command.migrate.status',
+        'MigrateStatus'   => 'command.migrate.status',
         'PackageDiscover' => 'command.package.discover',
-        'QueueFailed' => 'command.queue.failed',
-        'QueueFlush' => 'command.queue.flush',
-        'QueueForget' => 'command.queue.forget',
-        'QueueListen' => 'command.queue.listen',
-        'QueueRestart' => 'command.queue.restart',
-        'QueueRetry' => 'command.queue.retry',
-        'QueueWork' => 'command.queue.work',
-        'Seed' => 'command.seed',
-        'ScheduleFinish' => ScheduleFinishCommand::class,
-        'ScheduleRun' => ScheduleRunCommand::class,
-        'Up' => 'command.up',
+        'QueueFailed'     => 'command.queue.failed',
+        'QueueFlush'      => 'command.queue.flush',
+        'QueueForget'     => 'command.queue.forget',
+        'QueueListen'     => 'command.queue.listen',
+        'QueueRestart'    => 'command.queue.restart',
+        'QueueRetry'      => 'command.queue.retry',
+        'QueueWork'       => 'command.queue.work',
+        'Seed'            => 'command.seed',
+        'ScheduleFinish'  => ScheduleFinishCommand::class,
+        'ScheduleRun'     => ScheduleRunCommand::class,
+        'Up'              => 'command.up',
     ];
 
     /**
@@ -106,7 +106,7 @@ class ArtisanServiceProvider extends ServiceProvider
 //        'ListenerMake' => 'command.listener.make',
 //        'MailMake' => 'command.mail.make',
 //        'MiddlewareMake' => 'command.middleware.make',
-        'MigrateMake' => 'command.migrate.make',
+        'MigrateMake'    => 'command.migrate.make',
         'InitializeMake' => 'command.initialize.make',
 //        'ModelMake' => 'command.model.make',
 //        'NotificationMake' => 'command.notification.make',
@@ -115,7 +115,7 @@ class ArtisanServiceProvider extends ServiceProvider
 //        'PolicyMake' => 'command.policy.make',
 //        'ProviderMake' => 'command.provider.make',
         'QueueFailedTable' => 'command.queue.failed-table',
-        'QueueTable' => 'command.queue.table',
+        'QueueTable'       => 'command.queue.table',
 //        'RequestMake' => 'command.request.make',
 //        'ResourceMake' => 'command.resource.make',
 //        'RuleMake' => 'command.rule.make',
@@ -140,7 +140,8 @@ class ArtisanServiceProvider extends ServiceProvider
     /**
      * Register the given commands.
      *
-     * @param  array  $commands
+     * @param array $commands
+     *
      * @return void
      */
     protected function registerCommands(array $commands)
@@ -153,8 +154,8 @@ class ArtisanServiceProvider extends ServiceProvider
     }
 
     /**
-     * register Initialize
-     * 
+     * register Initialize.
+     *
      * @return void
      */
     protected function registerInitializeMakeCommand()
@@ -165,7 +166,7 @@ class ArtisanServiceProvider extends ServiceProvider
     }
 
     /**
-     * register SwooleServer
+     * register SwooleServer.
      *
      * @return void
      */
@@ -256,7 +257,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerEventGenerateCommand()
     {
         $this->app->singleton('command.event.generate', function () {
-            return new EventGenerateCommand;
+            return new EventGenerateCommand();
         });
     }
 
@@ -292,7 +293,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerDownCommand()
     {
         $this->app->singleton('command.down', function () {
-            return new DownCommand;
+            return new DownCommand();
         });
     }
 
@@ -304,7 +305,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerEnvironmentCommand()
     {
         $this->app->singleton('command.environment', function () {
-            return new EnvironmentCommand;
+            return new EnvironmentCommand();
         });
     }
 
@@ -328,7 +329,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerKeyGenerateCommand()
     {
         $this->app->singleton('command.key.generate', function () {
-            return new KeyGenerateCommand;
+            return new KeyGenerateCommand();
         });
     }
 
@@ -364,7 +365,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerMigrateFreshCommand()
     {
         $this->app->singleton('command.migrate.fresh', function () {
-            return new MigrateFreshCommand;
+            return new MigrateFreshCommand();
         });
     }
 
@@ -407,7 +408,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerMigrateRefreshCommand()
     {
         $this->app->singleton('command.migrate.refresh', function () {
-            return new MigrateRefreshCommand;
+            return new MigrateRefreshCommand();
         });
     }
 
@@ -479,7 +480,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerPackageDiscoverCommand()
     {
         $this->app->singleton('command.package.discover', function () {
-            return new PackageDiscoverCommand;
+            return new PackageDiscoverCommand();
         });
     }
 
@@ -503,7 +504,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerQueueFailedCommand()
     {
         $this->app->singleton('command.queue.failed', function () {
-            return new ListFailedQueueCommand;
+            return new ListFailedQueueCommand();
         });
     }
 
@@ -515,7 +516,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerQueueForgetCommand()
     {
         $this->app->singleton('command.queue.forget', function () {
-            return new ForgetFailedQueueCommand;
+            return new ForgetFailedQueueCommand();
         });
     }
 
@@ -527,7 +528,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerQueueFlushCommand()
     {
         $this->app->singleton('command.queue.flush', function () {
-            return new FlushFailedQueueCommand;
+            return new FlushFailedQueueCommand();
         });
     }
 
@@ -551,7 +552,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerQueueRestartCommand()
     {
         $this->app->singleton('command.queue.restart', function () {
-            return new QueueRestartCommand;
+            return new QueueRestartCommand();
         });
     }
 
@@ -563,7 +564,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerQueueRetryCommand()
     {
         $this->app->singleton('command.queue.retry', function () {
-            return new QueueRetryCommand;
+            return new QueueRetryCommand();
         });
     }
 
@@ -655,7 +656,7 @@ class ArtisanServiceProvider extends ServiceProvider
     protected function registerUpCommand()
     {
         $this->app->singleton('command.up', function () {
-            return new UpCommand;
+            return new UpCommand();
         });
     }
 
