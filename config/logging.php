@@ -95,7 +95,7 @@ return [
             'via' => MongoDBLogger::class,
             'database' => [
                 'driver' => 'mongodb',
-                'collection' => 'logger'
+                'collection' => 'logger',
             ],
         ],
     ],

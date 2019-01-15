@@ -61,7 +61,7 @@ class MongoDBLogger
         $driver = $config['database']['driver'];
 
         return new MongoLogger(
-            'laravel',
+            $this->config->get('app.name'),
             [
                 new MongoDBHandler(
                     $this->db->connection($driver)->getMongoClient(),
