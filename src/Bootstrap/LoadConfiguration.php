@@ -36,7 +36,7 @@ class LoadConfiguration
         // options available to the developer for use in various parts of this app.
         $app->instance('config', $config = new Repository($items));
 
-        if (! isset($loadedFromCache)) {
+        if (!isset($loadedFromCache)) {
             $this->loadConfigurationFiles($app, $config);
         }
 
@@ -56,7 +56,7 @@ class LoadConfiguration
      * Load the configuration items from all of the files.
      *
      * @param \Illuminate\Contracts\Foundation\Application $app
-     * @param \Illuminate\Contracts\Config\Repository      $repository
+     * @param \Illuminate\Contracts\Config\Repository $repository
      *
      * @throws \Exception
      *
@@ -66,7 +66,7 @@ class LoadConfiguration
     {
         $files = $this->getConfigurationFiles($app);
 
-        if (! isset($files['app'])) {
+        if (!isset($files['app'])) {
             throw new Exception('Unable to load the "app" configuration file.');
         }
 
@@ -87,8 +87,9 @@ class LoadConfiguration
         $files = [];
 
         $configPath = $app->configPath();
+        $defaultConfigPath = $app->defaultConfigPath();
 
-        foreach (Finder::create()->files()->name('*.php')->in($configPath) as $file) {
+        foreach (Finder::create()->files()->name('*.php')->in([$defaultConfigPath, $configPath]) as $file) {
             $directory = $this->getNestedDirectory($file, $configPath);
 
             $files[$directory.basename($file->getRealPath(), '.php')] = $file->getRealPath();
@@ -103,7 +104,7 @@ class LoadConfiguration
      * Get the configuration file nesting path.
      *
      * @param \SplFileInfo $file
-     * @param string       $configPath
+     * @param string $configPath
      *
      * @return string
      */
