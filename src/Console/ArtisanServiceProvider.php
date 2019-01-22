@@ -174,7 +174,7 @@ class ArtisanServiceProvider extends ServiceProvider
      */
     protected function registerModuleMakeCommand()
     {
-        $this->app->singleton('command.initialize.make', function ($app) {
+        $this->app->singleton('command.module.make', function ($app) {
             return new ModuleMakeCommand($app['files']);
         });
     }
