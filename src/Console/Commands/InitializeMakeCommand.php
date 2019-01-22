@@ -83,7 +83,7 @@ class InitializeMakeCommand extends Command
     /**
      * @return void
      */
-    protected function createDatabase(): void
+    /*protected function createDatabase(): void
     {
         if (!$this->files->exists(database_path())) {
             $this->autoCreateDirs([
@@ -96,7 +96,7 @@ class InitializeMakeCommand extends Command
             $this->files->put(database_path('migrations/2014_10_12_000000_create_users_table.php'), $this->files->get(__DIR__ . '/stubs/migration.stub'));
             $this->files->put(database_path('seeds/DatabaseSeeder.php'), $this->files->get(__DIR__ . '/stubs/seed.stub'));
         }
-    }
+    }*/
 
     /**
      * @return void
@@ -134,7 +134,7 @@ class InitializeMakeCommand extends Command
      *
      * @return void
      */
-    protected function createRoutes(): void
+    /*protected function createRoutes(): void
     {
         $routePath = base_path('routes');
         if (!$this->files->exists($routePath)) {
@@ -145,7 +145,7 @@ class InitializeMakeCommand extends Command
         if (!$this->files->exists($webFile)) {
             $this->files->put($webFile, $this->files->get(__DIR__ . '/stubs/service-route.stub'));
         }
-    }
+    }*/
 
     /**
      * @param array $dirs
