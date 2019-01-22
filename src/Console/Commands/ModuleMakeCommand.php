@@ -29,7 +29,11 @@ class ModuleMakeCommand extends InitializeMakeCommand
      */
     public function handle(): void
     {
-        $this->createModules($this->argument('name'));
+        $name = $this->argument('name');
+
+        $this->createModules($name);
+        $this->createRoutes($name);
+        $this->createDatabase($name);
     }
 
     /**
@@ -62,6 +66,33 @@ class ModuleMakeCommand extends InitializeMakeCommand
             base_path('modules/'.$name.'/Database/Migrations'),
             base_path('modules/'.$name.'/Database/Seeds'),
         ]);
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function createRoutes(string $name): void
+    {
+        $webFile = base_path('modules/'.$name.'/Routes/service.php');
+        if (!$this->files->exists($webFile)) {
+            $this->files->put($webFile, $this->files->get(__DIR__.'/stubs/service-route.stub'));
+        }
+    }
+
+    /**
+     * @param string $name
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     * @return void
+     */
+    protected function createDatabase(string $name): void
+    {
+        $this->files->put('modules/'.$name.'/Database/Factories/UserFactory.php', $this->files->get(__DIR__ . '/stubs/factory.stub'));
+        $this->files->put('modules/'.$name.'/Database/Migrations/2014_10_12_000000_create_users_table.php', $this->files->get(__DIR__ . '/stubs/migration.stub'));
+        $this->files->put('modules/'.$name.'/Database/Seeds/DatabaseSeeder.php', $this->files->get(__DIR__ . '/stubs/seed.stub'));
     }
 
     /**
