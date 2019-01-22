@@ -2,6 +2,7 @@
 
 namespace CrCms\Microservice\Console\Commands;
 
+use Illuminate\Support\Str;
 use Symfony\Component\Console\Input\InputArgument;
 
 /**
@@ -29,7 +30,7 @@ class ModuleMakeCommand extends InitializeMakeCommand
      */
     public function handle(): void
     {
-        $name = $this->argument('name');
+        $name = Str::ucfirst($this->argument('name'));
 
         $this->createModules($name);
         $this->createRoutes($name);
@@ -101,7 +102,7 @@ class ModuleMakeCommand extends InitializeMakeCommand
     protected function getArguments(): array
     {
         return [
-            ['name', InputArgument::REQUIRED, 'The module name.'],
+            ['name', InputArgument::REQUIRED, 'The module name'],
         ];
     }
 }
