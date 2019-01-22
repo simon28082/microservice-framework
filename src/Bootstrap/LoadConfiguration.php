@@ -3,11 +3,11 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use Exception;
-use SplFileInfo;
 use Illuminate\Config\Repository;
 use Symfony\Component\Finder\Finder;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Contracts\Config\Repository as RepositoryContract;
+use Symfony\Component\Finder\SplFileInfo;
 
 class LoadConfiguration
 {
@@ -65,7 +65,6 @@ class LoadConfiguration
     protected function loadConfigurationFiles(Application $app, RepositoryContract $repository)
     {
         $files = $this->getConfigurationFiles($app);
-
         if (!isset($files['app'])) {
             throw new Exception('Unable to load the "app" configuration file.');
         }
@@ -90,7 +89,8 @@ class LoadConfiguration
         $defaultConfigPath = $app->defaultConfigPath();
 
         foreach (Finder::create()->files()->name('*.php')->in([$defaultConfigPath, $configPath]) as $file) {
-            $directory = $this->getNestedDirectory($file, $configPath);
+            /* @var \Symfony\Component\Finder\SplFileInfo $file */
+            $directory = $this->getNestedDirectory($file, [$configPath, $defaultConfigPath]);
 
             $files[$directory.basename($file->getRealPath(), '.php')] = $file->getRealPath();
         }
@@ -108,11 +108,11 @@ class LoadConfiguration
      *
      * @return string
      */
-    protected function getNestedDirectory(SplFileInfo $file, $configPath)
+    protected function getNestedDirectory(SplFileInfo $file, array $configPaths)
     {
         $directory = $file->getPath();
 
-        if ($nested = trim(str_replace($configPath, '', $directory), DIRECTORY_SEPARATOR)) {
+        if ($nested = trim(str_replace($configPaths, '', $directory), DIRECTORY_SEPARATOR)) {
             $nested = str_replace(DIRECTORY_SEPARATOR, '.', $nested).'.';
         }
 
