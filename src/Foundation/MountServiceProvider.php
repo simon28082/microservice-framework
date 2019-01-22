@@ -22,6 +22,10 @@ use Symfony\Component\Finder\SplFileInfo;
  */
 class MountServiceProvider extends ServiceProvider
 {
+    /**
+     * @var bool
+     */
+    protected $defer = true;
 
     /**
      * @return void
@@ -128,5 +132,13 @@ class MountServiceProvider extends ServiceProvider
         }
 
         return null;
+    }
+
+    /**
+     * @return array
+     */
+    public function provides(): array
+    {
+        return ['translation.loader'];
     }
 }
