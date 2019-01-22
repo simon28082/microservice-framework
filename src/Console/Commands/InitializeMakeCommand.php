@@ -32,7 +32,7 @@ class InitializeMakeCommand extends Command
     /**
      * @var array
      */
-    protected $modules = ['resource', 'storage', 'config', 'database', 'modules', 'routes'];
+    protected $modules = ['storage',];
 
     /**
      * AutoCreateStorageCommand constructor.
@@ -120,6 +120,7 @@ class InitializeMakeCommand extends Command
             'logPath' => storage_path('logs'),
             'appPublicPath' => storage_path('app/public'),
             'testingPath' => storage_path('framework/testing'),
+            'viewPath' => storage_path('framework/views'),
         ]);
 
         $gitignore = storage_path('.gitignore');
@@ -158,35 +159,6 @@ class InitializeMakeCommand extends Command
                 $this->files->makeDirectory($dir, 0755, true);
             }
         }
-    }
-
-    /**
-     * @return void
-     */
-    protected function createModules(): void
-    {
-        $this->autoCreateDirs([
-            base_path('modules'),
-            base_path('modules/Testing/Schedules'),
-            base_path('modules/Testing/Commands'),
-            base_path('modules/Testing/Events'),
-            base_path('modules/Testing/Exceptions'),
-            base_path('modules/Testing/Handlers'),
-            base_path('modules/Testing/Tasks'),
-            base_path('modules/Testing/Jobs'),
-            base_path('modules/Testing/Listeners'),
-            base_path('modules/Testing/Models'),
-            base_path('modules/Testing/Providers'),
-            base_path('modules/Testing/Repositories'),
-            base_path('modules/Testing/Middleware'),
-            base_path('modules/Testing/DataProviders'),
-            base_path('modules/Testing/Controllers'),
-            base_path('modules/Testing/Resources'),
-            base_path('modules/Testing/Translations'),
-            base_path('modules/Testing/Database/Factories'),
-            base_path('modules/Testing/Database/Migrations'),
-            base_path('modules/Testing/Database/Seeds'),
-        ]);
     }
 
     /**

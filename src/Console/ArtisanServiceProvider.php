@@ -2,6 +2,7 @@
 
 namespace CrCms\Microservice\Console;
 
+use CrCms\Microservice\Console\Commands\ModuleMakeCommand;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Queue\Console\TableCommand;
 use Illuminate\Cache\Console\CacheTableCommand;
@@ -108,6 +109,7 @@ class ArtisanServiceProvider extends ServiceProvider
 //        'MiddlewareMake' => 'command.middleware.make',
         'MigrateMake'    => 'command.migrate.make',
         'InitializeMake' => 'command.initialize.make',
+        'ModuleMake' => 'command.module.make',
 //        'ModelMake' => 'command.model.make',
 //        'NotificationMake' => 'command.notification.make',
 //        'NotificationTable' => 'command.notification.table',
@@ -162,6 +164,18 @@ class ArtisanServiceProvider extends ServiceProvider
     {
         $this->app->singleton('command.initialize.make', function ($app) {
             return new InitializeMakeCommand($app['files']);
+        });
+    }
+
+    /**
+     * register module.
+     *
+     * @return void
+     */
+    protected function registerModuleMakeCommand()
+    {
+        $this->app->singleton('command.initialize.make', function ($app) {
+            return new ModuleMakeCommand($app['files']);
         });
     }
 
