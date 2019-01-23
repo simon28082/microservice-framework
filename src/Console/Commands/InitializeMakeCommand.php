@@ -32,7 +32,7 @@ class InitializeMakeCommand extends Command
     /**
      * @var array
      */
-    protected $modules = ['resource', 'storage', 'config', 'database', 'modules', 'routes'];
+    protected $modules = ['storage',];
 
     /**
      * AutoCreateStorageCommand constructor.
@@ -51,7 +51,7 @@ class InitializeMakeCommand extends Command
     public function handle(): void
     {
         foreach ($this->modules as $module) {
-            call_user_func([$this, 'create'.ucfirst($module)]);
+            call_user_func([$this, 'create' . ucfirst($module)]);
         }
 
         $this->info('Initialize completed');
@@ -63,49 +63,49 @@ class InitializeMakeCommand extends Command
      */
     protected function createResource()
     {
-        if (! $this->files->exists(resource_path())) {
+        if (!$this->files->exists(resource_path())) {
             $this->autoCreateDirs([resource_path()]);
         }
 
-        if (! $this->files->exists(app()->langPath())) {
+        if (!$this->files->exists(app()->langPath())) {
             $langPath = app()->langPath();
-            $localPath = $langPath.'/'.config('app.locale');
+            $localPath = $langPath . '/' . config('app.locale');
             $this->autoCreateDirs([
                 $langPath,
                 $localPath,
             ]);
 
-            $this->files->put($localPath.'/pagination.php', $this->files->get(__DIR__.'/stubs/lang/'.config('app.locale').'/pagination.stub'));
-            $this->files->put($localPath.'/validation.php', $this->files->get(__DIR__.'/stubs/lang/'.config('app.locale').'/validation.stub'));
+            $this->files->put($localPath . '/pagination.php', $this->files->get(__DIR__ . '/stubs/lang/' . config('app.locale') . '/pagination.stub'));
+            $this->files->put($localPath . '/validation.php', $this->files->get(__DIR__ . '/stubs/lang/' . config('app.locale') . '/validation.stub'));
         }
     }
 
     /**
      * @return void
      */
-    protected function createDatabase(): void
+    /*protected function createDatabase(): void
     {
-        if (! $this->files->exists(database_path())) {
+        if (!$this->files->exists(database_path())) {
             $this->autoCreateDirs([
                 database_path('factories'),
                 database_path('migrations'),
                 database_path('seeds'),
             ]);
 
-            $this->files->put(database_path('factories/UserFactory.php'), $this->files->get(__DIR__.'/stubs/factory.stub'));
-            $this->files->put(database_path('migrations/2014_10_12_000000_create_users_table.php'), $this->files->get(__DIR__.'/stubs/migration.stub'));
-            $this->files->put(database_path('seeds/DatabaseSeeder.php'), $this->files->get(__DIR__.'/stubs/seed.stub'));
+            $this->files->put(database_path('factories/UserFactory.php'), $this->files->get(__DIR__ . '/stubs/factory.stub'));
+            $this->files->put(database_path('migrations/2014_10_12_000000_create_users_table.php'), $this->files->get(__DIR__ . '/stubs/migration.stub'));
+            $this->files->put(database_path('seeds/DatabaseSeeder.php'), $this->files->get(__DIR__ . '/stubs/seed.stub'));
         }
-    }
+    }*/
 
     /**
      * @return void
      */
     protected function createConfig(): void
     {
-        if (! $this->files->exists(base_path('config'))) {
+        if (!$this->files->exists(base_path('config'))) {
             $this->autoCreateDirs([base_path('config')]);
-            $this->files->copyDirectory(__DIR__.'/../../../config', base_path('config'));
+            $this->files->copyDirectory(__DIR__ . '/../../../config', base_path('config'));
         }
     }
 
@@ -115,15 +115,16 @@ class InitializeMakeCommand extends Command
     protected function createStorage(): void
     {
         $this->autoCreateDirs([
-            'runCachePath'  => storage_path('run-cache'),
-            'cachePath'     => config('cache.stores.file.path'),
-            'logPath'       => storage_path('logs'),
+            'runCachePath' => storage_path('run-cache'),
+            'cachePath' => config('cache.stores.file.path'),
+            'logPath' => storage_path('logs'),
             'appPublicPath' => storage_path('app/public'),
-            'testingPath'   => storage_path('framework/testing'),
+            'testingPath' => storage_path('framework/testing'),
+            'viewPath' => storage_path('framework/views'),
         ]);
 
         $gitignore = storage_path('.gitignore');
-        if (! $this->files->exists($gitignore)) {
+        if (!$this->files->exists($gitignore)) {
             $this->files->put(storage_path('.gitignore'), '*');
         }
     }
@@ -133,18 +134,18 @@ class InitializeMakeCommand extends Command
      *
      * @return void
      */
-    protected function createRoutes(): void
+    /*protected function createRoutes(): void
     {
         $routePath = base_path('routes');
-        if (! $this->files->exists($routePath)) {
+        if (!$this->files->exists($routePath)) {
             $this->files->makeDirectory($routePath, 0755, true);
         }
 
         $webFile = base_path('routes/service.php');
-        if (! $this->files->exists($webFile)) {
-            $this->files->put($webFile, $this->files->get(__DIR__.'/stubs/service-route.stub'));
+        if (!$this->files->exists($webFile)) {
+            $this->files->put($webFile, $this->files->get(__DIR__ . '/stubs/service-route.stub'));
         }
-    }
+    }*/
 
     /**
      * @param array $dirs
@@ -154,20 +155,10 @@ class InitializeMakeCommand extends Command
     protected function autoCreateDirs(array $dirs): void
     {
         foreach ($dirs as $dir) {
-            if (! $this->files->exists($dir) && ! empty($dir)) {
+            if (!$this->files->exists($dir) && !empty($dir)) {
                 $this->files->makeDirectory($dir, 0755, true);
             }
         }
-    }
-
-    /**
-     * @return void
-     */
-    protected function createModules(): void
-    {
-        $this->autoCreateDirs([
-            base_path('modules'),
-        ]);
     }
 
     /**

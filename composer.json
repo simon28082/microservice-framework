@@ -68,6 +68,9 @@
     ]
   },
   "autoload-dev": {
+    "files": [
+      "tests/bootstrap.php"
+    ],
     "psr-4": {
       "CrCms\\Microservice\\Tests\\": "tests/"
     }

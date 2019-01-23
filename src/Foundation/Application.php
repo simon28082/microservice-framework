@@ -51,7 +51,17 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * @var string
      */
+    protected $defaultConfigPath;
+
+    /**
+     * @var string
+     */
     protected $databasePath;
+
+    /**
+     * @var string
+     */
+    protected $modulePath;
 
     /**
      * @var string
@@ -175,19 +185,41 @@ class Application extends Container implements ContainerContract, ApplicationCon
     }
 
     /**
+     * @return string
+     */
+    public function defaultConfigPath($path = ''): string
+    {
+        if (is_null($this->defaultConfigPath)) {
+            $this->defaultConfigPath = realpath(__DIR__.'/../../config');
+        }
+
+        return $path ? $this->defaultConfigPath.DIRECTORY_SEPARATOR.$path : $this->defaultConfigPath;
+    }
+
+    /**
+     * @param string $path
+     * @return string
+     */
+    public function modulePath($path = ''): string
+    {
+        if (is_null($this->modulePath)) {
+            $this->modulePath = $this->basePath.DIRECTORY_SEPARATOR.'modules';
+        }
+
+        return $path ? $this->modulePath.DIRECTORY_SEPARATOR.$path : $this->modulePath;
+    }
+
+    /**
      * Get the path to the application configuration files.
      *
      * @param string $path Optionally, a path to append to the config path
      *
      * @return string
      */
-    public function configPath($path = '')
+    public function configPath($path = ''): string
     {
         if (is_null($this->configPath)) {
             $this->configPath = $this->basePath.DIRECTORY_SEPARATOR.'config';
-            if (! is_dir($this->configPath)) {
-                $this->configPath = realpath(__DIR__.'/../../config');
-            }
         }
 
         return $path ? $this->configPath.DIRECTORY_SEPARATOR.$path : $this->configPath;
@@ -455,13 +487,13 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
     /**
      * @param ServiceProvider|string $provider
-     * @param bool                   $force
+     * @param bool $force
      *
      * @return ServiceProvider|null|string
      */
     public function register($provider, $force = false)
     {
-        if (($registered = $this->getProvider($provider)) && ! $force) {
+        if (($registered = $this->getProvider($provider)) && !$force) {
             return $registered;
         }
 
@@ -605,7 +637,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
      */
     public function loadDeferredProvider($service)
     {
-        if (! isset($this->deferredServices[$service])) {
+        if (!isset($this->deferredServices[$service])) {
             return;
         }
 
@@ -614,7 +646,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
         // If the service provider has not already been loaded and registered we can
         // register it with the application and remove the service from this list
         // of deferred services, since it will already be loaded on subsequent.
-        if (! isset($this->loadedProviders[$provider])) {
+        if (!isset($this->loadedProviders[$provider])) {
             $this->registerDeferredProvider($provider, $service);
         }
     }
@@ -625,7 +657,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
      * (Overriding Container::make)
      *
      * @param string $abstract
-     * @param array  $parameters
+     * @param array $parameters
      *
      * @return mixed
      */
@@ -633,7 +665,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
     {
         $abstract = $this->getAlias($abstract);
 
-        if (isset($this->deferredServices[$abstract]) && ! isset($this->instances[$abstract])) {
+        if (isset($this->deferredServices[$abstract]) && !isset($this->instances[$abstract])) {
             $this->loadDeferredProvider($abstract);
         }
 
@@ -668,7 +700,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
     /**
      * @param string $provider
-     * @param null   $service
+     * @param null $service
      */
     public function registerDeferredProvider($provider, $service = null)
     {
@@ -681,7 +713,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
         $this->register($instance = new $provider($this));
 
-        if (! $this->booted) {
+        if (!$this->booted) {
             $this->booting(function () use ($instance) {
                 $this->bootProvider($instance);
             });
