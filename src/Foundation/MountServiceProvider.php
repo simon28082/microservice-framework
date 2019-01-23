@@ -93,7 +93,7 @@ class MountServiceProvider extends ServiceProvider
         /* @var SplFileInfo $file */
         foreach (Finder::create()->files()->name('*Command.php')->in($this->app->modulePath()) as $file) {
             $class = $this->fileToClass($file);
-            if ($class) {
+            if ($class && !in_array($class, $this->app['config']->get('mount.commands', []))) {
                 $this->commands($class);
             }
         }
@@ -109,7 +109,7 @@ class MountServiceProvider extends ServiceProvider
 
         foreach (Finder::create()->files()->name('*Schedule.php')->in($this->app->modulePath()) as $file) {
             $class = $this->fileToClass($file);
-            if ($class) {
+            if ($class && !in_array($class, $this->app['config']->get('mount.schedules', []))) {
                 $this->app->make($class)->handle($schedule);
             }
         }
