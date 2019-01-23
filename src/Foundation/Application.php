@@ -220,9 +220,6 @@ class Application extends Container implements ContainerContract, ApplicationCon
     {
         if (is_null($this->configPath)) {
             $this->configPath = $this->basePath.DIRECTORY_SEPARATOR.'config';
-            if (!is_dir($this->configPath)) {
-                $this->configPath = realpath(__DIR__.'/../../config');
-            }
         }
 
         return $path ? $this->configPath.DIRECTORY_SEPARATOR.$path : $this->configPath;

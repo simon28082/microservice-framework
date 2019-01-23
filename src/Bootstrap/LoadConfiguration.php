@@ -83,14 +83,17 @@ class LoadConfiguration
      */
     protected function getConfigurationFiles(Application $app)
     {
-        $files = [];
+        $paths = $files = [];
 
-        $configPath = $app->configPath();
         $defaultConfigPath = $app->defaultConfigPath();
+        $configPath = $app->configPath();
 
-        foreach (Finder::create()->files()->name('*.php')->in([$defaultConfigPath, $configPath]) as $file) {
+        file_exists($defaultConfigPath) && $paths[] = $defaultConfigPath;
+        file_exists($configPath) && $paths[] = $configPath;
+
+        foreach (Finder::create()->files()->name('*.php')->in($paths) as $file) {
             /* @var \Symfony\Component\Finder\SplFileInfo $file */
-            $directory = $this->getNestedDirectory($file, [$configPath, $defaultConfigPath]);
+            $directory = $this->getNestedDirectory($file, $paths);
 
             $files[$directory.basename($file->getRealPath(), '.php')] = $file->getRealPath();
         }
