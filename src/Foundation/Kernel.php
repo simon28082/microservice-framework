@@ -1,13 +1,12 @@
 <?php
 
-namespace CrCms\Microservice\Server;
+namespace CrCms\Microservice\Foundation;
 
 use Exception;
 use Throwable;
 use CrCms\Microservice\Routing\Router;
 use Illuminate\Support\Facades\Facade;
 use CrCms\Microservice\Routing\Pipeline;
-use CrCms\Microservice\Foundation\Application;
 use CrCms\Microservice\Server\Events\RequestHandled;
 use CrCms\Microservice\Server\Events\RequestHandling;
 use CrCms\Microservice\Server\Contracts\KernelContract;
@@ -52,7 +51,7 @@ class Kernel implements KernelContract
      * @var array
      */
     protected $middleware = [
-        \CrCms\Microservice\Server\Middleware\CheckForMaintenanceModeMiddleware::class,
+        \CrCms\Microservice\Foundation\Middleware\CheckForMaintenanceModeMiddleware::class,
         \CrCms\Microservice\Server\Middleware\DataEncryptDecryptMiddleware::class,
     ];
 
@@ -83,7 +82,7 @@ class Kernel implements KernelContract
      * @var array
      */
     protected $middlewarePriority = [
-        \CrCms\Microservice\Server\Middleware\CheckForMaintenanceModeMiddleware::class,
+        \CrCms\Microservice\Foundation\Middleware\CheckForMaintenanceModeMiddleware::class,
         \CrCms\Microservice\Server\Middleware\DataEncryptDecryptMiddleware::class,
     ];
 

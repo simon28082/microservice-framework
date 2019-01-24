@@ -1,6 +1,6 @@
 <?php
 
-namespace CrCms\Microservice\Server\Middleware;
+namespace CrCms\Microservice\Foundation\Middleware;
 
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
