@@ -26,8 +26,9 @@
   "require": {
     "php": "^7.2.4",
     "crcms/foundation": "dev-master",
-    "crcms/microservice-server": "dev-master",
     "crcms/logger": "dev-master",
+    "crcms/microservice-server": "dev-master",
+    "crcms/microservice-routing": "dev-master",
     "illuminate/contracts": "5.7.*",
     "illuminate/container": "5.7.*",
     "illuminate/support": "5.7.*",
