@@ -2,7 +2,7 @@
 
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
-use CrCms\Microservice\Log\MongoDBLogger;
+use CrCms\Log\MongoDBLogger;
 
 return [
 
