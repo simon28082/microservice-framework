@@ -17,7 +17,7 @@ use CrCms\Microservice\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
 use CrCms\Microservice\Foundation\Kernel as ServerKernel;
-use CrCms\Microservice\Server\Exceptions\ExceptionHandler;
+use CrCms\Microservice\Foundation\Exceptions\ExceptionHandler;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
