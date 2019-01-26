@@ -12,7 +12,6 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use CrCms\Microservice\Console\Kernel;
-use CrCms\Microservice\Server\Http\Request;
 use CrCms\Microservice\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
@@ -44,8 +43,7 @@ class Start
 
         $instance->bootstrap($basePath);
 
-        $instance->getApplication()->runningInConsole() ?
-            $instance->runConsole($params) : $instance->runApplication($params);
+        $instance->runConsole($params);
     }
 
     /**
@@ -130,23 +128,5 @@ class Start
             ServerExceptionHandlerContract::class,
             ExceptionHandler::class
         );
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return void
-     */
-    protected function runApplication(array $params): void
-    {
-        $kernel = $this->app->make(ServerKernelContract::class);
-
-        $request = new Request($this->app, \Illuminate\Http\Request::capture());
-
-        $response = $kernel->handle($request);
-
-        $response->send();
-
-        $kernel->terminate($request, $response);
     }
 }

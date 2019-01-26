@@ -2,13 +2,12 @@
 
 namespace CrCms\Microservice\Foundation;
 
+use CrCms\Foundation\Transporters\Contracts\DataProviderContract;
+use CrCms\Foundation\Transporters\DataProvider;
 use Exception;
 use Throwable;
 use CrCms\Microservice\Routing\Router;
 use Illuminate\Support\Facades\Facade;
-use CrCms\Microservice\Routing\Pipeline;
-use CrCms\Microservice\Server\Events\RequestHandled;
-use CrCms\Microservice\Server\Events\RequestHandling;
 use CrCms\Microservice\Server\Contracts\KernelContract;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
@@ -22,14 +21,9 @@ use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
 class Kernel implements KernelContract
 {
     /**
-     * @var ApplicationContract|Application
+     * @var ApplicationContract
      */
     protected $app;
-
-    /**
-     * @var Router
-     */
-    protected $router;
 
     /**
      * @var array
@@ -44,45 +38,20 @@ class Kernel implements KernelContract
     ];
 
     /**
-     * The application's global HTTP middleware stack.
-     *
-     * These middleware are run during every request to your application.
+     * The application request middleware
      *
      * @var array
      */
-    protected $middleware = [
+    protected $requestMiddleware = [
         \CrCms\Microservice\Foundation\Middleware\CheckForMaintenanceModeMiddleware::class,
-        \CrCms\Microservice\Server\Middleware\DataEncryptDecryptMiddleware::class,
     ];
 
     /**
-     * The application's route middleware groups.
+     * The application data transport middleware
      *
      * @var array
      */
-    protected $middlewareGroups = [
-    ];
-
-    /**
-     * The application's route middleware.
-     *
-     * These middleware may be assigned to groups or used individually.
-     *
-     * @var array
-     */
-    protected $routeMiddleware = [
-    ];
-
-    /**
-     * The priority-sorted list of middleware.
-     * 优先加载的中间件，必须是$middleware和$middlewareGroups中定义.
-     *
-     * Forces the listed middleware to always be in the given order.
-     *
-     * @var array
-     */
-    protected $middlewarePriority = [
-        \CrCms\Microservice\Foundation\Middleware\CheckForMaintenanceModeMiddleware::class,
+    protected $transportMiddleware = [
         \CrCms\Microservice\Server\Middleware\DataEncryptDecryptMiddleware::class,
     ];
 
@@ -90,37 +59,28 @@ class Kernel implements KernelContract
      * Create a new HTTP kernel instance.
      *
      * @param ApplicationContract $app
-     * @param Router              $router
+     * @param Router $router
      *
      * @return void
      */
-    public function __construct(ApplicationContract $app, Router $router)
+    public function __construct(ApplicationContract $app)
     {
         $this->app = $app;
-        $this->router = $router;
-
-        $router->middlewarePriority = $this->middlewarePriority;
-
-        foreach ($this->middlewareGroups as $key => $middleware) {
-            $router->middlewareGroup($key, $middleware);
-        }
-
-        foreach ($this->routeMiddleware as $key => $middleware) {
-            $router->aliasMiddleware($key, $middleware);
-        }
     }
 
-    /**
-     * @param RequestContract $request
-     *
-     * @throws \ReflectionException
-     *
-     * @return ResponseContract
-     */
-    public function handle(RequestContract $request): ResponseContract
+    public function request(RequestContract $request)
     {
+        $this->app->instance('request', $request);
+
+        Facade::clearResolvedInstance('request');
+
         try {
-            $response = $this->sendRequestThroughRouter($request);
+            $response = (new \Illuminate\Pipeline\Pipeline($this->app))
+                ->send($request)
+                ->through($this->requestMiddleware)
+                ->then(function ($request) {
+                    return $request;
+                });
         } catch (Exception $e) {
             $this->reportException($e);
             $response = $this->renderException($request, $e);
@@ -129,85 +89,79 @@ class Kernel implements KernelContract
             $response = $this->renderException($request, $e);
         }
 
-        $this->app['events']->dispatch(
-            new RequestHandled($request, $response)
-        );
+        return $response;
+    }
+
+    public function transport(string $data, ?RequestContract $request = null): ResponseContract
+    {
+        try {
+            $data = $this->app->make('server.packer')->unpack($data);
+
+            $this->app->instance('data.provider', new DataProvider(
+                array_merge($data['data'],['_request' => $request])
+            ));
+
+            Facade::clearResolvedInstance('data.provider');
+
+            $response = $this->app->make('caller.match', $data['call'], $data);
+        } catch (Exception $e) {
+            $this->reportException($e);
+            $response = $this->renderException(null, $e);
+        } catch (Throwable $e) {
+            $this->reportException($e = new FatalThrowableError($e));
+            $response = $this->renderException(null, $e);
+        }
 
         return $response;
     }
 
     /**
-     * @param RequestContract $request
+     * bootstrap
      *
-     * @return mixed
+     * @return void
      */
-    protected function sendRequestThroughRouter(RequestContract $request)
-    {
-        $this->app->instance('request', $request);
-
-        Facade::clearResolvedInstance('request');
-
-        $this->bootstrap();
-
-        if ((bool) $response = $this->app['events']->until(
-            new RequestHandling($request)
-        )) {
-            return $response;
-        }
-
-        return (new Pipeline($this->app))
-            ->send($request)
-            ->through($this->app->shouldSkipMiddleware() ? [] : $this->middleware)
-            ->then($this->dispatchToRouter());
-    }
-
     public function bootstrap(): void
     {
-        if (! $this->app->hasBeenBootstrapped()) {
+        if (!$this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers());
         }
     }
 
     /**
-     * Get the route dispatcher callback.
-     *
-     * @return \Closure
+     * @return ApplicationContract
      */
-    protected function dispatchToRouter()
+    public function getApplication(): ApplicationContract
     {
-        return function (RequestContract $request) {
-            $this->app->instance('request', $request);
-
-            return $this->router->dispatch($request);
-        };
+        return $this->app;
     }
 
     /**
-     * @param RequestContract  $request
+     * @param RequestContract|DataProviderContract $data
      * @param ResponseContract $response
      *
      * @return mixed|void
      */
-    public function terminate(RequestContract $request, ResponseContract $response)
+    public function terminate($data, ResponseContract $response)
     {
-        $this->terminateMiddleware($request, $response);
+        $this->terminateMiddleware($data, $response);
 
         $this->app->terminate();
     }
 
     /**
-     * @param RequestContract  $request
+     * @param RequestContract|DataProviderContract $request
      * @param ResponseContract $response
      */
-    protected function terminateMiddleware(RequestContract $request, ResponseContract $response)
+    protected function terminateMiddleware($data, ResponseContract $response)
     {
-        $middlewares = $this->app->shouldSkipMiddleware() ? [] : array_merge(
-            $this->gatherRouteMiddleware($request),
-            $this->middleware
+        $middlewares = array_merge(
+            $this->requestMiddleware,
+            $this->transportMiddleware,
+            $this->app->make('caller.match')->getCallerMiddleware()
         );
 
         foreach ($middlewares as $middleware) {
-            if (! is_string($middleware)) {
+            if (!is_string($middleware)) {
                 continue;
             }
 
@@ -216,27 +170,9 @@ class Kernel implements KernelContract
             $instance = $this->app->make($name);
 
             if (method_exists($instance, 'terminate')) {
-                $instance->terminate($request, $response);
+                $instance->terminate($data, $response);
             }
         }
-    }
-
-    /**
-     * @param RequestContract $request
-     *
-     * @return array
-     */
-    protected function gatherRouteMiddleware(RequestContract $request)
-    {
-        try {
-            if ($route = $request->getRoute()) {
-                return $this->router->gatherRouteMiddleware($route);
-            }
-        } catch (Throwable $e) {
-            return [];
-        }
-
-        return [];
     }
 
     /**
@@ -253,50 +189,6 @@ class Kernel implements KernelContract
         }
 
         return [$name, $parameters];
-    }
-
-    /**
-     * Determine if the kernel has a given middleware.
-     *
-     * @param string $middleware
-     *
-     * @return bool
-     */
-    public function hasMiddleware($middleware)
-    {
-        return in_array($middleware, $this->middleware);
-    }
-
-    /**
-     * Add a new middleware to beginning of the stack if it does not already exist.
-     *
-     * @param string $middleware
-     *
-     * @return $this
-     */
-    public function prependMiddleware($middleware)
-    {
-        if (array_search($middleware, $this->middleware) === false) {
-            array_unshift($this->middleware, $middleware);
-        }
-
-        return $this;
-    }
-
-    /**
-     * Add a new middleware to end of the stack if it does not already exist.
-     *
-     * @param string $middleware
-     *
-     * @return $this
-     */
-    public function pushMiddleware($middleware)
-    {
-        if (array_search($middleware, $this->middleware) === false) {
-            $this->middleware[] = $middleware;
-        }
-
-        return $this;
     }
 
     /**
@@ -317,20 +209,12 @@ class Kernel implements KernelContract
 
     /**
      * @param RequestContract $request
-     * @param Exception       $e
+     * @param Exception $e
      *
      * @return mixed
      */
-    protected function renderException(RequestContract $request, Exception $e)
+    protected function renderException(?RequestContract $request, Exception $e)
     {
         return $this->app[ExceptionHandlerContract::class]->render($request, $e);
-    }
-
-    /**
-     * @return ApplicationContract
-     */
-    public function getApplication(): ApplicationContract
-    {
-        return $this->app;
     }
 }

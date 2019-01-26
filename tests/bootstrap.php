@@ -6,7 +6,10 @@
  * @copyright Copyright &copy; 2019 Rights Reserved CRCMS
  */
 
-function forkApp($path = __DIR__)
+$app = new \CrCms\Microservice\Foundation\Application(__DIR__);
+\CrCms\Microservice\Foundation\Application::setInstance($app);
+
+function forkApp()
 {
-    return new \CrCms\Microservice\Foundation\Application($path);
+    return \CrCms\Microservice\Foundation\Application::getInstance();
 }

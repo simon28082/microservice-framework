@@ -31,7 +31,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
     /**
      * @var string
      */
-    const VERSION = '0.0.1-dev5';
+    const VERSION = '0.1.0-dev1';
 
     /**
      * @var string
@@ -888,7 +888,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
 
         $this->register(new LogServiceProvider($this));
 
-        $this->register(new RoutingServiceProvider($this));
+        //$this->register(new RoutingServiceProvider($this));
     }
 
     /**
@@ -944,9 +944,11 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'queue.connection' => [\Illuminate\Contracts\Queue\Queue::class],
                      'queue.failer' => [\Illuminate\Queue\Failed\FailedJobProviderInterface::class],
                      'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],
-                     'router' => [\CrCms\Microservice\Routing\Router::class],
+                     //'router' => [\CrCms\Microservice\Routing\Router::class],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
                      'request' => [\CrCms\Microservice\Server\Contracts\RequestContract::class],
+                     'caller' => [\CrCms\Microservice\Dispatching\Dispatcher::class],
+                     'caller.match' => [\CrCms\Microservice\Dispatching\Matcher::class],
                  ] as $key => $aliases) {
             foreach ($aliases as $alias) {
                 $this->alias($key, $alias);
