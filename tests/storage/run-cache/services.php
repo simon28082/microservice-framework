@@ -13,7 +13,7 @@
     9 => 'Illuminate\\Translation\\TranslationServiceProvider',
     10 => 'Illuminate\\Validation\\ValidationServiceProvider',
     11 => 'CrCms\\Microservice\\Foundation\\CrCmsServiceProvider',
-    12 => 'CrCms\\Microservice\\Routing\\RouteServiceProvider',
+    12 => 'CrCms\\Microservice\\Dispatching\\DispatchingServiceProvider',
   ),
   'eager' => 
   array (
@@ -21,7 +21,7 @@
     1 => 'Illuminate\\Encryption\\EncryptionServiceProvider',
     2 => 'Illuminate\\Filesystem\\FilesystemServiceProvider',
     3 => 'CrCms\\Microservice\\Foundation\\CrCmsServiceProvider',
-    4 => 'CrCms\\Microservice\\Routing\\RouteServiceProvider',
+    4 => 'CrCms\\Microservice\\Dispatching\\DispatchingServiceProvider',
   ),
   'deferred' => 
   array (

@@ -15,6 +15,9 @@ class KernelTest extends TestCase
         $kernel = new Kernel(static::$app);
 
         $request = $kernel->request(new Request(static::$app,\Illuminate\Http\Request::capture()));
+        $content = static::$app->make('server.packer')->pack(['call'=>'test','data'=>['x'=>1]]);
+        $response = $kernel->transport($content);
+        dd($response);
         dd($request);
     }
 

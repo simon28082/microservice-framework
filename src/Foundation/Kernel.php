@@ -103,7 +103,7 @@ class Kernel implements KernelContract
 
             Facade::clearResolvedInstance('data.provider');
 
-            $response = $this->app->make('caller.match', $data['call'], $data);
+            $response = $this->app->make('caller.match')->match($data['call'], $this->app->get('data.provider'));
         } catch (Exception $e) {
             $this->reportException($e);
             $response = $this->renderException(null, $e);
