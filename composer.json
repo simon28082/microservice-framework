@@ -3,7 +3,6 @@
   "description": "The CrCms Microservice Framework.",
   "keywords": [
     "microservice",
-    "micro-service",
     "framework",
     "swoole",
     "rpc",
