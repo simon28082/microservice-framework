@@ -19,7 +19,6 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Log\LogServiceProvider;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Events\EventServiceProvider;
-use CrCms\Microservice\Routing\RoutingServiceProvider;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 use Illuminate\Contracts\Foundation\Application as ApplicationContainerContract;
 
@@ -944,11 +943,7 @@ class Application extends Container implements ContainerContract, ApplicationCon
                      'queue.connection' => [\Illuminate\Contracts\Queue\Queue::class],
                      'queue.failer' => [\Illuminate\Queue\Failed\FailedJobProviderInterface::class],
                      'redis' => [\Illuminate\Redis\RedisManager::class, \Illuminate\Contracts\Redis\Factory::class],
-                     //'router' => [\CrCms\Microservice\Routing\Router::class],
                      'validator' => [\Illuminate\Validation\Factory::class, \Illuminate\Contracts\Validation\Factory::class],
-                     'request' => [\CrCms\Microservice\Server\Contracts\RequestContract::class],
-                     'caller' => [\CrCms\Microservice\Dispatching\Dispatcher::class],
-                     'caller.match' => [\CrCms\Microservice\Dispatching\Matcher::class],
                  ] as $key => $aliases) {
             foreach ($aliases as $alias) {
                 $this->alias($key, $alias);
