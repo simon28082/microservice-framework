@@ -36,7 +36,7 @@ return [
     |
     */
     'reload_provider_events' => [
-        \CrCms\Microservice\Server\Events\RequestHandled::class,
+        \CrCms\Microservice\Foundation\Events\RequestHandled::class,
     ],
 
     /*

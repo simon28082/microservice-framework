@@ -3,15 +3,20 @@
 namespace CrCms\Microservice\Foundation;
 
 use CrCms\Microservice\Dispatching\Dispatcher;
-use Illuminate\Support\Facades\Facade;
 use CrCms\Microservice\Server\Contracts\KernelContract;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Support\Facades\Facade;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
+use Illuminate\Contracts\Support\Arrayable;
+use ArrayObject;
 use Exception;
 use Throwable;
+use DomainException;
 
 /**
  * Class Kernel.
@@ -67,17 +72,8 @@ class Kernel implements KernelContract
      */
     public function handle(RequestContract $request): ResponseContract
     {
-        $this->app->instance('request', $this->bindRequestMatcher($request));
-
-        Facade::clearResolvedInstance('request');
-
         try {
-            $response = (new Pipeline($this->app))
-                ->send($request)
-                ->through(array_merge($this->middleware, $request->matcher()->getCallerMiddleware()))
-                ->then(function (RequestContract $request) {
-                    return $this->app->call($request->matcher()->getCallerUses());
-                });
+            $response = $this->sendRequest($request);
         } catch (Exception $e) {
             $this->reportException($e);
             $response = $this->renderException($request, $e);
@@ -86,7 +82,60 @@ class Kernel implements KernelContract
             $response = $this->renderException($request, $e);
         }
 
+        $this->app['events']->dispatch(
+            new Events\RequestHandled($request, $response)
+        );
+
         return $response;
+    }
+
+    /**
+     * sendRequest
+     *
+     * @param RequestContract $request
+     * @return ResponseContract
+     */
+    protected function sendRequest(RequestContract $request): ResponseContract
+    {
+        $this->app->instance('request', $this->bindRequestMatcher($request));
+
+        Facade::clearResolvedInstance('request');
+
+        return (new Pipeline($this->app))
+            ->send($request)
+            ->through(array_merge($this->middleware, $request->matcher()->getCallerMiddleware()))
+            ->then(function (RequestContract $request) {
+                return $this->toResponse(
+                    $this->app->call($request->matcher()->getCallerUses())
+                );
+            });
+    }
+
+    /**
+     * toResponse
+     *
+     * @param $response
+     * @return ResponseContract
+     */
+    protected function toResponse($response): ResponseContract
+    {
+        if ($response instanceof JsonResponse) {
+            $data = $response->getData(true);
+        } elseif ($response instanceof Arrayable || $response instanceof Model) {
+            $data = $response->toArray();
+        } elseif (is_array($response)) {
+            $data = $response;
+        } elseif ($response instanceof ArrayObject) {
+            // @todo 待验证
+            $data = (array)$response;
+        } else {
+            throw new DomainException("The response type error");
+        }
+
+        /* @var ResponseContract $response */
+        $response = $this->app->make('response');
+
+        return $response->setData($data)->setPackData($this->app->make('transport.packer')->pack($data));
     }
 
     /**
@@ -97,7 +146,7 @@ class Kernel implements KernelContract
      */
     protected function bindRequestMatcher(RequestContract $request): RequestContract
     {
-        $data = $this->app->make('server.packer')->unpack($request->rawData());
+        $data = $this->app->make('transport.packer')->unpack($request->rawData());
 
         return $request->setData($data['data'] ?? [])
             ->setMatcher(
