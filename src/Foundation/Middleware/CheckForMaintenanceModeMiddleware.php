@@ -5,7 +5,7 @@ namespace CrCms\Microservice\Foundation\Middleware;
 use Closure;
 use Illuminate\Contracts\Foundation\Application;
 use CrCms\Microservice\Server\Contracts\RequestContract;
-use CrCms\Microservice\Server\Exceptions\ServiceUnavailableException;
+use CrCms\Microservice\Foundation\Exceptions\ServiceUnavailableException;
 
 /**
  * Class CheckForMaintenanceModeMiddleware.
