@@ -14,6 +14,7 @@ namespace CrCms\Microservice\Foundation;
 use Illuminate\Support\AggregateServiceProvider;
 use CrCms\Microservice\Server\ServerServiceProvider;
 use CrCms\Foundation\Transporters\DataServiceProvider;
+use CrCms\Microservice\Dispatching\DispatchingServiceProvider;
 
 /**
  * Class CrCmsServiceProvider.
@@ -27,5 +28,7 @@ class CrCmsServiceProvider extends AggregateServiceProvider
         DataServiceProvider::class,
         ServerServiceProvider::class,
         MountServiceProvider::class,
+        DispatchingServiceProvider::class,
+        TransportServiceProvider::class,
     ];
 }

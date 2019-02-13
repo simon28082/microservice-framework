@@ -50,7 +50,7 @@ class MountServiceProvider extends ServiceProvider
     }
 
     /**
-     *
+     * @return void
      */
     protected function scanLoadMigrations(): void
     {
