@@ -12,6 +12,7 @@
 namespace CrCms\Microservice\Foundation\Exceptions;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
 use CrCms\Microservice\Server\Http\Response;
@@ -165,7 +166,7 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     protected function convertExceptionToArray(Exception $e)
     {
-        return config('app.debug') ? [
+        return $this->container->make('config')->get('app.debug') ? [
             'message'   => $e->getMessage(),
             'exception' => get_class($e),
             'file'      => $e->getFile(),
@@ -181,11 +182,11 @@ class ExceptionHandler implements ExceptionHandlerContract
     /**
      * @param Exception $e
      *
-     * @return Response
+     * @return JsonResponse
      */
     protected function prepareJsonResponse(Exception $e)
     {
-        return new Response(
+        return new JsonResponse(
             $this->packResponseError($this->convertExceptionToArray($e)),
             500//$e->getCode() <= 0 ? 500 : $e->getCode()
         );
