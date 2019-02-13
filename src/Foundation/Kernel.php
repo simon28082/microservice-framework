@@ -76,10 +76,10 @@ class Kernel implements KernelContract
             $response = $this->sendRequest($request);
         } catch (Exception $e) {
             $this->reportException($e);
-            $response = $this->renderException($request, $e);
+            $response = $this->toResponse($this->renderException($request, $e));
         } catch (Throwable $e) {
             $this->reportException($e = new FatalThrowableError($e));
-            $response = $this->renderException($request, $e);
+            $response = $this->toResponse($this->renderException($request, $e));
         }
 
         $this->app['events']->dispatch(
@@ -135,7 +135,9 @@ class Kernel implements KernelContract
         /* @var ResponseContract $response */
         $response = $this->app->make('response');
 
-        return $response->setData($data)->setPackData($this->app->make('transport.packer')->pack($data));
+        return $data ? $response->setData($data)->setPackData(
+            $this->app->make('transport.packer')->pack($data)
+        ) : $response;
     }
 
     /**
@@ -255,7 +257,7 @@ class Kernel implements KernelContract
      *
      * @return mixed
      */
-    protected function renderException(?RequestContract $request, Exception $e)
+    protected function renderException(RequestContract $request, Exception $e)
     {
         return $this->app[ExceptionHandlerContract::class]->render($request, $e);
     }
