@@ -2,8 +2,13 @@
 
 namespace CrCms\Microservice\Tests;
 
+use CrCms\Microservice\Foundation\Application;
+
 trait ApplicationTrait
 {
+    /**
+     * @var Application
+     */
     public static $app;
 
     public static function setUpBeforeClass()
