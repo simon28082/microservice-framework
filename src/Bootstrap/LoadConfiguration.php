@@ -55,17 +55,17 @@ class LoadConfiguration
     /**
      * Load the configuration items from all of the files.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     * @param \Illuminate\Contracts\Config\Repository $repository
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Config\Repository  $repository
+     * @return void
      *
      * @throws \Exception
-     *
-     * @return void
      */
     protected function loadConfigurationFiles(Application $app, RepositoryContract $repository)
     {
         $files = $this->getConfigurationFiles($app);
-        if (!isset($files['app'])) {
+
+        if (! isset($files['app'])) {
             throw new Exception('Unable to load the "app" configuration file.');
         }
 
@@ -77,8 +77,7 @@ class LoadConfiguration
     /**
      * Get all of the configuration files for the application.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return array
      */
     protected function getConfigurationFiles(Application $app)

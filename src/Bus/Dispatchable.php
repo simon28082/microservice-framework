@@ -29,12 +29,11 @@ trait Dispatchable
     /**
      * Set the jobs that should run if this job is successful.
      *
-     * @param array $chain
-     *
+     * @param  array  $chain
      * @return \Illuminate\Foundation\Bus\PendingChain
      */
     public static function withChain($chain)
     {
-        return new PendingChain(get_called_class(), $chain);
+        return new PendingChain(static::class, $chain);
     }
 }

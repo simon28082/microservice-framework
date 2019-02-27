@@ -10,8 +10,7 @@ class SetRequestForConsole
     /**
      * Bootstrap the given application.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
     public function bootstrap(Application $app)
@@ -25,7 +24,7 @@ class SetRequestForConsole
         if (isset($components['path'])) {
             $server = array_merge($server, [
                 'SCRIPT_FILENAME' => $components['path'],
-                'SCRIPT_NAME'     => $components['path'],
+                'SCRIPT_NAME' => $components['path'],
             ]);
         }
 

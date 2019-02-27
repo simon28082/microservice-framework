@@ -68,9 +68,8 @@ class Kernel implements KernelContract
     /**
      * Create a new console kernel instance.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     * @param \Illuminate\Contracts\Events\Dispatcher      $events
-     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
+     * @param  \Illuminate\Contracts\Events\Dispatcher  $events
      * @return void
      */
     public function __construct(Application $app, Dispatcher $events)
@@ -103,8 +102,8 @@ class Kernel implements KernelContract
      */
     protected function defineConsoleSchedule()
     {
-        $this->app->singleton(Schedule::class, function () {
-            return new Schedule();
+        $this->app->singleton(Schedule::class, function ($app) {
+            return new Schedule($this->scheduleTimezone());
         });
 
         $schedule = $this->app->make(Schedule::class);
@@ -115,9 +114,8 @@ class Kernel implements KernelContract
     /**
      * Run the console application.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface   $input
-     * @param \Symfony\Component\Console\Output\OutputInterface $output
-     *
+     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param  \Symfony\Component\Console\Output\OutputInterface  $output
      * @return int
      */
     public function handle($input, $output = null)
@@ -134,6 +132,7 @@ class Kernel implements KernelContract
             return 1;
         } catch (Throwable $e) {
             $e = new FatalThrowableError($e);
+
             $this->reportException($e);
 
             $this->renderException($output, $e);
@@ -145,9 +144,8 @@ class Kernel implements KernelContract
     /**
      * Terminate the application.
      *
-     * @param \Symfony\Component\Console\Input\InputInterface $input
-     * @param int                                             $status
-     *
+     * @param  \Symfony\Component\Console\Input\InputInterface  $input
+     * @param  int  $status
      * @return void
      */
     public function terminate($input, $status)
@@ -158,8 +156,7 @@ class Kernel implements KernelContract
     /**
      * Define the application's command schedule.
      *
-     * @param \Illuminate\Console\Scheduling\Schedule $schedule
-     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
      * @return void
      */
     protected function schedule(Schedule $schedule)
@@ -167,6 +164,16 @@ class Kernel implements KernelContract
         foreach (config('mount.schedules') as $scheduleCommand) {
             (new $scheduleCommand())->handle($schedule);
         }
+    /**
+     * Get the timezone that should be used by default for scheduled events.
+     *
+     * @return \DateTimeZone|string|null
+     */
+    protected function scheduleTimezone()
+    {
+        $config = $this->app['config'];
+
+        return $config->get('app.schedule_timezone', $config->get('app.timezone'));
     }
 
     /**

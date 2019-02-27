@@ -23,8 +23,7 @@ class HandleExceptions
     /**
      * Bootstrap the given application.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
     public function bootstrap(Application $app)
@@ -47,15 +46,14 @@ class HandleExceptions
     /**
      * Convert PHP errors to ErrorException instances.
      *
-     * @param int    $level
-     * @param string $message
-     * @param string $file
-     * @param int    $line
-     * @param array  $context
+     * @param  int  $level
+     * @param  string  $message
+     * @param  string  $file
+     * @param  int  $line
+     * @param  array  $context
+     * @return void
      *
      * @throws \ErrorException
-     *
-     * @return void
      */
     public function handleError($level, $message, $file = '', $line = 0, $context = [])
     {
@@ -71,8 +69,7 @@ class HandleExceptions
      * the HTTP and Console kernels. But, fatal error exceptions must
      * be handled differently since they are not normal exceptions.
      *
-     * @param \Throwable $e
-     *
+     * @param  \Throwable  $e
      * @return void
      */
     public function handleException($e)
@@ -97,13 +94,12 @@ class HandleExceptions
     /**
      * Render an exception to the console.
      *
-     * @param \Exception $e
-     *
+     * @param  \Exception  $e
      * @return void
      */
     protected function renderForConsole(Exception $e)
     {
-        $this->getExceptionHandler()->renderForConsole(new ConsoleOutput(), $e);
+        $this->getExceptionHandler()->renderForConsole(new ConsoleOutput, $e);
     }
 
     /**
@@ -137,9 +133,8 @@ class HandleExceptions
     /**
      * Create a new fatal exception instance from an error array.
      *
-     * @param array    $error
-     * @param int|null $traceOffset
-     *
+     * @param  array  $error
+     * @param  int|null  $traceOffset
      * @return \Symfony\Component\Debug\Exception\FatalErrorException
      */
     protected function fatalExceptionFromError(array $error, $traceOffset = null)
@@ -152,8 +147,7 @@ class HandleExceptions
     /**
      * Determine if the error type is fatal.
      *
-     * @param int $type
-     *
+     * @param  int  $type
      * @return bool
      */
     protected function isFatal($type)
