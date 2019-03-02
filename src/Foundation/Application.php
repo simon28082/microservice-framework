@@ -31,12 +31,22 @@ class Application extends BaseApplication implements ContainerContract, Applicat
     /**
      * @var string
      */
-    const VERSION = '0.3.0-dev1';
+    const MS_VERSION = '0.3.0-dev1';
 
     /**
      * @var string
      */
     protected $defaultConfigPath;
+
+    /**
+     * msVersion
+     *
+     * @return string
+     */
+    public function msVersion(): string
+    {
+        return static::MS_VERSION;
+    }
 
     /**
      * Register the basic bindings into the container.

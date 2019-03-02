@@ -21,6 +21,11 @@ use Illuminate\Contracts\Console\Application as ApplicationContract;
  */
 class Application extends BaseApplication implements ApplicationContract
 {
+    /**
+     * @param Container $laravel
+     * @param Dispatcher $events
+     * @param string $version
+     */
     public function __construct(Container $laravel, Dispatcher $events, string $version)
     {
         parent::__construct($laravel, $events, $version);
@@ -32,6 +37,7 @@ class Application extends BaseApplication implements ApplicationContract
      */
     protected function logo(): string
     {
+        $laravelVersion = \Illuminate\Foundation\Application::VERSION;
         return <<<str
                                     ____               
                                   ,'  , `.             
@@ -47,7 +53,7 @@ class Application extends BaseApplication implements ApplicationContract
  \   \  /        \   \  / '---'             `--'---'   
   `----'          `----'                               
 
-Microservice Framework(Based on Laravel)
+Microservice Framework(Based on Laravel:{$laravelVersion})
 Version:
 str;
     }
