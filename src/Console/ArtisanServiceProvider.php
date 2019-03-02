@@ -80,8 +80,6 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
     {
         $devCommands = ['AuthMake', 'ControllerMake', 'MiddlewareMake',
             'NotificationTable', 'ExceptionMake', 'SessionTable',
-            'Optimize',
-            'OptimizeClear',
             'ChannelMake',
             'ConsoleMake',
             'EventGenerate',
@@ -108,7 +106,8 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
             unset($this->devCommands[$item]);
         }, $devCommands);
 
-        $commands = ['ClearResets', 'RouteCache',
+        $commands = ['Optimize',
+            'OptimizeClear', 'ClearResets', 'RouteCache',
             'RouteClear',
             'RouteList', 'Preset', 'ViewCache',
             'ViewClear', 'Serve', 'StorageLink',];
