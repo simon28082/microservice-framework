@@ -2,6 +2,7 @@
 
 namespace CrCms\Microservice\Console;
 
+use CrCms\Microservice\Console\Commands\ConfigCacheCommand;
 use CrCms\Microservice\Console\Commands\ModuleMakeCommand;
 use CrCms\Microservice\Console\Commands\InitializeMakeCommand;
 use Illuminate\Foundation\Providers\ArtisanServiceProvider as BaseArtisanServiceProvider;
@@ -58,20 +59,40 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
     }
 
     /**
+     * Register the command.
+     *
+     * @return void
+     */
+    protected function registerConfigCacheCommand()
+    {
+        $this->app->singleton('command.config.cache', function ($app) {
+            return new ConfigCacheCommand($app['files']);
+        });
+    }
+
+
+    /**
      * removeLaravelCommands
      *
      * @return void
      */
     protected function removeLaravelCommands(): void
     {
-        $devCommands = ['AuthMake', 'ControllerMake', 'MiddlewareMake', 'NotificationTable'];
+        $devCommands = ['AuthMake', 'ControllerMake', 'MiddlewareMake',
+            'NotificationTable', 'ExceptionMake', 'PolicyMake', 'SessionTable',
+            'Optimize',
+            'OptimizeClear',
+        ];
         array_map(function ($item) {
             unset($this->devCommands[$item]);
-        },$devCommands);
+        }, $devCommands);
 
-        $commands = ['ClearResets'];
+        $commands = ['ClearResets', 'RouteCache',
+            'RouteClear',
+            'RouteList', 'Preset', 'ViewCache',
+            'ViewClear', 'Serve',];
         array_map(function ($item) {
             unset($this->commands[$item]);
-        },$commands);
+        }, $commands);
     }
 }
