@@ -1,8 +1,0 @@
-<?php
-
-use Illuminate\Support\Facades\Route;
-
-Route::register('test', function(){
-    return ['data' => ['key' => 'value']];
-});
-

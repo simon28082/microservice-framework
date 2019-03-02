@@ -4,6 +4,7 @@ namespace CrCms\Microservice\Console;
 
 use Illuminate\Support\AggregateServiceProvider;
 use Illuminate\Database\MigrationServiceProvider;
+use Illuminate\Foundation\Providers\ComposerServiceProvider;
 
 class ConsoleServiceProvider extends AggregateServiceProvider
 {

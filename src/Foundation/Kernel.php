@@ -37,12 +37,12 @@ class Kernel implements KernelContract
      * @var array
      */
     protected $bootstrappers = [
-        \CrCms\Microservice\Bootstrap\LoadEnvironmentVariables::class,
+        \Illuminate\Foundation\Bootstrap\LoadEnvironmentVariables::class,
         \CrCms\Microservice\Bootstrap\LoadConfiguration::class,
         \CrCms\Microservice\Bootstrap\HandleExceptions::class,
         \CrCms\Microservice\Bootstrap\RegisterFacades::class,
-        \CrCms\Microservice\Bootstrap\RegisterProviders::class,
-        \CrCms\Microservice\Bootstrap\BootProviders::class,
+        \Illuminate\Foundation\Bootstrap\RegisterProviders::class,
+        \Illuminate\Foundation\Bootstrap\BootProviders::class,
     ];
 
     /**
@@ -73,6 +73,8 @@ class Kernel implements KernelContract
     public function handle(RequestContract $request): ResponseContract
     {
         try {
+            $this->app['events']->dispatch('request.handle', [$request]);
+
             $response = $this->sendRequest($request);
         } catch (Exception $e) {
             $this->reportException($e);
@@ -82,9 +84,7 @@ class Kernel implements KernelContract
             $response = $this->toResponse($this->renderException($request, $e));
         }
 
-        $this->app['events']->dispatch(
-            new Events\RequestHandled($request, $response)
-        );
+        $this->app['events']->dispatch('request.handled', [$request, $response]);
 
         return $response;
     }

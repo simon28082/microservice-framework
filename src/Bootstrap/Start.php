@@ -21,9 +21,6 @@ use Illuminate\Contracts\Console\Kernel as KernelContract;
 use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
 
-/**
- * Class Start.
- */
 class Start
 {
     /**

@@ -61,7 +61,6 @@
     "mockery/mockery": "^1.2",
     "phpunit/phpunit": "^7.5",
     "codedungeon/phpunit-result-printer": "^0.26.0",
-    "laravel/framework": "^5.7",
     "php-coveralls/php-coveralls": "^2.1",
     "phpunit/php-code-coverage": "^6.0"
   },
@@ -69,7 +68,8 @@
     "classmap": [
     ],
     "psr-4": {
-      "CrCms\\Microservice\\": "src/"
+      "CrCms\\Microservice\\": "src/",
+      "Illuminate\\Foundation\\": "src/Illuminate/Foundation"
     },
     "files": [
       "src/Helpers/helpers.php"
