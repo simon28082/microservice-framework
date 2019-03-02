@@ -1,5 +1,7 @@
 <?php
 
+use CrCms\Server\Drivers\Laravel\Resetters;
+
 return [
     /*
     |--------------------------------------------------------------------------
@@ -12,7 +14,7 @@ return [
     */
 
     'servers' => [
-        'http' => [
+        'ms' => [
             'driver'   => CrCms\Microservice\Server\Http\Server::class,
             'host'     => env('SERVER_HTTP_HOST', '0.0.0.0'),
             'port'     => env('SERVER_HTTP_PORT', 28080),
@@ -27,28 +29,90 @@ return [
         ],
     ],
 
-    /*
-    |--------------------------------------------------------------------------
-    | Register reload provider events
-    |--------------------------------------------------------------------------
-    |
-    | Information file for saving all running processes
-    |
-    */
-    'reload_provider_events' => [
-        \CrCms\Microservice\Foundation\Events\RequestHandled::class,
-    ],
+    'laravel' => [
 
-    /*
-    |--------------------------------------------------------------------------
-    | Laravel reload providers
-    |--------------------------------------------------------------------------
-    |
-    | Information file for saving all running processes
-    |
-    */
+        /*
+        |--------------------------------------------------------------------------
+        | Laravel initialize application
+        |--------------------------------------------------------------------------
+        |
+        | Must be realized CrCms\Server\Drivers\Laravel\Contracts\ApplicationContract
+        |
+        */
 
-    'reload_providers' => [
+        'app' => \CrCms\Microservice\Console\ServerApplication::class,
 
+        /*
+        |--------------------------------------------------------------------------
+        | Laravel preload instance
+        |--------------------------------------------------------------------------
+        |
+        | Load the parsed instance ahead of time
+        | This parsing will be an instance of all request sharing for the current worker.
+        |
+        */
+
+        'preload' => [
+            'cache', 'cache.store', 'encrypter', 'db', 'files', 'filesystem', 'hash', 'translator', 'log', 'validator', 'queue',
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Laravel reload providers
+        |--------------------------------------------------------------------------
+        |
+        | Information file for saving all running processes
+        |
+        */
+
+        'providers' => [
+
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Laravel resetters
+        |--------------------------------------------------------------------------
+        |
+        | Every time you need to load an object that needs to be reset
+        | Please note the order of execution of the load
+        |
+        */
+
+        'resetters' => [
+            Resetters\ConfigResetter::class,
+            Resetters\ProviderResetter::class,
+        ],
+
+        /*
+        |--------------------------------------------------------------------------
+        | Laravel events
+        |--------------------------------------------------------------------------
+        |
+        | Available events
+        | start: onStart
+        | worker_start: onWorkerStart
+        | request: onRequest
+        |
+        */
+
+        'events' => [
+        ],
+
+
+        /*'websocket_rooms' => [
+
+            'default' => 'redis',
+
+            'connections' => [
+                'redis' => [
+                    'connection' => 'websocket',
+                ],
+            ],
+        ],*/
+
+        'websocket_channels' => [
+            '/',
+        ],
     ],
 ];
