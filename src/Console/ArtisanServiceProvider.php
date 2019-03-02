@@ -79,10 +79,31 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
     protected function removeLaravelCommands(): void
     {
         $devCommands = ['AuthMake', 'ControllerMake', 'MiddlewareMake',
-            'NotificationTable', 'ExceptionMake', 'PolicyMake', 'SessionTable',
+            'NotificationTable', 'ExceptionMake', 'SessionTable',
             'Optimize',
             'OptimizeClear',
+            'ChannelMake',
+            'ConsoleMake',
+            'EventGenerate',
+            'EventMake',
+            'ExceptionMake',
+            'FactoryMake',
+            'JobMake',
+            'ListenerMake',
+            'MailMake',
+            'MiddlewareMake',
+            'ModelMake',
+            'NotificationMake',
+            'ObserverMake',
+            'PolicyMake',
+            'ProviderMake',
+            'TestMake',
+            'RequestMake',
+            'ResourceMake',
+            'RuleMake',
+            'SeederMake',
         ];
+
         array_map(function ($item) {
             unset($this->devCommands[$item]);
         }, $devCommands);
