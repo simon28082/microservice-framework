@@ -15,6 +15,8 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
     {
         parent::__construct($app);
 
+        $this->removeLaravelCommands();
+
         $this->devCommands['InitializeMake'] = 'command.initialize.make';
         $this->devCommands['ModuleMake'] = 'command.module.make';
     }
@@ -53,5 +55,23 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
         $this->app->singleton('command.module.make', function ($app) {
             return new ModuleMakeCommand($app['files']);
         });
+    }
+
+    /**
+     * removeLaravelCommands
+     *
+     * @return void
+     */
+    protected function removeLaravelCommands(): void
+    {
+        $devCommands = ['AuthMake', 'ControllerMake', 'MiddlewareMake', 'NotificationTable'];
+        array_map(function ($item) {
+            unset($this->devCommands[$item]);
+        },$devCommands);
+
+        $commands = ['ClearResets'];
+        array_map(function ($item) {
+            unset($this->commands[$item]);
+        },$commands);
     }
 }
