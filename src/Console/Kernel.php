@@ -52,4 +52,19 @@ class Kernel extends BaseKernel implements KernelContract
             });
         }
     }
+
+    /**
+     * getArtisan
+     *
+     * @return Application|\Illuminate\Console\Application
+     */
+    public function getArtisan()
+    {
+        if (is_null($this->artisan)) {
+            return $this->artisan = (new Artisan($this->app, $this->events, $this->app->msVersion()))
+                ->resolveCommands($this->commands);
+        }
+
+        return $this->artisan;
+    }
 }
