@@ -111,7 +111,7 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
         $commands = ['ClearResets', 'RouteCache',
             'RouteClear',
             'RouteList', 'Preset', 'ViewCache',
-            'ViewClear', 'Serve',];
+            'ViewClear', 'Serve', 'StorageLink',];
         array_map(function ($item) {
             unset($this->commands[$item]);
         }, $commands);
