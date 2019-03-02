@@ -81,6 +81,36 @@ class Application extends BaseApplication implements ContainerContract, Applicat
     }
 
     /**
+     * Get the path to the cached services.php file.
+     *
+     * @return string
+     */
+    public function getCachedServicesPath()
+    {
+        return $_ENV['APP_SERVICES_CACHE'] ?? $this->storagePath().'/run-cache/services.php';
+    }
+
+    /**
+     * Get the path to the cached packages.php file.
+     *
+     * @return string
+     */
+    public function getCachedPackagesPath()
+    {
+        return $_ENV['APP_PACKAGES_CACHE'] ?? $this->storagePath().'/run-cache/packages.php';
+    }
+
+    /**
+     * Get the path to the configuration cache file.
+     *
+     * @return string
+     */
+    public function getCachedConfigPath()
+    {
+        return $_ENV['APP_CONFIG_CACHE'] ?? $this->storagePath().'/run-cache/config.php';
+    }
+
+    /**
      * Bind all of the application paths in the container.
      *
      * @return void
