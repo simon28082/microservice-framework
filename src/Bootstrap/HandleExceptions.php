@@ -48,21 +48,6 @@ class HandleExceptions extends BaseHandleExceptions
     protected function renderApplication(Exception $e)
     {
         $response = $this->getExceptionHandler()->render($this->app['request'], $e);
-        if ($response instanceof ResponseContract) {
-            $response->setData($this->pack($response->getData(true)));
-        }
         $response->send();
-    }
-
-    /**
-     * @param array $messages
-     *
-     * @throws \Illuminate\Contracts\Container\BindingResolutionException
-     *
-     * @return array
-     */
-    protected function pack(array $messages): array
-    {
-        return ['data' => $this->app->make('server.packer')->pack($messages, config('app.secret_status'))];
     }
 }
