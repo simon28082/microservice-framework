@@ -32,11 +32,13 @@ class MountServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        $this->scanLoadMigrations();
-        $this->scanLoadTranslations();
-        $this->scanLoadRoutes();
-        $this->scanCommands();
-        $this->scanLoadSchedules();
+        if (is_dir($this->app->modulePath())) {
+            $this->scanLoadMigrations();
+            $this->scanLoadTranslations();
+            $this->scanLoadRoutes();
+            $this->scanCommands();
+            $this->scanLoadSchedules();
+        }
     }
 
     /**
