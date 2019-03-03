@@ -32,16 +32,4 @@ class CrCmsServiceProvider extends AggregateServiceProvider
         DispatchingServiceProvider::class,
         BridgingServiceProvider::class,
     ];
-
-    /**
-     * Register
-     *
-     * @return void
-     */
-    public function register()
-    {
-        parent::register();
-
-        $this->app['config']->set('bridging.encryption',$this->app['config']->get('app.encryption'));
-    }
 }
