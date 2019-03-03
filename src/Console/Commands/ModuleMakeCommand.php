@@ -35,6 +35,8 @@ class ModuleMakeCommand extends InitializeMakeCommand
         $this->createModules($name);
         $this->createRoutes($name);
         $this->createDatabase($name);
+
+        $this->info("The module:{$name} create success");
     }
 
     /**
