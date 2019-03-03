@@ -15,16 +15,14 @@ return [
 
     'servers' => [
         'ms' => [
-            'driver'   => CrCms\Microservice\Server\Http\Server::class,
-            'host'     => env('SERVER_HTTP_HOST', '0.0.0.0'),
-            'port'     => env('SERVER_HTTP_PORT', 28080),
-            'mode'     => defined('SWOOLE_PROCESS') ? SWOOLE_PROCESS : 3,
-            'type'     => defined('SWOOLE_SOCK_TCP') ? SWOOLE_SOCK_TCP : 1,
+            'driver' => CrCms\Microservice\Server\Http\Server::class,
+            'host' => env('SERVER_HTTP_HOST', '0.0.0.0'),
+            'port' => env('SERVER_HTTP_PORT', 28080),
             'settings' => [
-                'user'      => env('SERVER_USER'),
-                'group'     => env('SERVER_GROUP'),
+                'user' => env('SERVER_USER'),
+                'group' => env('SERVER_GROUP'),
                 'log_level' => env('SERVER_LOG_LEVEL', 4),
-                'log_file'  => storage_path('logs/http.log'),
+                'log_file' => storage_path('logs/ms.log'),
             ],
         ],
     ],
@@ -53,7 +51,7 @@ return [
         */
 
         'preload' => [
-            'cache', 'cache.store', 'encrypter', 'db', 'files', 'filesystem', 'hash', 'translator', 'log', 'validator', 'queue',
+            'cache', 'events', 'cache.store', 'encrypter', 'db', 'files', 'filesystem', 'hash', 'hash.driver', 'translator', 'log', 'validator', 'queue',
         ],
 
         /*
@@ -97,22 +95,6 @@ return [
         */
 
         'events' => [
-        ],
-
-
-        /*'websocket_rooms' => [
-
-            'default' => 'redis',
-
-            'connections' => [
-                'redis' => [
-                    'connection' => 'websocket',
-                ],
-            ],
-        ],*/
-
-        'websocket_channels' => [
-            '/',
         ],
     ],
 ];
