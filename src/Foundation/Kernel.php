@@ -152,7 +152,7 @@ class Kernel implements KernelContract
 
         return $request->setData($data['data'] ?? [])
             ->setMatcher(
-                $this->caller->getCaller($data['call'])->setContainer($this->app)
+                $this->caller->getCaller($data['call'])
             );
     }
 
