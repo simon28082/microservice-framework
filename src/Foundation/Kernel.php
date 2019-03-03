@@ -136,7 +136,7 @@ class Kernel implements KernelContract
         $response = $this->app->make('response');
 
         return $data ? $response->setData($data)->setPackData(
-            $this->app->make('transport.packer')->pack($data)
+            $this->app->make('bridging.packer')->pack($data)
         ) : $response;
     }
 
@@ -148,7 +148,7 @@ class Kernel implements KernelContract
      */
     protected function bindRequestMatcher(RequestContract $request): RequestContract
     {
-        $data = $this->app->make('transport.packer')->unpack($request->rawData());
+        $data = $this->app->make('bridging.packer')->unpack($request->rawData());
 
         return $request->setData($data['data'] ?? [])
             ->setMatcher(

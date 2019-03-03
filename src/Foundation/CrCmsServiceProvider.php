@@ -11,6 +11,7 @@
 
 namespace CrCms\Microservice\Foundation;
 
+use CrCms\Microservice\Bridging\BridgingServiceProvider;
 use Illuminate\Support\AggregateServiceProvider;
 use CrCms\Microservice\Server\ServerServiceProvider;
 use CrCms\Foundation\Transporters\DataServiceProvider;
@@ -29,6 +30,18 @@ class CrCmsServiceProvider extends AggregateServiceProvider
         ServerServiceProvider::class,
         MountServiceProvider::class,
         DispatchingServiceProvider::class,
-        TransportServiceProvider::class,
+        BridgingServiceProvider::class,
     ];
+
+    /**
+     * Register
+     *
+     * @return void
+     */
+    public function register()
+    {
+        parent::register();
+
+        $this->app['config']->set('bridging.encryption',$this->app['config']->get('app.encryption'));
+    }
 }
