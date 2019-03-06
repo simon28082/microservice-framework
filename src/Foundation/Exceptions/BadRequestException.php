@@ -2,7 +2,6 @@
 
 namespace CrCms\Microservice\Foundation\Exceptions;
 
-
 use Throwable;
 
 /**
