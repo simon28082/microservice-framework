@@ -1,9 +1,9 @@
 <?php
 
-namespace CrCms\Microservice\Tests\modules\Support\Schedules;
+namespace CrCms\Microservice\Tests\tmp\modules\Testing\Schedules;
 
 use Illuminate\Console\Scheduling\Schedule;
-use CrCms\Microservice\Tests\modules\Support\Commands\TestCommand;
+use CrCms\Microservice\Tests\tmp\modules\Testing\Commands\TestCommand;
 
 /**
  * Class TestSchedule

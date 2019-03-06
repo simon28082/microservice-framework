@@ -7,7 +7,7 @@
  * @copyright Copyright &copy; 2019 Rights Reserved CRCMS
  */
 
-namespace CrCms\Microservice\Tests\modules\Support\Commands;
+namespace CrCms\Microservice\Tests\tmp\modules\Testing\Commands;
 
 use Illuminate\Console\Command;
 

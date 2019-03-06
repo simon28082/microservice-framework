@@ -46,9 +46,25 @@ class MountServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->singleton('translation.loader', function ($app) {
-            return new FileLoader($app['files'], realpath(__DIR__.'/../../resources/lang'));
-        });
+        if (is_dir($this->app->modulePath())) {
+            $this->scanLoadConfig();
+        }
+    }
+
+    /**
+     * Merge config
+     *
+     * @return void
+     */
+    protected function scanLoadConfig(): void
+    {
+        /* @var SplFileInfo $directory */
+        /* @var SplFileInfo $file */
+        foreach (Finder::create()->directories()->name('Config')->in($this->app->modulePath()) as $directory) {
+            foreach (Finder::create()->files()->name('*.php')->in($directory->getPathname()) as $file) {
+                $this->mergeConfigFrom($file->getPathname(), Str::snake($directory->getRelativePath()));
+            }
+        }
     }
 
     /**
@@ -69,7 +85,7 @@ class MountServiceProvider extends ServiceProvider
     {
         /* @var SplFileInfo $directory */
         foreach (Finder::create()->directories()->name('Translations')->in($this->app->modulePath()) as $directory) {
-            $this->loadTranslationsFrom($directory->getPathname(), Str::kebab($directory->getRelativePath()));
+            $this->loadTranslationsFrom($directory->getPathname(), Str::snake($directory->getRelativePath()));
         }
     }
 
@@ -111,7 +127,7 @@ class MountServiceProvider extends ServiceProvider
 
         foreach (Finder::create()->files()->name('*Schedule.php')->in($this->app->modulePath()) as $file) {
             $class = $this->fileToClass($file);
-            if ($class && !in_array($class, $this->app['config']->get('mount.schedules', []))) {
+            if ($class && !in_array($class, $this->app['config']->get('mount.schedules', []), true)) {
                 $this->app->make($class)->handle($schedule);
             }
         }

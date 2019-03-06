@@ -35,6 +35,7 @@ class ModuleMakeCommand extends InitializeMakeCommand
         $this->createModules($name);
         $this->createRoutes($name);
         $this->createDatabase($name);
+        $this->createConfigFile($name);
 
         $this->info("The module:{$name} create success");
     }
@@ -49,6 +50,7 @@ class ModuleMakeCommand extends InitializeMakeCommand
     {
         $this->autoCreateDirs([
             base_path('modules/'.$name.'/Schedules'),
+            base_path('modules/'.$name.'/Config'),
             base_path('modules/'.$name.'/Commands'),
             base_path('modules/'.$name.'/Events'),
             base_path('modules/'.$name.'/Exceptions'),
@@ -69,6 +71,22 @@ class ModuleMakeCommand extends InitializeMakeCommand
             base_path('modules/'.$name.'/Database/Migrations'),
             base_path('modules/'.$name.'/Database/Seeds'),
         ]);
+    }
+
+    /**
+     * Create module config
+     *
+     * @param string $name
+     * @return void
+     *
+     * @throws \Illuminate\Contracts\Filesystem\FileNotFoundException
+     */
+    protected function createConfigFile(string $name): void
+    {
+        $file = base_path('modules/'.$name.'/Config/config.php');
+        if (!$this->files->exists($file)) {
+            $this->files->put($file, $this->files->get(__DIR__.'/stubs/config.stub'));
+        }
     }
 
     /**
