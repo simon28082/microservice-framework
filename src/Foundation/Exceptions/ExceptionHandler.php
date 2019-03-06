@@ -104,7 +104,7 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function shouldReport(Exception $e)
     {
-        return ! $this->shouldntReport($e);
+        return !$this->shouldntReport($e);
     }
 
     /**
@@ -116,21 +116,23 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     protected function shouldntReport(Exception $e)
     {
-        $dontReport = array_merge($this->dontReport, $this->internalDontReport);
+        $dontReport = array_merge($this->dontReport, $this->internalDontReport, $this->container['config']->get('exception.dont_report', []));
 
-        return ! is_null(Arr::first($dontReport, function ($type) use ($e) {
+        return !is_null(Arr::first($dontReport, function ($type) use ($e) {
             return $e instanceof $type;
         }));
     }
 
     /**
      * @param RequestContract $request
-     * @param Exception       $e
+     * @param Exception $e
      *
      * @return Response|null|\Symfony\Component\HttpFoundation\Response
      */
     public function render($request, Exception $e)
     {
+        $e = $this->convertExceptionToServiceException($e);
+
         if ($this->isServiceException($e)) {
             $e->setRequest($request);
         } elseif ($e instanceof ValidationException) {
@@ -142,11 +144,32 @@ class ExceptionHandler implements ExceptionHandlerContract
 
     /**
      * @param \Symfony\Component\Console\Output\OutputInterface $output
-     * @param Exception                                         $e
+     * @param Exception $e
      */
     public function renderForConsole($output, Exception $e)
     {
         (new ConsoleApplication())->renderException($e, $output);
+    }
+
+    /**
+     * Convert other exception to service exception
+     *
+     * @param Exception $e
+     * @return ServiceException
+     */
+    protected function convertExceptionToServiceException(Exception $e): ServiceException
+    {
+        $exception = get_class($e);
+        $conversion = $this->container['config']->get('exception.conversion', []);
+
+        if (isset($conversion[$exception])) {
+            return new $conversion[$exception]($e->getMessage(), $e->getCode(), $e);
+        } /*else if (in_array($exception, $conversion, true)) {
+            return new ServiceException($e->getMessage(), 400, $e);
+        }*/ else {
+            $statusCode = method_exists($e,'getStatusCode') ? $e->getStatusCode() : 400;
+            return new ServiceException($e->getMessage(), $statusCode, $e);
+        }
     }
 
     /**
@@ -167,11 +190,11 @@ class ExceptionHandler implements ExceptionHandlerContract
     protected function convertExceptionToArray(Exception $e)
     {
         return $this->container->make('config')->get('app.debug') ? [
-            'message'   => $e->getMessage(),
+            'message' => $e->getMessage(),
             'exception' => get_class($e),
-            'file'      => $e->getFile(),
-            'line'      => $e->getLine(),
-            'trace'     => collect($e->getTrace())->map(function ($trace) {
+            'file' => $e->getFile(),
+            'line' => $e->getLine(),
+            'trace' => collect($e->getTrace())->map(function ($trace) {
                 return Arr::except($trace, ['args']);
             })->all(),
         ] : [
@@ -205,7 +228,7 @@ class ExceptionHandler implements ExceptionHandlerContract
 
         return new Response([
             'message' => $e->getMessage(),
-            'errors'  => $e->errors(),
+            'errors' => $e->errors(),
         ], $e->status);
     }
 }
