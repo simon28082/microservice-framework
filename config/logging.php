@@ -92,9 +92,14 @@ return [
 
         'mongo' => [
             'driver' => 'custom',
+            // If it is empty, the default app.env
+            //'name' => env('APP_ENV', 'production'),
             'via' => MongoDBLogger::class,
+            'level' => 'debug',
             'database' => [
                 'driver' => 'mongodb',
+                // If it is empty, the default database will be selected.
+                'database' => 'logger',
                 'collection' => 'logger',
             ],
         ],
