@@ -127,16 +127,16 @@ class ExceptionHandler implements ExceptionHandlerContract
      * @param RequestContract $request
      * @param Exception $e
      *
-     * @return Response|null|\Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse|array
      */
     public function render($request, Exception $e)
     {
-        $e = $this->convertExceptionToServiceException($e);
-
         if ($this->isServiceException($e)) {
             $e->setRequest($request);
         } elseif ($e instanceof ValidationException) {
-            return $this->convertValidationExceptionToResponse($e);
+            $e = $this->convertValidationExceptionToEntityException($e);
+        } else {
+            $e = $this->convertExceptionToServiceException($e);
         }
 
         return $this->prepareJsonResponse($e);
@@ -216,19 +216,13 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * @param ValidationException $e
+     * convertValidationExceptionToEntityException
      *
-     * @return Response|null|\Symfony\Component\HttpFoundation\Response
+     * @param ValidationException $e
+     * @return UnprocessableEntityException
      */
-    protected function convertValidationExceptionToResponse(ValidationException $e)
+    protected function convertValidationExceptionToEntityException(ValidationException $e): UnprocessableEntityException
     {
-        if ($e->response) {
-            return $e->response;
-        }
-
-        return new Response([
-            'message' => $e->getMessage(),
-            'errors' => $e->errors(),
-        ], $e->status);
+        return new UnprocessableEntityException(Arr::first(Arr::first($e->errors())));
     }
 }
