@@ -127,16 +127,16 @@ class ExceptionHandler implements ExceptionHandlerContract
      * @param RequestContract $request
      * @param Exception $e
      *
-     * @return Response|null|\Symfony\Component\HttpFoundation\Response
+     * @return JsonResponse|array
      */
     public function render($request, Exception $e)
     {
-        $e = $this->convertExceptionToServiceException($e);
-
         if ($this->isServiceException($e)) {
             $e->setRequest($request);
         } elseif ($e instanceof ValidationException) {
             return $this->convertValidationExceptionToResponse($e);
+        } else {
+            $e = $this->convertExceptionToServiceException($e);
         }
 
         return $this->prepareJsonResponse($e);
@@ -218,17 +218,20 @@ class ExceptionHandler implements ExceptionHandlerContract
     /**
      * @param ValidationException $e
      *
-     * @return Response|null|\Symfony\Component\HttpFoundation\Response
+     * @return array
      */
     protected function convertValidationExceptionToResponse(ValidationException $e)
     {
-        if ($e->response) {
+        return [
+            'message' => Arr::first($e->errors())
+        ];
+        /*if ($e->response) {
             return $e->response;
         }
 
         return new Response([
-            'message' => $e->getMessage(),
+            'message' => Arr::first($e->errors()),//$e->getMessage(),
             'errors' => $e->errors(),
-        ], $e->status);
+        ], $e->status);*/
     }
 }
