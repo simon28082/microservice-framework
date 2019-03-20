@@ -117,10 +117,11 @@ class Kernel implements KernelContract
      * @param $response
      * @return ResponseContract
      */
-    protected function toResponse($response): ResponseContract
+    protected function toResponse($response, int $statusCode = 200): ResponseContract
     {
         if ($response instanceof JsonResponse) {
             $data = $response->getData(true);
+            $statusCode = $response->getStatusCode();
         } elseif ($response instanceof Arrayable || $response instanceof Model) {
             $data = $response->toArray();
         } elseif (is_array($response)) {
@@ -134,6 +135,7 @@ class Kernel implements KernelContract
 
         /* @var ResponseContract $response */
         $response = $this->app->make('response');
+        $response->setStatusCode($statusCode);
 
         return $data ? $response->setData($data)->setPackData(
             $this->app->make('bridging.packer')->pack($data)
