@@ -15,7 +15,6 @@ use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
-use CrCms\Microservice\Server\Http\Response;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Validation\ValidationException;
 use CrCms\Microservice\Server\Contracts\RequestContract;
