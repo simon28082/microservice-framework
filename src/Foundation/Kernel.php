@@ -115,7 +115,10 @@ class Kernel implements KernelContract
      * toResponse
      *
      * @param $response
+     * @param int $statusCode
      * @return ResponseContract
+     *
+     * @throws \Illuminate\Contracts\Container\BindingResolutionException
      */
     protected function toResponse($response, int $statusCode = 200): ResponseContract
     {
