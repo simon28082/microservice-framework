@@ -2,10 +2,13 @@
 
 namespace CrCms\Microservice\Tests\Server;
 
+use CrCms\Foundation\Transporters\DataProvider;
+use CrCms\Microservice\Bridging\BridgingServiceProvider;
 use CrCms\Microservice\Foundation\Kernel;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use CrCms\Microservice\Server\Http\Events\RequestEvent;
 use CrCms\Microservice\Server\Http\Request;
+use CrCms\Microservice\Server\Http\Response;
 use CrCms\Microservice\Tests\ApplicationTrait;
 use PHPUnit\Framework\TestCase;
 
@@ -33,10 +36,15 @@ class HttpServerTest extends TestCase
             'data' => ['x' => 1]
         ];
 
+        static::$app->bind('response', function () {
+            return new Response();
+        });
 
-        $string = static::$app->make('transport.packer')->pack($data);
+        $provider = new BridgingServiceProvider(static::$app);
+        $provider->register();
+        $provider->boot();
 
-        //$this->app->make('server')->request->getSwooleRequest()->rawContent()
+        $string = static::$app->make('bridging.packer')->pack($data);
 
         $swooleRequest = \Mockery::mock(\Swoole\Http\Request::class);
         $swooleRequest->shouldReceive('rawContent')->andReturn($string);
@@ -46,22 +54,29 @@ class HttpServerTest extends TestCase
 
         $server = \Mockery::mock('server');
         $server->request = $swooleRequestEvent;
-        static::$app->instance('server',$server);
+        static::$app->instance('server', $server);
 
 
         $illuminateRequest = \Illuminate\Http\Request::capture();
+        $illuminateRequest = \Mockery::mock($illuminateRequest);
+        $illuminateRequest->shouldReceive('getContent')->andReturn($string);
+        $request = new Request(static::$app, $illuminateRequest);
+        $request = \Mockery::mock($request);
+        $request->shouldReceive('rawContent')->andReturn($string);
 
         $response = $kernel->handle(
-            new Request(static::$app,$illuminateRequest)
+            $request
         );
 
-        $this->assertInstanceOf(ResponseContract::class,$response);
+        $this->assertInstanceOf(ResponseContract::class, $response);
 
         $stringData = $response->getContent();
 
-        $result = static::$app->make('transport.packer')->unpack($stringData);
-        $this->assertEquals(true,is_array($result));
-        $this->assertEquals(1,$result['data']['z']);
+
+        $result = static::$app->make('bridging.packer')->unpack($stringData);
+
+        $this->assertEquals(true, is_array($result));
+        $this->assertEquals(1, $result['data']['z']);
     }
 
 //    public function testRequestAndNotValue()
