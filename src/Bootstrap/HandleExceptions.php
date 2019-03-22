@@ -3,7 +3,6 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use Exception;
-use CrCms\Microservice\Server\Contracts\ResponseContract;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Foundation\Bootstrap\HandleExceptions as BaseHandleExceptions;
 
