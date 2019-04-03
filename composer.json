@@ -30,7 +30,7 @@
     "crcms/microservice-bridging": "dev-master",
     "crcms/microservice-dispatching": "dev-master",
     "crcms/microservice-server": "dev-master",
-    "crcms/foundation": "^0.0.1",
+    "crcms/foundation": "^0.0",
     "crcms/logger": "^0.1.0",
     "dragonmantank/cron-expression": "^2.0",
     "illuminate/bus": "5.8.*",
