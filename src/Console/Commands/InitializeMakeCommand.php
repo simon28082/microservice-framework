@@ -63,11 +63,11 @@ class InitializeMakeCommand extends Command
      */
     protected function createResource()
     {
-        if (!$this->files->exists(resource_path())) {
+        if (! $this->files->exists(resource_path())) {
             $this->autoCreateDirs([resource_path()]);
         }
 
-        if (!$this->files->exists(app()->langPath())) {
+        if (! $this->files->exists(app()->langPath())) {
             $langPath = app()->langPath();
             $localPath = $langPath.'/'.config('app.locale');
             $this->autoCreateDirs([
@@ -103,7 +103,7 @@ class InitializeMakeCommand extends Command
      */
     protected function createConfig(): void
     {
-        if (!$this->files->exists(base_path('config'))) {
+        if (! $this->files->exists(base_path('config'))) {
             $this->autoCreateDirs([base_path('config')]);
             $this->files->copyDirectory(__DIR__.'/../../../config', base_path('config'));
         }
@@ -124,7 +124,7 @@ class InitializeMakeCommand extends Command
         ]);
 
         $gitignore = storage_path('.gitignore');
-        if (!$this->files->exists($gitignore)) {
+        if (! $this->files->exists($gitignore)) {
             $this->files->put(storage_path('.gitignore'), '*');
         }
     }
@@ -155,7 +155,7 @@ class InitializeMakeCommand extends Command
     protected function autoCreateDirs(array $dirs): void
     {
         foreach ($dirs as $dir) {
-            if (!$this->files->exists($dir) && !empty($dir)) {
+            if (! $this->files->exists($dir) && ! empty($dir)) {
                 $this->files->makeDirectory($dir, 0755, true);
             }
         }

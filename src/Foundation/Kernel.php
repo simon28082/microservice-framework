@@ -2,21 +2,21 @@
 
 namespace CrCms\Microservice\Foundation;
 
-use CrCms\Microservice\Dispatching\Dispatcher;
-use CrCms\Microservice\Server\Contracts\KernelContract;
-use Illuminate\Database\Eloquent\Model;
+use Exception;
+use Throwable;
+use ArrayObject;
+use DomainException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Contracts\Support\Arrayable;
+use CrCms\Microservice\Dispatching\Dispatcher;
+use CrCms\Microservice\Server\Contracts\KernelContract;
 use CrCms\Microservice\Server\Contracts\RequestContract;
 use CrCms\Microservice\Server\Contracts\ResponseContract;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use Illuminate\Contracts\Foundation\Application as ApplicationContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Illuminate\Contracts\Support\Arrayable;
-use ArrayObject;
-use Exception;
-use Throwable;
-use DomainException;
 
 /**
  * Class Kernel.
@@ -46,7 +46,7 @@ class Kernel implements KernelContract
     ];
 
     /**
-     * The application request middleware
+     * The application request middleware.
      *
      * @var array
      */
@@ -65,7 +65,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * handle
+     * handle.
      *
      * @param RequestContract $request
      * @return ResponseContract
@@ -90,7 +90,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * sendRequest
+     * sendRequest.
      *
      * @param RequestContract $request
      * @return ResponseContract
@@ -112,7 +112,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * toResponse
+     * toResponse.
      *
      * @param $response
      * @param int $statusCode
@@ -131,9 +131,9 @@ class Kernel implements KernelContract
             $data = $response;
         } elseif ($response instanceof ArrayObject) {
             // @todo 待验证
-            $data = (array)$response;
+            $data = (array) $response;
         } else {
-            throw new DomainException("The response type error");
+            throw new DomainException('The response type error');
         }
 
         /* @var ResponseContract $response */
@@ -146,7 +146,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * bindRequestMatcher
+     * bindRequestMatcher.
      *
      * @param RequestContract $request
      * @return RequestContract
@@ -162,13 +162,13 @@ class Kernel implements KernelContract
     }
 
     /**
-     * bootstrap
+     * bootstrap.
      *
      * @return void
      */
     public function bootstrap(): void
     {
-        if (!$this->app->hasBeenBootstrapped()) {
+        if (! $this->app->hasBeenBootstrapped()) {
             $this->app->bootstrapWith($this->bootstrappers());
         }
     }
@@ -182,7 +182,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * terminate
+     * terminate.
      *
      * @param RequestContract $request
      * @param ResponseContract $response
@@ -196,7 +196,7 @@ class Kernel implements KernelContract
     }
 
     /**
-     * terminateMiddleware
+     * terminateMiddleware.
      *
      * @param RequestContract $request
      * @param ResponseContract $response
@@ -210,7 +210,7 @@ class Kernel implements KernelContract
         );
 
         foreach ($middlewares as $middleware) {
-            if (!is_string($middleware)) {
+            if (! is_string($middleware)) {
                 continue;
             }
 

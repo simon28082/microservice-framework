@@ -11,17 +11,17 @@
 
 namespace CrCms\Microservice\Foundation;
 
-use Illuminate\Foundation\PackageManifest;
-use Illuminate\Foundation\ProviderRepository;
 use Illuminate\Support\Str;
 use Illuminate\Support\Collection;
 use Illuminate\Container\Container;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Log\LogServiceProvider;
+use Illuminate\Foundation\PackageManifest;
 use Illuminate\Events\EventServiceProvider;
+use Illuminate\Foundation\ProviderRepository;
+use Illuminate\Foundation\Application as BaseApplication;
 use Illuminate\Contracts\Container\Container as ContainerContract;
 use Illuminate\Contracts\Foundation\Application as ApplicationContainerContract;
-use Illuminate\Foundation\Application as BaseApplication;
 
 /**
  * Class Application.
@@ -39,7 +39,7 @@ class Application extends BaseApplication implements ContainerContract, Applicat
     protected $defaultConfigPath;
 
     /**
-     * msVersion
+     * msVersion.
      *
      * @return string
      */
@@ -132,7 +132,7 @@ class Application extends BaseApplication implements ContainerContract, Applicat
     }
 
     /**
-     * modulePath
+     * modulePath.
      *
      * @return string
      */

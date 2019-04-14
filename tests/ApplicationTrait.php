@@ -12,7 +12,7 @@ trait ApplicationTrait
     public static $app;
 
     /**
-     * setUpBeforeClass
+     * setUpBeforeClass.
      *
      * @return void
      */
@@ -25,7 +25,7 @@ trait ApplicationTrait
     }
 
     /**
-     * tearDownAfterClass
+     * tearDownAfterClass.
      *
      * @return void
      */

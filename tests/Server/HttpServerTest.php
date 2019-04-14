@@ -2,15 +2,14 @@
 
 namespace CrCms\Microservice\Tests\Server;
 
-use CrCms\Foundation\Transporters\DataProvider;
-use CrCms\Microservice\Bridging\BridgingServiceProvider;
+use PHPUnit\Framework\TestCase;
 use CrCms\Microservice\Foundation\Kernel;
-use CrCms\Microservice\Server\Contracts\ResponseContract;
-use CrCms\Microservice\Server\Http\Events\RequestEvent;
 use CrCms\Microservice\Server\Http\Request;
 use CrCms\Microservice\Server\Http\Response;
 use CrCms\Microservice\Tests\ApplicationTrait;
-use PHPUnit\Framework\TestCase;
+use CrCms\Microservice\Server\Http\Events\RequestEvent;
+use CrCms\Microservice\Bridging\BridgingServiceProvider;
+use CrCms\Microservice\Server\Contracts\ResponseContract;
 
 class HttpServerTest extends TestCase
 {
@@ -22,7 +21,7 @@ class HttpServerTest extends TestCase
         parent::setUp();
 
         static::$app->make('config')->set([
-            'app.key' => 'base64:Bey9po1NfR9CHY65KxPqQIemqvhDfHLNTFeffewn3pY='
+            'app.key' => 'base64:Bey9po1NfR9CHY65KxPqQIemqvhDfHLNTFeffewn3pY=',
         ]);
     }
 
@@ -33,7 +32,7 @@ class HttpServerTest extends TestCase
 
         $data = [
             'call' => 'test',
-            'data' => ['x' => 1]
+            'data' => ['x' => 1],
         ];
 
         static::$app->bind('response', function () {
@@ -56,7 +55,6 @@ class HttpServerTest extends TestCase
         $server->request = $swooleRequestEvent;
         static::$app->instance('server', $server);
 
-
         $illuminateRequest = \Illuminate\Http\Request::capture();
         $illuminateRequest = \Mockery::mock($illuminateRequest);
         $illuminateRequest->shouldReceive('getContent')->andReturn($string);
@@ -71,7 +69,6 @@ class HttpServerTest extends TestCase
         $this->assertInstanceOf(ResponseContract::class, $response);
 
         $stringData = $response->getContent();
-
 
         $result = static::$app->make('bridging.packer')->unpack($stringData);
 

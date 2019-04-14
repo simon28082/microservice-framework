@@ -5,8 +5,7 @@ namespace CrCms\Microservice\Console\Commands;
 use CrCms\Foundation\Commands\ModuleMakeCommand as BaseModuleMakeCommand;
 
 /**
- * Class ModuleMakeCommand
- * @package CrCms\Microservice\Console\Commands
+ * Class ModuleMakeCommand.
  */
 class ModuleMakeCommand extends BaseModuleMakeCommand
 {
@@ -19,7 +18,7 @@ class ModuleMakeCommand extends BaseModuleMakeCommand
     protected function createRoutes(string $name): void
     {
         $webFile = base_path('modules/'.$name.'/Routes/service.php');
-        if (!$this->files->exists($webFile)) {
+        if (! $this->files->exists($webFile)) {
             $this->files->put($webFile, $this->files->get(__DIR__.'/stubs/service-route.stub'));
         }
     }

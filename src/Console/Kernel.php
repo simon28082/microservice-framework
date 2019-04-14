@@ -2,10 +2,10 @@
 
 namespace CrCms\Microservice\Console;
 
-use CrCms\Microservice\Console\Application as Artisan;
 use Illuminate\Console\Scheduling\Schedule;
-use Illuminate\Contracts\Console\Kernel as KernelContract;
+use CrCms\Microservice\Console\Application as Artisan;
 use Illuminate\Foundation\Console\Kernel as BaseKernel;
+use Illuminate\Contracts\Console\Kernel as KernelContract;
 
 class Kernel extends BaseKernel implements KernelContract
 {
@@ -54,7 +54,7 @@ class Kernel extends BaseKernel implements KernelContract
     }
 
     /**
-     * getArtisan
+     * getArtisan.
      *
      * @return Application|\Illuminate\Console\Application
      */

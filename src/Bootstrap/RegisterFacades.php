@@ -3,9 +3,9 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use Illuminate\Support\Facades\Facade;
+use Illuminate\Foundation\PackageManifest;
 use CrCms\Microservice\Foundation\AliasLoader;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Foundation\PackageManifest;
 
 class RegisterFacades
 {

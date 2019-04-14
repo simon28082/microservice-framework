@@ -6,7 +6,7 @@ use Illuminate\Console\Scheduling\Schedule;
 use CrCms\Microservice\Tests\tmp\modules\Testing\Commands\TestCommand;
 
 /**
- * Class TestSchedule
+ * Class TestSchedule.
  */
 class TestSchedule
 {

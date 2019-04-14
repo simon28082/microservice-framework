@@ -12,9 +12,9 @@
 namespace CrCms\Microservice\Foundation\Exceptions;
 
 use Exception;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Support\Arr;
 use Psr\Log\LoggerInterface;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Contracts\Container\Container;
 use Illuminate\Validation\ValidationException;
 use CrCms\Microservice\Server\Contracts\RequestContract;
@@ -103,7 +103,7 @@ class ExceptionHandler implements ExceptionHandlerContract
      */
     public function shouldReport(Exception $e)
     {
-        return !$this->shouldntReport($e);
+        return ! $this->shouldntReport($e);
     }
 
     /**
@@ -117,7 +117,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     {
         $dontReport = array_merge($this->dontReport, $this->internalDontReport, $this->container['config']->get('exception.dont_report', []));
 
-        return !is_null(Arr::first($dontReport, function ($type) use ($e) {
+        return ! is_null(Arr::first($dontReport, function ($type) use ($e) {
             return $e instanceof $type;
         }));
     }
@@ -151,7 +151,7 @@ class ExceptionHandler implements ExceptionHandlerContract
     }
 
     /**
-     * Convert other exception to service exception
+     * Convert other exception to service exception.
      *
      * @param Exception $e
      * @return ServiceException
@@ -166,7 +166,8 @@ class ExceptionHandler implements ExceptionHandlerContract
         } /*else if (in_array($exception, $conversion, true)) {
             return new ServiceException($e->getMessage(), 400, $e);
         }*/ else {
-            $statusCode = method_exists($e,'getStatusCode') ? $e->getStatusCode() : 400;
+            $statusCode = method_exists($e, 'getStatusCode') ? $e->getStatusCode() : 400;
+
             return new ServiceException($e->getMessage(), $statusCode, $e);
         }
     }
@@ -210,12 +211,12 @@ class ExceptionHandler implements ExceptionHandlerContract
     {
         return new JsonResponse(
             $this->convertExceptionToArray($e),
-            ($e->getCode() <= 0 || !is_numeric($e->getCode())) ? 500 : $e->getCode()
+            ($e->getCode() <= 0 || ! is_numeric($e->getCode())) ? 500 : $e->getCode()
         );
     }
 
     /**
-     * convertValidationExceptionToEntityException
+     * convertValidationExceptionToEntityException.
      *
      * @param ValidationException $e
      * @return UnprocessableEntityException
