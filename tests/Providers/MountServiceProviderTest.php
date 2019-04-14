@@ -9,17 +9,16 @@
 
 namespace CrCms\Microservice\Tests\Providers;
 
-use CrCms\Microservice\Foundation\MountServiceProvider;
+use PHPUnit\Framework\TestCase;
 use Illuminate\Cache\ArrayStore;
 use Illuminate\Config\Repository;
-use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Container\Container;
 use Illuminate\Translation\Translator;
-use PHPUnit\Framework\TestCase;
+use Illuminate\Console\Scheduling\Schedule;
+use CrCms\Microservice\Foundation\MountServiceProvider;
 
 /**
- * Class MountServiceProviderTest
- * @package CrCms\Microservice\Tests
+ * Class MountServiceProviderTest.
  */
 class MountServiceProviderTest extends TestCase
 {
@@ -41,12 +40,12 @@ class MountServiceProviderTest extends TestCase
         $basePath = static::$basePath;
 
         $directories = [
-            'Schedules', 'Config', 'Commands', 'Providers', 'Translations', 'Migrations'
+            'Schedules', 'Config', 'Commands', 'Providers', 'Translations', 'Migrations',
         ];
 
         foreach ($directories as $directory) {
-            $directory = $basePath."/".$directory;
-            if (!is_dir($directory)) {
+            $directory = $basePath.'/'.$directory;
+            if (! is_dir($directory)) {
                 mkdir($directory, 777, true);
             }
         }
@@ -65,17 +64,18 @@ class MountServiceProviderTest extends TestCase
 
         $app = \Mockery::mock($app);
         $app->shouldReceive('modulePath')->andReturn(dirname(static::$basePath));
-        $app->singleton('config',function(){
+        $app->singleton('config', function () {
             return new Repository();
         });
-        $app->singleton('translator',function(){
+        $app->singleton('translator', function () {
             //return new Translator(new FileLoader($app['files'], $app['path.lang']);
             $translator = \Mockery::mock(Translator::class);
             $translator->shouldReceive('addNamespace');
+
             return $translator;
         });
 
-        $app->singleton('cache',function($app){
+        $app->singleton('cache', function ($app) {
             return new \Illuminate\Cache\Repository(new ArrayStore());
         });
 
@@ -84,13 +84,12 @@ class MountServiceProviderTest extends TestCase
         $schedule->shouldReceive('handle');
         $app->shouldReceive('make')->with(\CrCms\Microservice\Tests\tmp\modules\Testing\Schedules\TestSchedule::class)->andReturn($schedule);
 
-
         $mountServiceProvider = new MountServiceProvider($app);
 
         $mountServiceProvider->register();
         $mountServiceProvider->boot();
 
         // @todo 暂时只测试了一个config
-        $this->assertEquals($app['config']->get('testing.config'),'test');
+        $this->assertEquals($app['config']->get('testing.config'), 'test');
     }
 }

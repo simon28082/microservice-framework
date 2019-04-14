@@ -38,6 +38,7 @@ class Application extends BaseApplication implements ApplicationContract
     protected function logo(): string
     {
         $laravelVersion = \Illuminate\Foundation\Application::VERSION;
+
         return <<<str
                                     ____               
                                   ,'  , `.             

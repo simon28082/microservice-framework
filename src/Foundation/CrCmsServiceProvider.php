@@ -11,12 +11,12 @@
 
 namespace CrCms\Microservice\Foundation;
 
-use CrCms\Microservice\Bridging\BridgingServiceProvider;
+use Illuminate\Translation\FileLoader;
 use Illuminate\Support\AggregateServiceProvider;
 use CrCms\Microservice\Server\ServerServiceProvider;
 use CrCms\Foundation\Transporters\DataServiceProvider;
+use CrCms\Microservice\Bridging\BridgingServiceProvider;
 use CrCms\Microservice\Dispatching\DispatchingServiceProvider;
-use Illuminate\Translation\FileLoader;
 
 /**
  * Class CrCmsServiceProvider.
@@ -34,7 +34,7 @@ class CrCmsServiceProvider extends AggregateServiceProvider
     ];
 
     /**
-     * Register
+     * Register.
      *
      * @return void
      */
@@ -48,7 +48,7 @@ class CrCmsServiceProvider extends AggregateServiceProvider
     }
 
     /**
-     * Provides
+     * Provides.
      *
      * @return array
      */
@@ -56,6 +56,6 @@ class CrCmsServiceProvider extends AggregateServiceProvider
     {
         $provides = parent::provides();
 
-        return array_merge($provides,['translation.loader']);
+        return array_merge($provides, ['translation.loader']);
     }
 }

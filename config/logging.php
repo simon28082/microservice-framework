@@ -1,8 +1,8 @@
 <?php
 
+use CrCms\Log\MongoDBLogger;
 use Monolog\Handler\StreamHandler;
 use Monolog\Handler\SyslogUdpHandler;
-use CrCms\Log\MongoDBLogger;
 
 return [
 

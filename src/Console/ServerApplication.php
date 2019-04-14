@@ -3,14 +3,14 @@
 namespace CrCms\Microservice\Console;
 
 use CrCms\Microservice\Bootstrap\Start;
-use CrCms\Server\Drivers\Laravel\Contracts\ApplicationContract;
 use CrCms\Server\Drivers\Laravel\Application;
 use Illuminate\Contracts\Container\Container;
+use CrCms\Server\Drivers\Laravel\Contracts\ApplicationContract;
 
 class ServerApplication extends Application implements ApplicationContract
 {
     /**
-     * createApplication
+     * createApplication.
      *
      * @return Container
      */
@@ -20,7 +20,7 @@ class ServerApplication extends Application implements ApplicationContract
     }
 
     /**
-     * bootstrap
+     * bootstrap.
      *
      * @param Container $app
      * @return void

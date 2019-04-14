@@ -12,10 +12,8 @@ namespace CrCms\Microservice\Tests\tmp\modules\Testing\Commands;
 use Illuminate\Console\Command;
 
 /**
- * Class TestCommand
- * @package CrCms\Microservice\Tests\modules\Support\Commands
+ * Class TestCommand.
  */
 class TestCommand extends Command
 {
-
 }

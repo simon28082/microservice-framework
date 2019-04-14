@@ -11,13 +11,10 @@
 
 namespace CrCms\Microservice\Tests\Exceptions;
 
-
 class ResourceException extends \Exception
 {
-
     public function getStatusCode()
     {
         return 403;
     }
-
 }

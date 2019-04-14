@@ -2,8 +2,8 @@
 
 namespace CrCms\Microservice\Console;
 
-use CrCms\Microservice\Console\Commands\ConfigCacheCommand;
 use CrCms\Microservice\Console\Commands\ModuleMakeCommand;
+use CrCms\Microservice\Console\Commands\ConfigCacheCommand;
 use CrCms\Microservice\Console\Commands\InitializeMakeCommand;
 use Illuminate\Foundation\Providers\ArtisanServiceProvider as BaseArtisanServiceProvider;
 
@@ -70,9 +70,8 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
         });
     }
 
-
     /**
-     * removeLaravelCommands
+     * removeLaravelCommands.
      *
      * @return void
      */
@@ -110,7 +109,7 @@ class ArtisanServiceProvider extends BaseArtisanServiceProvider
             'OptimizeClear', 'ClearResets', 'RouteCache',
             'RouteClear',
             'RouteList', 'Preset', 'ViewCache',
-            'ViewClear', 'Serve', 'StorageLink',];
+            'ViewClear', 'Serve', 'StorageLink', ];
         array_map(function ($item) {
             unset($this->commands[$item]);
         }, $commands);

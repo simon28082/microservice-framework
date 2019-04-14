@@ -2,13 +2,13 @@
 
 namespace CrCms\Microservice\Foundation;
 
+use Closure;
+use Exception;
+use Throwable;
 use Illuminate\Pipeline\Pipeline as BasePipeline;
 use Symfony\Component\Debug\Exception\FatalThrowableError;
 use CrCms\Foundation\Transporters\Contracts\DataProviderContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ExceptionHandlerContract;
-use Exception;
-use Throwable;
-use Closure;
 
 /**
  * This extended pipeline catches any exceptions that occur during each slice.

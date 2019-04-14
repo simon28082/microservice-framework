@@ -13,5 +13,4 @@ namespace CrCms\Microservice\Tests\Exceptions;
 
 class ResourceNotFoundException extends \Exception
 {
-
 }
