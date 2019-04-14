@@ -107,13 +107,4 @@ return [
     'key' => env('APP_KEY'),
 
     'cipher' => 'AES-256-CBC',
-
-    /*
-    |--------------------------------------------------------------------------
-    | Whether to enable microservice data encryption and decryption
-    |--------------------------------------------------------------------------
-    |
-    */
-
-    'encryption' => env('APP_ENCRYPTION', true),
 ];

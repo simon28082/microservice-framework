@@ -5,15 +5,14 @@ namespace CrCms\Microservice\Bootstrap;
 use Illuminate\Support\Facades\Facade;
 use CrCms\Microservice\Foundation\AliasLoader;
 use Illuminate\Contracts\Foundation\Application;
-use CrCms\Microservice\Foundation\PackageManifest;
+use Illuminate\Foundation\PackageManifest;
 
 class RegisterFacades
 {
     /**
      * Bootstrap the given application.
      *
-     * @param \Illuminate\Contracts\Foundation\Application $app
-     *
+     * @param  \Illuminate\Contracts\Foundation\Application  $app
      * @return void
      */
     public function bootstrap(Application $app)

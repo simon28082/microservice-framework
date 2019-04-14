@@ -1,6 +1,6 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
+use CrCms\Microservice\Dispatching\Facades\Route;
 
 Route::register('test', function(){
     return ['data' => ['key' => 'value']];

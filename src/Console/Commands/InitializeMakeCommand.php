@@ -32,7 +32,7 @@ class InitializeMakeCommand extends Command
     /**
      * @var array
      */
-    protected $modules = ['storage',];
+    protected $modules = ['storage', 'config', 'resource'];
 
     /**
      * AutoCreateStorageCommand constructor.
@@ -51,7 +51,7 @@ class InitializeMakeCommand extends Command
     public function handle(): void
     {
         foreach ($this->modules as $module) {
-            call_user_func([$this, 'create' . ucfirst($module)]);
+            call_user_func([$this, 'create'.ucfirst($module)]);
         }
 
         $this->info('Initialize completed');
@@ -69,14 +69,14 @@ class InitializeMakeCommand extends Command
 
         if (!$this->files->exists(app()->langPath())) {
             $langPath = app()->langPath();
-            $localPath = $langPath . '/' . config('app.locale');
+            $localPath = $langPath.'/'.config('app.locale');
             $this->autoCreateDirs([
                 $langPath,
                 $localPath,
             ]);
 
-            $this->files->put($localPath . '/pagination.php', $this->files->get(__DIR__ . '/stubs/lang/' . config('app.locale') . '/pagination.stub'));
-            $this->files->put($localPath . '/validation.php', $this->files->get(__DIR__ . '/stubs/lang/' . config('app.locale') . '/validation.stub'));
+            $this->files->put($localPath.'/pagination.php', $this->files->get(__DIR__.'/stubs/lang/'.config('app.locale').'/pagination.stub'));
+            $this->files->put($localPath.'/validation.php', $this->files->get(__DIR__.'/stubs/lang/'.config('app.locale').'/validation.stub'));
         }
     }
 
@@ -105,7 +105,7 @@ class InitializeMakeCommand extends Command
     {
         if (!$this->files->exists(base_path('config'))) {
             $this->autoCreateDirs([base_path('config')]);
-            $this->files->copyDirectory(__DIR__ . '/../../../config', base_path('config'));
+            $this->files->copyDirectory(__DIR__.'/../../../config', base_path('config'));
         }
     }
 

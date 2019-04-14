@@ -12,19 +12,15 @@
 namespace CrCms\Microservice\Bootstrap;
 
 use CrCms\Microservice\Console\Kernel;
-use CrCms\Microservice\Server\Http\Request;
 use CrCms\Microservice\Foundation\Application;
 use Symfony\Component\Console\Input\ArgvInput;
 use Symfony\Component\Console\Output\ConsoleOutput;
-use CrCms\Microservice\Server\Kernel as ServerKernel;
-use CrCms\Microservice\Server\Exceptions\ExceptionHandler;
+use CrCms\Microservice\Foundation\Kernel as ServerKernel;
+use CrCms\Microservice\Foundation\Exceptions\ExceptionHandler;
 use Illuminate\Contracts\Console\Kernel as KernelContract;
 use CrCms\Microservice\Server\Contracts\KernelContract as ServerKernelContract;
 use Illuminate\Contracts\Debug\ExceptionHandler as ServerExceptionHandlerContract;
 
-/**
- * Class Start.
- */
 class Start
 {
     /**
@@ -44,8 +40,7 @@ class Start
 
         $instance->bootstrap($basePath);
 
-        $instance->getApplication()->runningInConsole() ?
-            $instance->runConsole($params) : $instance->runApplication($params);
+        $instance->runConsole($params);
     }
 
     /**
@@ -130,23 +125,5 @@ class Start
             ServerExceptionHandlerContract::class,
             ExceptionHandler::class
         );
-    }
-
-    /**
-     * @param array $params
-     *
-     * @return void
-     */
-    protected function runApplication(array $params): void
-    {
-        $kernel = $this->app->make(ServerKernelContract::class);
-
-        $request = new Request($this->app, \Illuminate\Http\Request::capture());
-
-        $response = $kernel->handle($request);
-
-        $response->send();
-
-        $kernel->terminate($request, $response);
     }
 }

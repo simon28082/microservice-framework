@@ -28,7 +28,8 @@ return [
         Illuminate\Translation\TranslationServiceProvider::class,
         Illuminate\Validation\ValidationServiceProvider::class,
         CrCms\Microservice\Foundation\CrCmsServiceProvider::class,
-
+        CrCms\Microservice\Console\ConsoleServiceProvider::class,
+        CrCms\Foundation\Providers\FoundationServiceProvider::class,
         /*
          * Package Service Providers...
          */
@@ -36,7 +37,7 @@ return [
         /*
          * Application Service Providers...
          */
-        CrCms\Microservice\Routing\RouteServiceProvider::class,
+        //CrCms\Microservice\Routing\RouteServiceProvider::class,
     ],
 
     /*
